@@ -2,6 +2,8 @@ import { join } from 'path';
 import { BrowserWindow, Menu } from 'electron';
 import { installExtension, VUEJS_DEVTOOLS } from 'electron-devtools-installer';
 import { is } from '@electron-toolkit/utils';
+import { loadStartupData } from '../startup';
+import { OnChannels } from '@preload/channels/on';
 
 /**
  * Singleton for managing application windows.
@@ -60,7 +62,8 @@ export class WindowManager {
       height: 800,
     });
     this.mainWindow.once('ready-to-show', async () => {
-      // TODO: send startup data to renderer.
+      const startupData = await loadStartupData();
+      this.mainWindow.webContents.send(OnChannels.startup, startupData);
       this.mainWindow.show();
     });
     this.initWindow(this.mainWindow);

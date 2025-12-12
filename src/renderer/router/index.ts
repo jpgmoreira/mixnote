@@ -1,10 +1,15 @@
 import { createMemoryHistory, createRouter } from 'vue-router';
-import AppPage from '@renderer/pages/AppPage.vue';
+import NotesPage from '@renderer/pages/NotesPage.vue';
+import LoginPage from '@renderer/pages/LoginPage.vue';
 
 const routes = [
   {
-    path: '/',
-    component: AppPage,
+    path: '/notes',
+    component: NotesPage,
+  },
+  {
+    path: '/login',
+    component: LoginPage,
   },
 ];
 

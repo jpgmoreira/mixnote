@@ -1,0 +1,1 @@
+<template>Notes page!</template>

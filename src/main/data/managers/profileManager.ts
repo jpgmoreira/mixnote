@@ -25,9 +25,9 @@ export class ProfileManager {
   private get registry() {
     return this._registryProxy.proxy;
   }
-  private get profile() {
-    return this._currProfileProxy?.proxy || null;
-  }
+  // private get profile() {
+  //   return this._currProfileProxy?.proxy || null;
+  // }
 
   private constructor() {
     const registryPath = path.join(DATA_DIR, 'profiles.json');

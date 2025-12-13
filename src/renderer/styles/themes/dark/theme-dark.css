@@ -1,5 +1,7 @@
 @import 'pages/login.css';
 @import 'elements/buttons.css';
+@import 'elements/controls.css';
+@import 'components/modal.css';
 
 .theme-dark * {
   color: white;

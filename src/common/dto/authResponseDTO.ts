@@ -1,6 +1,6 @@
 import { StartupDTO } from './startupDTO';
 
-export type CreateProfileResponseDTO =
+export type AuthResponseDTO =
   | {
       status: 'error';
       errorMsg: string;

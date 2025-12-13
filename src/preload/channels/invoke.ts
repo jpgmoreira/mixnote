@@ -3,4 +3,9 @@
  *   process to the main process, even if no response is expected.
  */
 
-export enum InvokeChannels {}
+export enum InvokeChannels {
+  createProfile = 'create-profile',
+  renameProfile = 'rename-profile',
+  deleteProfile = 'delete-profile',
+  login = 'login',
+}

@@ -1,4 +1,4 @@
 export enum Events {
-  startup = 'startup',
+  loadStartupData = 'load-startup-data',
   clearProfileData = 'clear-profile-data',
 }

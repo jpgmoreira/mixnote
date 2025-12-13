@@ -8,7 +8,7 @@ import { initStores } from '@renderer/store/initStores';
 
 window.api.on(OnChannels.startup, (data: StartupDTO) => {
   initStores();
-  EventEmitter.instance.emit(Events.startup, data);
+  EventEmitter.instance.emit(Events.loadStartupData, data);
   document.documentElement.classList.add('theme-dark');
   const title = data.profile ? `${data.profile.name}@${APP_NAME}` : APP_NAME;
   const route = data.profile ? '/notes' : '/login';

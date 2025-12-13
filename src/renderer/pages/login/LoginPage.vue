@@ -1,9 +1,6 @@
 <script setup lang="ts">
   import { ref, reactive, computed, useTemplateRef, provide } from 'vue';
-  import { EventEmitter } from '@common/events/eventEmitter';
-  import { Events } from '@renderer/events';
-  import { getEmptyProfileRegistry, ProfileRecord, ProfileRegistry } from '@common/schemas/profile';
-  import { StartupDTO } from '@common/dto/startupDTO';
+  import { ProfileRecord } from '@common/schemas/profile';
   import { parseTimestamp } from '@common/utils/dateUtils';
   import { LoginActionsKey } from './loginActions';
   import { useUIStore } from '@renderer/store/ui';
@@ -11,7 +8,6 @@
   import { useProfileStore } from '@renderer/store/profile';
   import { APP_NAME } from '@common/constants';
   import LoginPageModals from './LoginPageModals.vue';
-  EventEmitter.instance.on(Events.startup, initData);
 
   const profileStore = useProfileStore();
   const uiStore = useUIStore();
@@ -20,7 +16,6 @@
 
   const modalsRef = useTemplateRef('modals');
 
-  const registry = ref<ProfileRegistry>(getEmptyProfileRegistry());
   const selected = ref<ProfileRecord | null>(null);
   const isDeleting = ref(false);
 
@@ -35,11 +30,7 @@
     rename: '',
   });
 
-  const records = computed(() => registry.value.profileRecords);
-
-  function initData(data: StartupDTO) {
-    registry.value = data.registry;
-  }
+  const records = computed(() => profileStore.registry.profileRecords);
 
   function selectRow(profile: ProfileRecord) {
     selected.value = profile;
@@ -50,7 +41,7 @@
     const result = await profileStore.createProfile(name);
     if (result.status === 'error') {
       uiStore.showToast(result.errorMsg, 'error');
-    } else {
+    } else if (result.status === 'success') {
       modals.create = false;
       names.create = '';
       document.title = `${name}@${APP_NAME}`;
@@ -73,9 +64,13 @@
   async function login() {
     const profileId = selected.value!.id;
     const name = selected.value!.name;
-    await profileStore.login(profileId);
-    document.title = `${name}@${APP_NAME}`;
-    router.replace('/home');
+    const result = await profileStore.login(profileId);
+    if (result.status === 'error') {
+      uiStore.showToast(result.errorMsg, 'error');
+    } else if (result.status === 'success') {
+      document.title = `${name}@${APP_NAME}`;
+      router.replace('/home');
+    }
   }
 
   function openCreateModal() {

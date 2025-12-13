@@ -1,7 +1,12 @@
 import { InvokeChannels } from './channels/invoke';
 import { OnChannels } from './channels/on';
 
-export const allowedInvokeChannels = Object.freeze([] as const);
+export const allowedInvokeChannels = Object.freeze([
+  InvokeChannels.createProfile,
+  InvokeChannels.deleteProfile,
+  InvokeChannels.renameProfile,
+  InvokeChannels.login,
+] as const);
 export const allowedOnChannels = Object.freeze([OnChannels.startup] as const);
 
 export interface ElectronAPI {

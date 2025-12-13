@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { ref, reactive, computed, useTemplateRef, provide } from 'vue';
+  import { ref, reactive, computed, useTemplateRef, watch, provide } from 'vue';
   import { ProfileRecord } from '@common/schemas/profile';
   import { parseTimestamp } from '@common/utils/dateUtils';
   import { LoginActionsKey } from './loginActions';
@@ -69,7 +69,7 @@
       uiStore.showToast(result.errorMsg, 'error');
     } else if (result.status === 'success') {
       document.title = `${name}@${APP_NAME}`;
-      router.replace('/home');
+      router.replace('/notes');
     }
   }
 
@@ -92,6 +92,11 @@
       names.rename = '';
     }
   }
+
+  watch(modals, () => {
+    names.create = '';
+    names.rename = '';
+  });
 
   provide(LoginActionsKey, {
     modals,

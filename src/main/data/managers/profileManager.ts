@@ -60,11 +60,13 @@ export class ProfileManager {
   }
 
   public getCurrProfile() {
-    return structuredClone(this._currProfileProxy?.target || null);
+    const x = structuredClone(this._currProfileProxy?.target || null);
+    return x;
   }
 
   public getProfileRegistry() {
-    return structuredClone(this._registryProxy.target || null);
+    const x = structuredClone(this._registryProxy.target || null);
+    return x;
   }
 
   public createProfile(name: string): GenericResponseDTO {
@@ -109,7 +111,9 @@ export class ProfileManager {
     try {
       const folderPath = path.join(DATA_DIR, 'profileData', profileId);
       fs.rmSync(folderPath, { recursive: true, force: true });
-      this.registry.profileRecords = this.registry.profileRecords.filter((p) => p.id !== profileId);
+      this.registry.profileRecords = this._registryProxy.target.profileRecords.filter(
+        (p) => p.id !== profileId
+      );
     } catch (err) {
       console.log('Error while deleting profile:', err);
       return {

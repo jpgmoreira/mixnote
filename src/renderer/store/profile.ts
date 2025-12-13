@@ -68,5 +68,12 @@ export const useProfileStore = defineStore('profile', {
       }
       return result;
     },
+    async logout() {
+      EventEmitter.instance.emit(Events.clearProfileData);
+      const result = await window.api.invoke<AuthResponseDTO>(InvokeChannels.logout);
+      if (result.status === 'success') {
+        this.initData(result.data);
+      }
+    },
   },
 });

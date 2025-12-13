@@ -14,7 +14,7 @@
 
   const router = useRouter();
 
-  const modalsRef = useTemplateRef('modals');
+  const modalsRef = useTemplateRef('modals-ref');
 
   const selected = ref<ProfileRecord | null>(null);
   const isDeleting = ref(false);
@@ -106,7 +106,7 @@
 
 <template>
   <div class="flex flex-col h-screen login-page">
-    <LoginPageModals ref="modals" />
+    <LoginPageModals ref="modals-ref" />
     <div class="flex justify-center items-center h-10 text-lg">Select or create a profile</div>
     <div class="flex grow table-container overflow-y-auto">
       <div v-if="!records.length" class="flex grow items-center justify-center">

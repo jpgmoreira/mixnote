@@ -126,8 +126,6 @@ export class ProfileManager {
     const filePath = path.join(DATA_DIR, 'profileData', profileId, 'profile.json');
     this._currProfileProxy = new FileProxy(filePath, getEmptyProfile(profileId, record.name));
     this.registry.currProfileId = profileId;
-    const mediaDir = path.join(DATA_DIR, 'profileData', profileId, 'media');
-    ensureDirExists(mediaDir);
   }
 
   public logout() {

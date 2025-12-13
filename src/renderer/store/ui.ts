@@ -13,7 +13,7 @@ export const useUIStore = defineStore('ui', {
     backdropVisible: false,
   }),
   actions: {
-    showToast(message: string, type: ToastType, duration: number = 3000) {
+    showToast(message: string, type: ToastType, duration: number = 2000) {
       if (this.toast.visible) return;
       this.toast.message = message;
       this.toast.type = type;

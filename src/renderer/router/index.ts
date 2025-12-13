@@ -1,5 +1,6 @@
 import { createMemoryHistory, createRouter } from 'vue-router';
-import NotesPage from '@renderer/pages/NotesPage.vue';
+import NotesPage from '@renderer/pages/SettingsPage.vue';
+import SettingsPage from '@renderer/pages/SettingsPage.vue';
 import LoginPage from '@renderer/pages/login/LoginPage.vue';
 
 const routes = [
@@ -10,6 +11,10 @@ const routes = [
   {
     path: '/login',
     component: LoginPage,
+  },
+  {
+    path: '/settings',
+    component: SettingsPage,
   },
 ];
 

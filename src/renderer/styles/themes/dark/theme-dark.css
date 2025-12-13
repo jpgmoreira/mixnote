@@ -1,0 +1,14 @@
+@import 'pages/login.css';
+@import 'elements/buttons.css';
+
+.theme-dark * {
+  color: white;
+}
+
+.theme-dark *:focus {
+  outline: none;
+}
+
+.theme-dark body {
+  background-color: #232323;
+}

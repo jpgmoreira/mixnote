@@ -1,19 +1,38 @@
 <script setup lang="ts">
-  import { ref, reactive, computed } from 'vue';
+  import { ref, reactive, computed, useTemplateRef, provide } from 'vue';
   import { EventEmitter } from '@common/events/eventEmitter';
   import { Events } from '@renderer/events';
   import { getEmptyProfileRegistry, ProfileRecord, ProfileRegistry } from '@common/schemas/profile';
   import { StartupDTO } from '@common/dto/startupDTO';
   import { parseTimestamp } from '@common/utils/dateUtils';
+  import { LoginActionsKey } from './loginActions';
+  import { useUIStore } from '@renderer/store/ui';
+  import { useRouter } from 'vue-router';
+  import { useProfileStore } from '@renderer/store/profile';
+  import { APP_NAME } from '@common/constants';
+  import LoginPageModals from './LoginPageModals.vue';
   EventEmitter.instance.on(Events.startup, initData);
+
+  const profileStore = useProfileStore();
+  const uiStore = useUIStore();
+
+  const router = useRouter();
+
+  const modalsRef = useTemplateRef('modals');
 
   const registry = ref<ProfileRegistry>(getEmptyProfileRegistry());
   const selected = ref<ProfileRecord | null>(null);
+  const isDeleting = ref(false);
 
   const modals = reactive({
     create: false,
     rename: false,
     delete: false,
+  });
+
+  const names = reactive({
+    create: '',
+    rename: '',
   });
 
   const records = computed(() => registry.value.profileRecords);
@@ -26,14 +45,73 @@
     selected.value = profile;
   }
 
-  function openCreateModal() {}
-  function login() {}
+  async function createProfile() {
+    const name = names.create.trim();
+    const result = await profileStore.createProfile(name);
+    if (result.status === 'error') {
+      uiStore.showToast(result.errorMsg, 'error');
+    } else {
+      modals.create = false;
+      names.create = '';
+      document.title = `${name}@${APP_NAME}`;
+      router.replace('/notes');
+    }
+  }
 
-  function startRename() {}
+  async function deleteProfile() {
+    const profileId = selected.value!.id;
+    isDeleting.value = true;
+    const result = await profileStore.deleteProfile(profileId);
+    if (result.status === 'error') {
+      uiStore.showToast(result.errorMsg, 'error');
+    }
+    isDeleting.value = false;
+    modals.delete = false;
+    selected.value = null;
+  }
+
+  async function login() {
+    const profileId = selected.value!.id;
+    const name = selected.value!.name;
+    await profileStore.login(profileId);
+    document.title = `${name}@${APP_NAME}`;
+    router.replace('/home');
+  }
+
+  function openCreateModal() {
+    modalsRef.value?.openCreateModal();
+  }
+
+  function startRename() {
+    modalsRef.value?.openRenameModal();
+  }
+
+  async function applyRename() {
+    const profileId = selected.value!.id;
+    const newName = names.rename;
+    const result = await profileStore.renameProfile(profileId, newName);
+    if (result.status === 'error') {
+      uiStore.showToast(result.errorMsg, 'error');
+    } else {
+      modals.rename = false;
+      names.rename = '';
+    }
+  }
+
+  provide(LoginActionsKey, {
+    modals,
+    names,
+    selected,
+    isDeleting,
+    createProfile,
+    applyRename,
+    deleteProfile,
+  });
 </script>
 
 <template>
   <div class="flex flex-col h-screen login-page">
+    <LoginPageModals ref="modals" />
     <div class="flex justify-center items-center h-10 text-lg">Select or create a profile</div>
     <div class="flex grow table-container overflow-y-auto">
       <div v-if="!records.length" class="flex grow items-center justify-center">

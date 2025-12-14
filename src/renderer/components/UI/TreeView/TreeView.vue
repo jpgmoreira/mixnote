@@ -667,6 +667,7 @@
                   'cursor-not-allowed': isNodeDisabled(node),
                 }"
                 :readonly="renamingNode !== node"
+                @mousedown.prevent
                 @keydown.enter="applyRenaming"
                 @keydown.esc="undoRenaming"
                 @blur="applyRenaming"

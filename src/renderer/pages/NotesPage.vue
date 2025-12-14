@@ -3,6 +3,7 @@
   import { useUIStore } from '@renderer/store/ui';
   import Header from '@renderer/components/Header.vue';
   import TreeView from '@renderer/components/UI/TreeView/TreeView.vue';
+  import NotesView from '@renderer/components/NotesView.vue';
 
   const uiStore = useUIStore();
 
@@ -42,7 +43,7 @@
 <template>
   <div class="notes-page h-screen flex flex-col overflow-hidden" :class="{ resizing: isResizing }">
     <Header />
-    <div class="flex grow" style="border: 2px solid red">
+    <div class="flex grow">
       <div :style="treeAreaStyle">
         <TreeView class="select-none" files-hint file-icon checkbox />
       </div>
@@ -51,11 +52,9 @@
         :class="{ resizing: isResizing }"
         @mousedown="isResizing = true"
       ></div>
-      <div
-        class="flex flex-col grow"
-        :style="editorAreaStyle"
-        style="border: 2px solid orchid"
-      ></div>
+      <div class="flex flex-col grow" :style="editorAreaStyle">
+        <NotesView />
+      </div>
     </div>
   </div>
 </template>

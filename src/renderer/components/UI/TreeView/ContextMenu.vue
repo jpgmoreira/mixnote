@@ -112,7 +112,7 @@
 
       <div v-if="rootSections.move">
         <div class="item" @click="emit('moveSelectedNodesToRoot')">
-          Move selected nodes to the root
+          Move selected items to the root
         </div>
       </div>
       <div

@@ -38,7 +38,7 @@
     <Header />
     <div class="flex grow" style="border: 2px solid red">
       <div :style="treeAreaStyle">
-        <TreeView class="select-none" files-hint />
+        <TreeView class="select-none" files-hint file-icon checkbox />
       </div>
       <div
         class="separator shrink-0"

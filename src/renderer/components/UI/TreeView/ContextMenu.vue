@@ -93,7 +93,7 @@
     <!-- Root context -->
     <div v-if="props.type === 'root'">
       <div v-if="rootSections.create">
-        <div class="item" @click="emit('createNode', 'file')">New session</div>
+        <div class="item" @click="emit('createNode', 'file')">New note</div>
         <div class="item" @click="emit('createNode', 'dir')">New folder</div>
       </div>
       <div v-if="rootSections.create && rootSections.select" class="separator"></div>
@@ -130,7 +130,7 @@
     <!-- Dir context -->
     <div v-else-if="props.type === 'dir'">
       <div v-if="dirSections.create">
-        <div class="item" @click="emit('createNode', 'file')">New session</div>
+        <div class="item" @click="emit('createNode', 'file')">New note</div>
         <div class="item" @click="emit('createNode', 'dir')">New folder</div>
         <div class="item" @click="emit('createNodeAbove', 'dir')">Create folder above</div>
         <div class="item" @click="emit('createNodeBelow', 'dir')">Create folder below</div>
@@ -162,14 +162,14 @@
     <!-- File context -->
     <div v-else-if="props.type === 'file'">
       <div v-if="fileSections.create">
-        <div class="item" @click="emit('createNodeAbove', 'file')">Create file above</div>
-        <div class="item" @click="emit('createNodeBelow', 'file')">Create file below</div>
+        <div class="item" @click="emit('createNodeAbove', 'file')">Create note above</div>
+        <div class="item" @click="emit('createNodeBelow', 'file')">Create note below</div>
       </div>
       <div v-if="fileSections.create && fileSections.move" class="separator"></div>
 
       <div v-if="fileSections.move">
-        <div class="item" @click="emit('moveSelectedFilesAbove')">Move selected files above</div>
-        <div class="item" @click="emit('moveSelectedFilesBelow')">Move selected files below</div>
+        <div class="item" @click="emit('moveSelectedFilesAbove')">Move selected notes above</div>
+        <div class="item" @click="emit('moveSelectedFilesBelow')">Move selected notes below</div>
       </div>
       <div
         v-if="(fileSections.create || fileSections.move) && fileSections.change"

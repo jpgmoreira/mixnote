@@ -61,7 +61,7 @@
 
   const emit = defineEmits<{
     (e: 'rename', newName: string): void;
-    (e: 'deleteSingle', sessionId: string): void;
+    (e: 'deleteSingle', noteId: string): void;
     (e: 'deleteMultiple'): void;
   }>();
 
@@ -114,9 +114,9 @@
   }));
 
   const selectedFilesText = computed(() => {
-    if (!tree.value) return '0 sessions';
+    if (!tree.value) return '0 notes';
     const val = toLocaleNumber(tree.value.nSelectedFiles);
-    return val === '1' ? '1 session' : `${val} sessions`;
+    return val === '1' ? '1 note' : `${val} notes`;
   });
 
   const nSelectedFolders = computed(() => {
@@ -146,7 +146,7 @@
   async function createNode(type: NodeType) {
     const node = contextState.activeNode;
     const parentId = node ? node.id : null;
-    const prefix = type === 'dir' ? 'Folder' : 'Session';
+    const prefix = type === 'dir' ? 'Folder' : 'Note';
     const newTree = await window.api.invoke<TreeOperationResponseDTO>(
       TreeChannels.createNode,
       lastScrollTop,
@@ -160,7 +160,7 @@
   async function createNodeAbove(type: NodeType) {
     const node = contextState.activeNode;
     if (!node) return;
-    const prefix = type === 'dir' ? 'Folder' : 'Session';
+    const prefix = type === 'dir' ? 'Folder' : 'Note';
     const newTree = await window.api.invoke<TreeOperationResponseDTO>(
       TreeChannels.createNodeAbove,
       lastScrollTop,
@@ -174,7 +174,7 @@
   async function createNodeBelow(type: NodeType) {
     const node = contextState.activeNode;
     if (!node) return;
-    const prefix = type === 'dir' ? 'Folder' : 'Session';
+    const prefix = type === 'dir' ? 'Folder' : 'Note';
     const newTree = await window.api.invoke<TreeOperationResponseDTO>(
       TreeChannels.createNodeBelow,
       lastScrollTop,
@@ -382,7 +382,7 @@
   }
 
   function fileHintText(node: DirNode) {
-    return node.nFileDesc === 1 ? '1 session' : `${toLocaleNumber(node.nFileDesc)} sessions`;
+    return node.nFileDesc === 1 ? '1 note' : `${toLocaleNumber(node.nFileDesc)} notes`;
   }
 
   function updateTree(newTree: TreeOperationResponseDTO) {
@@ -498,7 +498,7 @@
           <strong>"{{ modalState.currentNode.text }}"</strong>
         </div>
         <div v-else-if="!modalState.multiple && modalState.currentNode?.type === 'file'">
-          Delete session
+          Delete note
           <strong>"{{ modalState.currentNode.text }}"</strong>
         </div>
         <div v-else>Delete selection</div>
@@ -509,7 +509,7 @@
             <span>
               Are you sure you want to delete the
               <strong>"{{ modalState.currentNode.text }}"</strong>
-              {{ modalState.currentNode.type === 'dir' ? 'folder' : 'session' }}?
+              {{ modalState.currentNode.type === 'dir' ? 'folder' : 'note' }}?
             </span>
             <span class="text-danger my-2">This action cannot be undone!</span>
             <div v-if="modalState.isDeleting" class="text-danger flex items-center">
@@ -521,7 +521,7 @@
             <span>
               Are you sure you want to delete
               <strong>{{ tree?.nSelectedFiles || 0 }}</strong>
-              {{ tree?.nSelectedFiles === 1 ? 'session' : 'sessions' }}
+              {{ tree?.nSelectedFiles === 1 ? 'note' : 'notes' }}
               and
               <strong>{{ nSelectedFolders }}</strong>
               {{ nSelectedFolders === 1 ? 'folder' : 'folders' }}?
@@ -603,7 +603,7 @@
           v-model.trim="searchText"
           class="w-full !rounded-none !border-none"
           type="text"
-          placeholder="Search for sessions..."
+          placeholder="Search for notes..."
           @keydown.enter="search"
         />
         <button type="button" class="btn-primary rounded-none" @click="search">Search</button>

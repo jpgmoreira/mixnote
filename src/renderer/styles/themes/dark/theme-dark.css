@@ -6,6 +6,9 @@
 @import 'components/modal.css';
 @import 'components/header.css';
 @import 'components/toast.css';
+@import 'components/treeview/checkbox.css';
+@import 'components/treeview/contextMenu.css';
+@import 'components/treeview/treeView.css';
 
 .theme-dark * {
   color: white;

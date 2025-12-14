@@ -13,6 +13,7 @@
     onBeforeUnmount,
     useTemplateRef,
     computed,
+    onActivated,
   } from 'vue';
   import { GenericResponseDTO } from '@common/dto/genericResponseDTO';
   import { useUIStore } from '@renderer/store/ui';
@@ -67,8 +68,6 @@
 
   // --- Variables: ---
 
-  let lastScrollTop = 0;
-
   const rowHeight = 28;
   const paddingBottom = 250;
   const indentSpanWidth = 20;
@@ -78,6 +77,8 @@
   const keys: ModifierKeys = {
     ctrl: false,
   };
+
+  const lastScrollTop = ref(0);
 
   const hasLoaded = ref(false);
   const tree = ref<TreeOperationResponseDTO | null>(null);
@@ -149,7 +150,7 @@
     const prefix = type === 'dir' ? 'Folder' : 'Note';
     const newTree = await window.api.invoke<TreeOperationResponseDTO>(
       TreeChannels.createNode,
-      lastScrollTop,
+      lastScrollTop.value,
       type,
       prefix,
       parentId
@@ -163,7 +164,7 @@
     const prefix = type === 'dir' ? 'Folder' : 'Note';
     const newTree = await window.api.invoke<TreeOperationResponseDTO>(
       TreeChannels.createNodeAbove,
-      lastScrollTop,
+      lastScrollTop.value,
       type,
       prefix,
       node.id
@@ -177,7 +178,7 @@
     const prefix = type === 'dir' ? 'Folder' : 'Note';
     const newTree = await window.api.invoke<TreeOperationResponseDTO>(
       TreeChannels.createNodeBelow,
-      lastScrollTop,
+      lastScrollTop.value,
       type,
       prefix,
       node.id
@@ -190,7 +191,7 @@
   async function toggleDirOpen(node: Node) {
     const newTree = await window.api.invoke<TreeOperationResponseDTO>(
       TreeChannels.toggleDirOpen,
-      lastScrollTop,
+      lastScrollTop.value,
       node.id
     );
     updateTree(newTree);
@@ -199,7 +200,7 @@
   async function collapseAll() {
     const newTree = await window.api.invoke<TreeOperationResponseDTO>(
       TreeChannels.collapseAll,
-      lastScrollTop
+      lastScrollTop.value
     );
     updateTree(newTree);
   }
@@ -260,7 +261,7 @@
     if (props.checkbox) localKeys.ctrl = true;
     const newTree = await window.api.invoke<TreeOperationResponseDTO>(
       TreeChannels.handleSelection,
-      lastScrollTop,
+      lastScrollTop.value,
       node.id,
       localKeys
     );
@@ -270,7 +271,7 @@
   async function clearSelection() {
     const newTree = await window.api.invoke<TreeOperationResponseDTO>(
       TreeChannels.clearSelection,
-      lastScrollTop
+      lastScrollTop.value
     );
     updateTree(newTree);
   }
@@ -278,7 +279,7 @@
   async function selectAll() {
     const newTree = await window.api.invoke<TreeOperationResponseDTO>(
       TreeChannels.selectAll,
-      lastScrollTop
+      lastScrollTop.value
     );
     updateTree(newTree);
   }
@@ -290,7 +291,7 @@
     if (!node) return;
     const newTree = await window.api.invoke<TreeOperationResponseDTO>(
       TreeChannels.deleteNode,
-      lastScrollTop,
+      lastScrollTop.value,
       node.id
     );
     updateTree(newTree);
@@ -302,7 +303,7 @@
   async function deleteSelectedNodes() {
     const newTree = await window.api.invoke<TreeOperationResponseDTO>(
       TreeChannels.deleteSelectedNodes,
-      lastScrollTop
+      lastScrollTop.value
     );
     updateTree(newTree);
     emit('deleteMultiple');
@@ -340,7 +341,7 @@
     const text = searchText.value.trim();
     const newTree = await window.api.invoke<TreeOperationResponseDTO>(
       TreeChannels.search,
-      lastScrollTop,
+      lastScrollTop.value,
       text
     );
     nextTick(() => {
@@ -355,7 +356,7 @@
     if (!tree.value) return;
     const newTree = await window.api.invoke<TreeOperationResponseDTO>(
       channel,
-      lastScrollTop,
+      lastScrollTop.value,
       contextState.activeNode?.id || null
     );
     updateTree(newTree);
@@ -365,7 +366,7 @@
     if (!tree.value) return;
     const newTree = await window.api.invoke<TreeOperationResponseDTO>(
       TreeChannels.moveSelectedNodesInto,
-      lastScrollTop,
+      lastScrollTop.value,
       null
     );
     updateTree(newTree);
@@ -422,15 +423,15 @@
     if (!scrollContainer.value) return;
     contextState.visible = false;
     const scrollTop = scrollContainer.value.scrollTop;
-    if (scrollTop === lastScrollTop) return; // Do not react on x scroll;
-    lastScrollTop = scrollTop;
+    if (scrollTop === lastScrollTop.value) return; // Do not react on x scroll;
+    lastScrollTop.value = scrollTop;
     clearTimeout(scrollTimer.value);
     scrollTimer.value = setTimeout(async () => {
       const container = scrollContainer.value;
       if (!container) return;
       const newTree = await window.api.invoke<TreeOperationResponseDTO>(
         TreeChannels.getState,
-        lastScrollTop
+        lastScrollTop.value
       );
       updateTree(newTree);
       nodeContainerOffset.value = (tree.value?.page[0].ui.position || 0) * rowHeight; // This is the key! Using a computed-value causes flickering.
@@ -465,6 +466,10 @@
 
   // --- Hooks: ---
 
+  onActivated(() => {
+    if (!scrollContainer.value) return;
+    scrollContainer.value.scrollTop = lastScrollTop.value;
+  });
   onMounted(async () => {
     tree.value = await window.api.invoke(TreeChannels.getState, 0);
     hasLoaded.value = true;

@@ -473,7 +473,6 @@
     window.addEventListener('keyup', windowKeyUp);
   });
   onBeforeUnmount(async () => {
-    await window.api.invoke(TreeChannels.search, 0, ''); // Clear search when leaving.
     window.removeEventListener('click', windowClick);
     window.removeEventListener('keydown', windowKeyDown);
     window.removeEventListener('keyup', windowKeyUp);

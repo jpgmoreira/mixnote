@@ -45,7 +45,7 @@ export class TreeManager {
     return this._proxy!.target;
   }
 
-  private readonly TREE_PAGE_SIZE = 100;
+  private readonly TREE_PAGE_SIZE = 300;
   private readonly TREE_ITEM_SIZE = 28; // px.
 
   // --- Variables and structures: ---
@@ -167,6 +167,11 @@ export class TreeManager {
       if (node.type === 'dir' && (node.hidden || !node.open)) {
         i += node.nDesc;
       }
+    }
+    if (nSurfaceNodes && !page.length) {
+      // If current scrollTop is larger than the size of the tree:
+      const fakeScrollTop = (nSurfaceNodes - 1) * this.TREE_ITEM_SIZE;
+      return this.buildResult(fakeScrollTop);
     }
     return {
       nSelectedNodes: this.nSelectedNodes,
@@ -625,7 +630,7 @@ export class TreeManager {
     for (const node of this.expandedFlat) node.hidden = false;
   }
 
-  //  -- Movement: ---
+  //  --- Movement: ---
 
   public moveSelectedFilesAbove(baseNodeId: string) {
     const baseNode = this.target.idToNode[baseNodeId];

@@ -4,6 +4,8 @@ import { ipcMain, IpcMainInvokeEvent } from 'electron';
 import { InvokeChannels } from '@preload/channels/invoke';
 import { AuthResponseDTO } from '@common/dto/authResponseDTO';
 import { GenericResponseDTO } from '@common/dto/genericResponseDTO';
+import { UISettings } from '@common/schemas/ui';
+import { UIManager } from '@main/data/managers/uiManager';
 
 ipcMain.handle(
   InvokeChannels.createProfile,
@@ -54,3 +56,10 @@ ipcMain.handle(InvokeChannels.logout, async (_: IpcMainInvokeEvent): Promise<Aut
   };
   return result;
 });
+
+ipcMain.handle(
+  InvokeChannels.updateUISettings,
+  async (_: IpcMainInvokeEvent, settings: UISettings) => {
+    UIManager.instance.setUISettings(settings);
+  }
+);

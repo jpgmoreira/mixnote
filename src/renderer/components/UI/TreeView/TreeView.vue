@@ -78,7 +78,8 @@
     ctrl: false,
   };
 
-  const lastScrollTop = ref(0);
+  const initialScrollTop = uiStore.settings.explorerScrollTop;
+  const lastScrollTop = ref(initialScrollTop);
 
   const hasLoaded = ref(false);
   const tree = ref<TreeOperationResponseDTO | null>(null);
@@ -425,6 +426,7 @@
     const scrollTop = scrollContainer.value.scrollTop;
     if (scrollTop === lastScrollTop.value) return; // Do not react on x scroll;
     lastScrollTop.value = scrollTop;
+    uiStore.updateSettings({ explorerScrollTop: scrollTop });
     clearTimeout(scrollTimer.value);
     scrollTimer.value = setTimeout(async () => {
       const container = scrollContainer.value;
@@ -471,8 +473,13 @@
     scrollContainer.value.scrollTop = lastScrollTop.value;
   });
   onMounted(async () => {
-    tree.value = await window.api.invoke(TreeChannels.getState, 0);
+    tree.value = await window.api.invoke(TreeChannels.getState, initialScrollTop);
     hasLoaded.value = true;
+    await nextTick();
+    if (scrollContainer.value) {
+      scrollContainer.value.scrollTop = initialScrollTop;
+    }
+    nodeContainerOffset.value = (tree.value?.page[0].ui.position || 0) * rowHeight;
     window.addEventListener('click', windowClick);
     window.addEventListener('keydown', windowKeyDown);
     window.addEventListener('keyup', windowKeyUp);

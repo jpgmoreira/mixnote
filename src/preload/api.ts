@@ -8,6 +8,7 @@ export const allowedInvokeChannels = Object.freeze([
   InvokeChannels.renameProfile,
   InvokeChannels.login,
   InvokeChannels.logout,
+  InvokeChannels.updateUISettings,
   // Channels for communication for the TreeView component:
   TreeChannels.createNode,
   TreeChannels.createNodeAbove,

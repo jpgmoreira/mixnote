@@ -1,10 +1,15 @@
 <script lang="ts" setup>
   import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
+  import { useUIStore } from '@renderer/store/ui';
   import Header from '@renderer/components/Header.vue';
   import TreeView from '@renderer/components/UI/TreeView/TreeView.vue';
 
-  const treeAreaWidth = ref(300);
-  const editorAreaWidth = ref(window.innerWidth - 300);
+  const uiStore = useUIStore();
+
+  const initialExplorerWidth = uiStore.settings.explorerWidth;
+
+  const treeAreaWidth = ref(initialExplorerWidth);
+  const editorAreaWidth = ref(window.innerWidth - initialExplorerWidth);
   const isResizing = ref(false);
 
   const treeAreaStyle = computed(() => ({
@@ -21,6 +26,7 @@
     if (!isResizing.value) return;
     treeAreaWidth.value = e.clientX;
     editorAreaWidth.value = window.innerWidth - e.clientX;
+    uiStore.updateSettings({ explorerWidth: e.clientX });
     window.getSelection()?.removeAllRanges();
   }
   onMounted(() => {

@@ -46,7 +46,7 @@ export class TreeManager {
   }
 
   private readonly TREE_PAGE_SIZE = 100;
-  private readonly TREE_ITEM_SIZE = 40; // px.
+  private readonly TREE_ITEM_SIZE = 28; // px.
 
   // --- Variables and structures: ---
 
@@ -141,7 +141,7 @@ export class TreeManager {
         const parentLastDirectChild = this.getLastDirectChild(parent);
         node.ui.isLastChild = node === parentLastDirectChild;
       }
-      // - Find last direct child of node, and set it as limit in the map:
+      // - Find last direct child of node, and set it as limit in the set:
       const lastDirectChild = this.getLastDirectChild(node);
       if (lastDirectChild) {
         depthSet.add(lastDirectChild.id);
@@ -156,8 +156,9 @@ export class TreeManager {
     let nSurfaceNodes = 0;
     for (let i = 0; i < this.expandedFlat.length; i++) {
       const node = this.expandedFlat[i];
-      const currScroll = this.TREE_ITEM_SIZE * i;
       if (!node.hidden) {
+        const currScroll = this.TREE_ITEM_SIZE * nSurfaceNodes;
+        node.ui.position = nSurfaceNodes;
         if (currScroll >= tolerance && page.length < this.TREE_PAGE_SIZE) {
           page.push(node);
         }
@@ -273,6 +274,7 @@ export class TreeManager {
       nSelDesc: 0,
       nFileDesc: 0,
       ui: {
+        position: 0,
         isLastChild: false,
         depths: 0,
       },
@@ -294,6 +296,7 @@ export class TreeManager {
       prevId: null,
       noteId: randomId(),
       ui: {
+        position: 0,
         isLastChild: false,
         depths: 0,
       },

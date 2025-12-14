@@ -23,6 +23,7 @@ export type BaseNode = {
   prevId: string | null; // Previous sibling ID, in the same doubly linked list.
   ui: {
     // Auxiliary for the UI.
+    position: number;
     isLastChild: boolean;
     depths: number; // Int representing depths as bits.
   };

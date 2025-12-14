@@ -7,7 +7,6 @@ import {
 import { FileProxy } from '../fileProxy';
 import path from 'path';
 import { DATA_DIR } from '@main/constants';
-import { ensureDirExists } from '@main/utils/utils';
 import fs from 'node:fs';
 import { GenericResponseDTO } from '@common/dto/genericResponseDTO';
 import { buildId, sleep } from '@common/utils/utils';

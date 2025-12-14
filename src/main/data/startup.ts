@@ -2,6 +2,7 @@ import { StartupDTO } from '@common/dto/startupDTO';
 import { ProfileManager } from './managers/profileManager';
 import { TreeManager } from './managers/treeManager';
 import { UIManager } from './managers/uiManager';
+import { NotesManager } from './managers/notesManager';
 
 export async function loadStartupData() {
   const profile = ProfileManager.instance.getCurrProfile();
@@ -14,6 +15,7 @@ export async function loadStartupData() {
   if (profile) {
     TreeManager.instance.loadTree(profile.id);
     UIManager.instance.loadProfile(profile.id);
+    NotesManager.instance.loadProfile(profile.id);
     data.ui = UIManager.instance.getUISettings();
   }
   return data;

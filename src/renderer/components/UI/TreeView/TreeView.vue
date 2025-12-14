@@ -479,7 +479,7 @@
     if (scrollContainer.value) {
       scrollContainer.value.scrollTop = initialScrollTop;
     }
-    nodeContainerOffset.value = (tree.value?.page[0].ui.position || 0) * rowHeight;
+    nodeContainerOffset.value = (tree.value?.page[0]?.ui.position || 0) * rowHeight;
     window.addEventListener('click', windowClick);
     window.addEventListener('keydown', windowKeyDown);
     window.addEventListener('keyup', windowKeyUp);

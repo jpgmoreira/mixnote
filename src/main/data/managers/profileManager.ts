@@ -24,9 +24,9 @@ export class ProfileManager {
   private get registry() {
     return this._registryProxy.proxy;
   }
-  // private get profile() {
-  //   return this._currProfileProxy?.proxy || null;
-  // }
+  private get profile() {
+    return this._currProfileProxy?.proxy || null;
+  }
 
   private constructor() {
     const registryPath = path.join(DATA_DIR, 'profiles.json');
@@ -129,6 +129,13 @@ export class ProfileManager {
     const filePath = path.join(DATA_DIR, 'profileData', profileId, 'profile.json');
     this._currProfileProxy = new FileProxy(filePath, getEmptyProfile(profileId, record.name));
     this.registry.currProfileId = profileId;
+  }
+
+  public addNotes(n: 1 | -1) {
+    if (!this.profile) throw new Error('Profile not initialized!');
+    const record = this.registry.profileRecords.find((p) => p.id === this.profile!.id);
+    if (!record) throw new Error('Record not found!');
+    record.notes += n;
   }
 
   public logout() {

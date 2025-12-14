@@ -7,6 +7,7 @@ import { TreeOperationResponseDTO } from '@common/dto/treeOperationResponseDTO';
 import { GenericResponseDTO } from '@common/dto/genericResponseDTO';
 import path from 'path';
 import { setBit, clearBit } from '@common/utils/bitMask';
+import { NotesManager } from './notesManager';
 
 // Contains a linked list of the root nodes.
 type Root = Links & {
@@ -288,7 +289,7 @@ export class TreeManager {
 
   private createFileNode(prefix: string, parentId: string | null): FileNode {
     const text = `${prefix} ${this.target.root.nextFile}`;
-    // TODO: Notes manager create note and get id.
+    const noteId = NotesManager.instance.createNote(text);
     return {
       id: randomId(),
       type: 'file',
@@ -299,7 +300,7 @@ export class TreeManager {
       parentId,
       nextId: null,
       prevId: null,
-      noteId: randomId(),
+      noteId,
       ui: {
         position: 0,
         isLastChild: false,

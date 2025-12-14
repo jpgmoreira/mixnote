@@ -54,7 +54,7 @@ export function arrayRemove<T>(array: T[], element: T) {
 export function randomId() {
   const timePart = toBase62(Date.now());
   const randomPart = toBase62(Math.floor(Math.random() * 1e15));
-  return `${timePart}.${randomPart}`;
+  return `${timePart}_${randomPart}`;
 }
 
 /**
@@ -65,7 +65,7 @@ export function genHash(str: string, len: number) {
 }
 
 /**
- * Builds a randomized id based on a name and millisecond-based unix timestmap.
+ * Builds a randomized id based on a name and millisecond-based unix timestamp.
  */
 export function buildId(name: string, timestamp: number) {
   const slug = slugify(name, {
@@ -73,7 +73,7 @@ export function buildId(name: string, timestamp: number) {
     lower: true,
   });
   const code = toBase62(timestamp);
-  const id = `${slug}-${code}`;
+  const id = `${slug}_${code}`;
   return id;
 }
 

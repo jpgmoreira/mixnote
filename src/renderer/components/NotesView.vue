@@ -16,6 +16,9 @@
     };
   }
 
+  /**
+   * Add a new tab group: width will be equally distributed on new configuration.
+   */
   function addTabGroup() {
     const newTabGroup = {
       id: randomId(),
@@ -29,8 +32,25 @@
     }
   }
 
+  /**
+   * Close a tab group:
+   *   - Closing the first tab group:
+   *       The second tab group will consume its width.
+   *   - Closing any other tab group:
+   *       The tab group immediatelly to the left will
+   *       consume its width.
+   */
   function closeTabGroup(groupId: string) {
-    // ...
+    if (tabGroups.value.length < 2) {
+      throw new Error('Cannot close a tab group having less than 2 groups!');
+    }
+    const index = tabGroups.value.findIndex((g) => g.id === groupId);
+    if (index === 0) {
+      tabGroups.value[1].width += tabGroups.value[0].width;
+    } else {
+      tabGroups.value[index - 1].width += tabGroups.value[index].width;
+    }
+    tabGroups.value.splice(index, 1);
   }
 </script>
 

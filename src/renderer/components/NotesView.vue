@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { ref } from 'vue';
+  import { ref, onMounted, onBeforeUnmount } from 'vue';
   import { randomId } from '@common/utils/utils';
 
   const tabGroups = ref([
@@ -9,6 +9,8 @@
       tabs: [],
     },
   ]);
+
+  const isResizing = ref(false);
 
   function computeTabGroupStyle(group: any) {
     return {
@@ -52,6 +54,31 @@
     }
     tabGroups.value.splice(index, 1);
   }
+
+  function resizerMouseDown() {
+    isResizing.value = true;
+    document.body.style.cursor = 'col-resize';
+    document.body.style.userSelect = 'none';
+  }
+
+  //  --- Hooks: ---
+  function windowMouseMove(e: MouseEvent) {
+    if (!isResizing.value) return;
+    // Implement here...
+  }
+  function windowMouseUp() {
+    isResizing.value = false;
+    document.body.style.cursor = '';
+    document.body.style.userSelect = '';
+  }
+  onMounted(() => {
+    window.addEventListener('mouseup', windowMouseUp);
+    window.addEventListener('mousemove', windowMouseMove);
+  });
+  onBeforeUnmount(() => {
+    window.removeEventListener('mouseup', windowMouseUp);
+    window.removeEventListener('mousemove', windowMouseMove);
+  });
 </script>
 
 <template>
@@ -64,27 +91,17 @@
       :style="computeTabGroupStyle(group)"
     >
       <!-- Resizer -->
-      <div v-if="index > 0" class="resizer"></div>
+      <div v-if="index > 0" class="resizer" @mousedown="resizerMouseDown"></div>
       <!-- Tab area: -->
       <div class="grow" style="border: 2px solid blue">
         <!-- Tab headers: -->
         <div class="flex" style="border: 2px solid mediumaquamarine">
           <!-- Tab group buttons -->
-          <div class="ml-auto">
-            <button
-              type="button"
-              v-if="tabGroups.length > 1"
-              class="ml-auto"
-              @click="closeTabGroup(group.id)"
-            >
+          <div class="ml-auto flex">
+            <button type="button" v-if="tabGroups.length > 1" @click="closeTabGroup(group.id)">
               x
             </button>
-            <button
-              type="button"
-              v-if="index === tabGroups.length - 1"
-              class="ml-auto"
-              @click="addTabGroup"
-            >
+            <button type="button" v-if="index === tabGroups.length - 1" @click="addTabGroup">
               ||
             </button>
           </div>
@@ -99,5 +116,9 @@
     height: 100%;
     width: 5px;
     background-color: red;
+    cursor: col-resize;
+  }
+  .resizer:hover {
+    background-color: chartreuse;
   }
 </style>

@@ -28,21 +28,56 @@
       group.width = width;
     }
   }
+
+  function closeTabGroup(groupId: string) {
+    // ...
+  }
 </script>
 
 <template>
-  <div class="notes-view flex grow relative" style="border: 2px solid orchid">
+  <div class="notes-view flex grow relative">
     <div
       v-for="(group, index) in tabGroups"
+      class="flex"
       :key="group.id"
-      style="border: 2px solid slateblue"
+      style="border: 2px solid violet"
       :style="computeTabGroupStyle(group)"
     >
-      <div class="flex" style="border: 2px solid mediumaquamarine">
-        <button v-if="index === tabGroups.length - 1" class="ml-auto" @click="addTabGroup">
-          ||
-        </button>
+      <!-- Resizer -->
+      <div v-if="index > 0" class="resizer"></div>
+      <!-- Tab area: -->
+      <div class="grow" style="border: 2px solid blue">
+        <!-- Tab headers: -->
+        <div class="flex" style="border: 2px solid mediumaquamarine">
+          <!-- Tab group buttons -->
+          <div class="ml-auto">
+            <button
+              type="button"
+              v-if="tabGroups.length > 1"
+              class="ml-auto"
+              @click="closeTabGroup(group.id)"
+            >
+              x
+            </button>
+            <button
+              type="button"
+              v-if="index === tabGroups.length - 1"
+              class="ml-auto"
+              @click="addTabGroup"
+            >
+              ||
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
+
+<style scoped>
+  .resizer {
+    height: 100%;
+    width: 5px;
+    background-color: red;
+  }
+</style>

@@ -32,19 +32,17 @@
 
 <template>
   <div class="notes-view flex grow relative" style="border: 2px solid orchid">
-    <button
-      type="button"
-      class="absolute top-1 right-1"
-      style="border: 1px solid white"
-      @click="addTabGroup"
-    >
-      ||
-    </button>
     <div
-      v-for="group in tabGroups"
+      v-for="(group, index) in tabGroups"
       :key="group.id"
       style="border: 2px solid slateblue"
       :style="computeTabGroupStyle(group)"
-    ></div>
+    >
+      <div class="flex" style="border: 2px solid mediumaquamarine">
+        <button v-if="index === tabGroups.length - 1" class="ml-auto" @click="addTabGroup">
+          ||
+        </button>
+      </div>
+    </div>
   </div>
 </template>

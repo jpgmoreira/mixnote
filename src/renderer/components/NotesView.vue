@@ -83,7 +83,6 @@
     }
     const container = groupsContainer.value;
     const containerRect = container.getBoundingClientRect();
-    // - Arrumar a condição a seguir que está ruim.
     // - Arrumar tamanho do último group que o tamanho mínimo tem que ser maior.
     // - Colocar botão de rearranjar todos com os mesmos tamanhos.
     if (e.clientX < containerRect.left || e.clientX > containerRect.right) {
@@ -91,12 +90,12 @@
     }
     const containerWidth = containerRect.width || 1;
     const delta = e.clientX - resize.left;
-    resize.left = e.clientX;
     let totalRatio = Math.abs(delta / containerWidth);
     const index = resize.index;
     // Stacking effect:
     if (delta < 0) {
       // to left.
+      const prevWidth = tabGroups.value[index].width;
       for (let i = index - 1; i >= 0; i--) {
         const group = tabGroups.value[i];
         const maxCanReduce = group.width - MIN_TAB_WIDTH / containerWidth;
@@ -107,8 +106,13 @@
         tabGroups.value[index].width += toReduce;
         if (totalRatio <= 0) break;
       }
+      const currWidth = tabGroups.value[index].width;
+      if (prevWidth !== currWidth) {
+        resize.left = e.clientX;
+      }
     } else {
       // to right.
+      const prevWidth = tabGroups.value[index - 1].width;
       for (let i = index; i < tabGroups.value.length; i++) {
         const group = tabGroups.value[i];
         const maxCanReduce = group.width - MIN_TAB_WIDTH / containerWidth;
@@ -118,6 +122,10 @@
         group.width -= toReduce;
         tabGroups.value[index - 1].width += toReduce;
         if (totalRatio <= 0) break;
+      }
+      const currWidth = tabGroups.value[index - 1].width;
+      if (prevWidth !== currWidth) {
+        resize.left = e.clientX;
       }
     }
   }

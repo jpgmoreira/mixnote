@@ -9,6 +9,7 @@
     {
       id: randomId(),
       width: 1,
+      active: false,
       tabs: [],
     },
   ]);
@@ -42,6 +43,7 @@
     const newTabGroup = {
       id: randomId(),
       width: 0,
+      active: false,
       tabs: [],
     };
     tabGroups.value.push(newTabGroup);
@@ -78,6 +80,17 @@
   }
   function isResizingIndex(index: number) {
     return resize.isResizing && resize.index === index;
+  }
+
+  function setActiveGroup(index: number) {
+    const groups = tabGroups.value;
+    if (!groups.length) return;
+    groups.forEach((group) => (group.active = false));
+    if (index < groups.length) {
+      groups[index].active = true;
+    } else {
+      groups[0].active = true;
+    }
   }
 
   //  --- Hooks: ---
@@ -151,12 +164,14 @@
 
 <template>
   <div class="notes-view flex grow relative" ref="groups-container">
+    <!-- Tab groups -->
     <div
       v-for="(group, index) in tabGroups"
-      class="flex"
+      class="tab-group flex"
       :key="group.id"
-      style="border: 2px solid violet"
       :style="computeTabGroupStyle(group)"
+      @click="setActiveGroup(index)"
+      :class="{ active: group.active }"
     >
       <!-- Resizer -->
       <div
@@ -164,13 +179,14 @@
         class="resizer"
         :class="{ resizing: isResizingIndex(index) }"
         @mousedown="resizerMouseDown($event, index)"
+        @click.stop
       ></div>
       <!-- Tab area: -->
       <div class="grow" style="border: 2px solid blue">
         <!-- Tab headers: -->
         <div class="flex" style="border: 2px solid mediumaquamarine">
           <!-- Tab group buttons -->
-          <div class="ml-auto flex">
+          <div class="ml-auto flex" @click.stop>
             <button type="button" v-if="tabGroups.length > 1" @click="closeTabGroup(group.id)">
               x
             </button>
@@ -186,6 +202,12 @@
 </template>
 
 <style scoped>
+  .tab-group {
+    border: 2px solid violet;
+  }
+  .tab-group.active {
+    background: rgba(100, 0, 0, 0.7);
+  }
   .resizer {
     height: 100%;
     width: 5px;

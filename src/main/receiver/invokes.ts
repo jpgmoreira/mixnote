@@ -6,6 +6,8 @@ import { AuthResponseDTO } from '@common/dto/authResponseDTO';
 import { GenericResponseDTO } from '@common/dto/genericResponseDTO';
 import { UISettings } from '@common/schemas/ui';
 import { UIManager } from '@main/data/managers/uiManager';
+import { TabGroup } from '@common/schemas/tabs';
+import { TabsManager } from '@main/data/managers/tabsManager';
 
 ipcMain.handle(
   InvokeChannels.createProfile,
@@ -61,5 +63,12 @@ ipcMain.handle(
   InvokeChannels.updateUISettings,
   async (_: IpcMainInvokeEvent, settings: UISettings) => {
     UIManager.instance.setUISettings(settings);
+  }
+);
+
+ipcMain.handle(
+  InvokeChannels.updateTabGroups,
+  async (_: IpcMainInvokeEvent, groups: TabGroup[]) => {
+    TabsManager.instance.updateGroups(groups);
   }
 );

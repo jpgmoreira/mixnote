@@ -1,18 +1,15 @@
 <script setup lang="ts">
-  import { ref, reactive, useTemplateRef, onMounted, onBeforeUnmount } from 'vue';
+  import { reactive, watch, useTemplateRef, onMounted, onBeforeUnmount } from 'vue';
   import { randomId } from '@common/utils/utils';
+  import { useNotesStore } from '@renderer/store/notes';
+  import { storeToRefs } from 'pinia';
 
   const MIN_GROUP_WIDTH = 30; // px.
   const MIN_LAST_GROUP_WIDTH = 50; // px.
 
-  const tabGroups = ref([
-    {
-      id: randomId(),
-      width: 1,
-      active: false,
-      tabs: [],
-    },
-  ]);
+  const notesStore = useNotesStore();
+
+  const { tabGroups } = storeToRefs(notesStore);
 
   const resize = reactive({
     isResizing: false,
@@ -29,7 +26,8 @@
   }
 
   function resetGroupWidths() {
-    if (!tabGroups.value.length) throw new Error('Cannot normalize empty tab groups!');
+    if (!tabGroups.value || !tabGroups.value.length)
+      throw new Error('Cannot normalize empty tab groups!');
     const width = 1 / tabGroups.value.length;
     for (const group of tabGroups.value) {
       group.width = width;
@@ -40,6 +38,7 @@
    * Add a new tab group: width will be equally distributed on new configuration.
    */
   function addTabGroup() {
+    if (!tabGroups.value) throw new Error('Uninitialized tab groups.');
     const newTabGroup = {
       id: randomId(),
       width: 0,
@@ -59,6 +58,7 @@
    *       consume its width.
    */
   function closeTabGroup(groupId: string) {
+    if (!tabGroups.value) throw new Error('Uninitialized tab groups.');
     if (tabGroups.value.length < 2) {
       throw new Error('Cannot close a tab group having less than 2 groups!');
     }
@@ -83,6 +83,7 @@
   }
 
   function setActiveGroup(index: number) {
+    if (!tabGroups.value) throw new Error('Uninitialized tab groups.');
     const groups = tabGroups.value;
     if (!groups.length) return;
     groups.forEach((group) => (group.active = false));
@@ -93,8 +94,14 @@
     }
   }
 
+  //  --- Watches: ---
+
+  watch(tabGroups, notesStore.tabGroupsUpdated, { deep: true });
+
   //  --- Hooks: ---
+
   function windowMouseMove(e: MouseEvent) {
+    if (!tabGroups.value) return;
     if (!resize.isResizing) return;
     if (!groupsContainer.value) return;
     if (tabGroups.value.length < 2) {
@@ -166,6 +173,7 @@
   <div class="notes-view flex grow relative" ref="groups-container">
     <!-- Tab groups -->
     <div
+      v-if="tabGroups"
       v-for="(group, index) in tabGroups"
       class="tab-group flex"
       :key="group.id"

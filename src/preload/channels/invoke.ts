@@ -10,4 +10,5 @@ export enum InvokeChannels {
   login = 'login',
   logout = 'logout',
   updateUISettings = 'update-ui-settings',
+  updateTabGroups = 'update-tab-groups',
 }

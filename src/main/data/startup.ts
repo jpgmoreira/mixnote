@@ -3,6 +3,7 @@ import { ProfileManager } from './managers/profileManager';
 import { TreeManager } from './managers/treeManager';
 import { UIManager } from './managers/uiManager';
 import { NotesManager } from './managers/notesManager';
+import { TabsManager } from './managers/tabsManager';
 
 export async function loadStartupData() {
   const profile = ProfileManager.instance.getCurrProfile();
@@ -11,12 +12,15 @@ export async function loadStartupData() {
     profile,
     registry,
     ui: null,
+    tabGroups: null,
   };
   if (profile) {
     TreeManager.instance.loadTree(profile.id);
     UIManager.instance.loadProfile(profile.id);
     NotesManager.instance.loadProfile(profile.id);
+    TabsManager.instance.loadProfile(profile.id);
     data.ui = UIManager.instance.getUISettings();
+    data.tabGroups = TabsManager.instance.getGroups();
   }
   return data;
 }

@@ -1,6 +1,8 @@
 <script setup lang="ts">
-  import { ref, onMounted, onBeforeUnmount } from 'vue';
+  import { ref, reactive, useTemplateRef, onMounted, onBeforeUnmount } from 'vue';
   import { randomId } from '@common/utils/utils';
+
+  const MIN_TAB_WIDTH = 30; // px.
 
   const tabGroups = ref([
     {
@@ -10,7 +12,13 @@
     },
   ]);
 
-  const isResizing = ref(false);
+  const resize = reactive({
+    isResizing: false,
+    index: 0,
+    left: 0,
+  });
+
+  const groupsContainer = useTemplateRef('groups-container');
 
   function computeTabGroupStyle(group: any) {
     return {
@@ -55,19 +63,66 @@
     tabGroups.value.splice(index, 1);
   }
 
-  function resizerMouseDown() {
-    isResizing.value = true;
+  function resizerMouseDown(e: MouseEvent, index: number) {
+    resize.isResizing = true;
+    resize.index = index;
+    resize.left = e.clientX;
     document.body.style.cursor = 'col-resize';
     document.body.style.userSelect = 'none';
+  }
+  function isResizingIndex(index: number) {
+    return resize.isResizing && resize.index === index;
   }
 
   //  --- Hooks: ---
   function windowMouseMove(e: MouseEvent) {
-    if (!isResizing.value) return;
-    // Implement here...
+    if (!resize.isResizing) return;
+    if (!groupsContainer.value) return;
+    if (tabGroups.value.length < 2) {
+      throw new Error('Cannot resize having less than 2 groups!');
+    }
+    const container = groupsContainer.value;
+    const containerRect = container.getBoundingClientRect();
+    // - Arrumar a condição a seguir que está ruim.
+    // - Arrumar tamanho do último group que o tamanho mínimo tem que ser maior.
+    // - Colocar botão de rearranjar todos com os mesmos tamanhos.
+    if (e.clientX < containerRect.left || e.clientX > containerRect.right) {
+      return;
+    }
+    const containerWidth = containerRect.width || 1;
+    const delta = e.clientX - resize.left;
+    resize.left = e.clientX;
+    let totalRatio = Math.abs(delta / containerWidth);
+    const index = resize.index;
+    // Stacking effect:
+    if (delta < 0) {
+      // to left.
+      for (let i = index - 1; i >= 0; i--) {
+        const group = tabGroups.value[i];
+        const maxCanReduce = group.width - MIN_TAB_WIDTH / containerWidth;
+        if (maxCanReduce <= 0) continue;
+        const toReduce = Math.min(maxCanReduce, totalRatio);
+        totalRatio -= toReduce;
+        group.width -= toReduce;
+        tabGroups.value[index].width += toReduce;
+        if (totalRatio <= 0) break;
+      }
+    } else {
+      // to right.
+      for (let i = index; i < tabGroups.value.length; i++) {
+        const group = tabGroups.value[i];
+        const maxCanReduce = group.width - MIN_TAB_WIDTH / containerWidth;
+        if (maxCanReduce <= 0) continue;
+        const toReduce = Math.min(maxCanReduce, totalRatio);
+        totalRatio -= toReduce;
+        group.width -= toReduce;
+        tabGroups.value[index - 1].width += toReduce;
+        if (totalRatio <= 0) break;
+      }
+    }
   }
   function windowMouseUp() {
-    isResizing.value = false;
+    resize.isResizing = false;
     document.body.style.cursor = '';
     document.body.style.userSelect = '';
   }
@@ -82,7 +137,7 @@
 </script>
 
 <template>
-  <div class="notes-view flex grow relative">
+  <div class="notes-view flex grow relative" ref="groups-container">
     <div
       v-for="(group, index) in tabGroups"
       class="flex"
@@ -91,7 +146,12 @@
       :style="computeTabGroupStyle(group)"
     >
       <!-- Resizer -->
-      <div v-if="index > 0" class="resizer" @mousedown="resizerMouseDown"></div>
+      <div
+        v-if="index > 0"
+        class="resizer"
+        :class="{ resizing: isResizingIndex(index) }"
+        @mousedown="resizerMouseDown($event, index)"
+      ></div>
       <!-- Tab area: -->
       <div class="grow" style="border: 2px solid blue">
         <!-- Tab headers: -->
@@ -118,6 +178,7 @@
     background-color: red;
     cursor: col-resize;
   }
+  .resizer.resizing,
   .resizer:hover {
     background-color: chartreuse;
   }

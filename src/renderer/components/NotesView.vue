@@ -2,7 +2,8 @@
   import { ref, reactive, useTemplateRef, onMounted, onBeforeUnmount } from 'vue';
   import { randomId } from '@common/utils/utils';
 
-  const MIN_TAB_WIDTH = 30; // px.
+  const MIN_GROUP_WIDTH = 30; // px.
+  const MIN_LAST_GROUP_WIDTH = 50; // px.
 
   const tabGroups = ref([
     {
@@ -26,6 +27,14 @@
     };
   }
 
+  function resetGroupWidths() {
+    if (!tabGroups.value.length) throw new Error('Cannot normalize empty tab groups!');
+    const width = 1 / tabGroups.value.length;
+    for (const group of tabGroups.value) {
+      group.width = width;
+    }
+  }
+
   /**
    * Add a new tab group: width will be equally distributed on new configuration.
    */
@@ -36,10 +45,7 @@
       tabs: [],
     };
     tabGroups.value.push(newTabGroup);
-    const width = 1 / tabGroups.value.length;
-    for (const group of tabGroups.value) {
-      group.width = width;
-    }
+    resetGroupWidths();
   }
 
   /**
@@ -83,8 +89,6 @@
     }
     const container = groupsContainer.value;
     const containerRect = container.getBoundingClientRect();
-    // - Arrumar tamanho do último group que o tamanho mínimo tem que ser maior.
-    // - Colocar botão de rearranjar todos com os mesmos tamanhos.
     if (e.clientX < containerRect.left || e.clientX > containerRect.right) {
       return;
     }
@@ -98,7 +102,7 @@
       const prevWidth = tabGroups.value[index].width;
       for (let i = index - 1; i >= 0; i--) {
         const group = tabGroups.value[i];
-        const maxCanReduce = group.width - MIN_TAB_WIDTH / containerWidth;
+        const maxCanReduce = group.width - MIN_GROUP_WIDTH / containerWidth;
         if (maxCanReduce <= 0) continue;
         const toReduce = Math.min(maxCanReduce, totalRatio);
         totalRatio -= toReduce;
@@ -115,7 +119,8 @@
       const prevWidth = tabGroups.value[index - 1].width;
       for (let i = index; i < tabGroups.value.length; i++) {
         const group = tabGroups.value[i];
-        const maxCanReduce = group.width - MIN_TAB_WIDTH / containerWidth;
+        const limit = i === tabGroups.value.length - 1 ? MIN_LAST_GROUP_WIDTH : MIN_GROUP_WIDTH;
+        const maxCanReduce = group.width - limit / containerWidth;
         if (maxCanReduce <= 0) continue;
         const toReduce = Math.min(maxCanReduce, totalRatio);
         totalRatio -= toReduce;
@@ -169,9 +174,10 @@
             <button type="button" v-if="tabGroups.length > 1" @click="closeTabGroup(group.id)">
               x
             </button>
-            <button type="button" v-if="index === tabGroups.length - 1" @click="addTabGroup">
-              ||
-            </button>
+            <template v-if="index === tabGroups.length - 1">
+              <button type="button" @click="resetGroupWidths">R</button>
+              <button type="button" @click="addTabGroup">||</button>
+            </template>
           </div>
         </div>
       </div>

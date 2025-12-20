@@ -198,6 +198,7 @@
             v-for="tab in group.tabs"
             class="tab-header whitespace-nowrap"
             :class="{ preview: tab.preview, active: tab.active }"
+            @click="notesStore.tabHeaderClick(group, tab.id)"
           >
             {{ notesStore.getTabTitle(tab) }}
           </div>
@@ -213,7 +214,7 @@
           </div>
         </div>
         <!-- Tab content -->
-        <div class="grow" style="border: 3px solid sienna" v-if="notesStore.getActiveNote(group)">
+        <div class="grow" style="border: 3px solid sienna" v-if="notesStore.hasActiveNote(group)">
           {{ notesStore.getActiveNote(group) }}
         </div>
       </div>
@@ -230,6 +231,13 @@
   }
   .tab-header.preview {
     font-style: italic;
+  }
+  .tab-header.active {
+    background-color: rgba(0, 0, 100, 0.7);
+  }
+  .tab-header {
+    border: 1px solid rebeccapurple;
+    cursor: pointer;
   }
   .resizer {
     height: 100%;

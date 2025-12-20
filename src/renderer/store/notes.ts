@@ -52,14 +52,22 @@ export const useNotesStore = defineStore('notes', {
       this.notes[noteId] = note;
     },
     setActiveTab(group: TabGroup, tabId: string) {
-      group.tabs.forEach((tab) => (tab.active = false));
-      const tab = group.tabs.find((tab) => tab.id === tabId);
-      if (!tab) throw new Error('Tab not found!');
-      tab.active = true;
+      group.tabs.forEach((tab) => (tab.active = tab.id === tabId));
     },
     getTabTitle(tab: Tab) {
       const note = this.notes[tab.noteId];
       return note?.title || '';
+    },
+    hasActiveNote(group: TabGroup) {
+      const activeTab = group.tabs.find((tab) => tab.active);
+      if (!activeTab) return false;
+      return Boolean(this.notes[activeTab.noteId]);
+    },
+    tabHeaderClick(group: TabGroup, tabId: string) {
+      const tab = group.tabs.find((tab) => tab.id === tabId);
+      if (!tab) return;
+      group.tabs.forEach((tab) => (tab.active = tab.id === tabId));
+      tab.preview = false;
     },
     getActiveNote(group: TabGroup) {
       const activeTab = group.tabs.find((tab) => tab.active);
@@ -83,6 +91,7 @@ export const useNotesStore = defineStore('notes', {
       const tab = activeGroup.tabs.find((tab) => tab.noteId === noteId);
       if (tab) {
         this.setActiveTab(activeGroup, tab.id);
+        tab.preview = false;
         return;
       }
       // 3. Open it in a preview tab in the current tab group.

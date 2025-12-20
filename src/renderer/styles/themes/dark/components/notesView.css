@@ -1,0 +1,19 @@
+.theme-dark .notes-view .tab-header.preview .tab-title {
+  font-style: italic;
+}
+
+.theme-dark .notes-view .tab-header {
+  cursor: pointer;
+}
+
+.theme-dark .notes-view .resizer {
+  height: 100%;
+  width: 5px;
+  background: rgb(66, 66, 66);
+  cursor: col-resize;
+}
+
+.theme-dark .notes-view .resizer.resizing,
+.theme-dark .notes-view .resizer:hover {
+  background: #0087e7;
+}

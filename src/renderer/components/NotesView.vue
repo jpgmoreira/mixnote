@@ -195,9 +195,9 @@
         @click.stop
       ></div>
       <!-- Tab area: -->
-      <div class="flex grow flex-col max-w-full" style="border: 3px solid fuchsia">
+      <div class="flex grow flex-col max-w-full">
         <!-- Tab headers: -->
-        <div class="flex flex-wrap" style="border: 2px solid red">
+        <div class="flex flex-wrap">
           <div
             v-for="tab in group.tabs"
             class="tab-header flex justify-between whitespace-nowrap"
@@ -219,39 +219,10 @@
           </div>
         </div>
         <!-- Tab content -->
-        <div class="grow" style="border: 3px solid sienna" v-if="notesStore.hasActiveNote(group)">
+        <div class="grow" v-if="notesStore.hasActiveNote(group)">
           {{ notesStore.getActiveNote(group) }}
         </div>
       </div>
     </div>
   </div>
 </template>
-
-<style scoped>
-  .tab-group {
-    border: 2px solid lightgreen;
-  }
-  .tab-group.active {
-    background: rgba(100, 0, 0, 0.7);
-  }
-  .tab-header.preview .tab-title {
-    font-style: italic;
-  }
-  .tab-header.active {
-    background-color: rgba(0, 0, 100, 0.7);
-  }
-  .tab-header {
-    border: 1px solid rebeccapurple;
-    cursor: pointer;
-  }
-  .resizer {
-    height: 100%;
-    width: 5px;
-    background-color: red;
-    cursor: col-resize;
-  }
-  .resizer.resizing,
-  .resizer:hover {
-    background-color: chartreuse;
-  }
-</style>

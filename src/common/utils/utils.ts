@@ -1,3 +1,4 @@
+import { toRaw } from 'vue';
 import crypto from 'node:crypto';
 import slugify from 'slugify';
 
@@ -126,4 +127,17 @@ export function extFromMime(mime: string): string {
   };
   if (mime in exceptions) return exceptions[mime];
   return `.${mime.split('/')[1]}`;
+}
+
+export function toRawDeep<T>(obj: T): T {
+  const raw = toRaw(obj);
+  if (obj === null || typeof obj !== 'object') return obj;
+  if (Array.isArray(raw)) {
+    return raw.map((item) => toRawDeep(item)) as T;
+  }
+  const result = {} as Partial<T>;
+  for (const key in raw) {
+    result[key] = toRawDeep(raw[key]);
+  }
+  return result as T;
 }

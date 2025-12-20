@@ -5,8 +5,8 @@ import { Events } from '@renderer/events';
 import { StartupDTO } from '@common/dto/startupDTO';
 import { Tab, TabGroup } from '@common/schemas/tabs';
 import { InvokeChannels } from '@preload/channels/invoke';
-import { getEmptyNote, Note } from '@common/schemas/note';
-import { randomId } from '@common/utils/utils';
+import { Note } from '@common/schemas/note';
+import { randomId, toRawDeep } from '@common/utils/utils';
 
 EventEmitter.instance.on(Events.loadStartupData, (data: StartupDTO) => {
   useNotesStore().initData(data);
@@ -45,7 +45,7 @@ export const useNotesStore = defineStore('notes', {
     updateTabGroups() {
       clearTimeout(this.tabGroupsTimer);
       this.tabGroupsTimer = setTimeout(() => {
-        window.api.invoke(InvokeChannels.updateTabGroups, toRaw(this.tabGroups));
+        window.api.invoke(InvokeChannels.updateTabGroups, toRawDeep(this.tabGroups));
       }, 500);
     },
     async fetchNote(noteId: string) {

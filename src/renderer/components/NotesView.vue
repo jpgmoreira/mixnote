@@ -195,9 +195,9 @@
         @click.stop
       ></div>
       <!-- Tab area: -->
-      <div class="flex grow flex-col" style="border: 2px solid blue">
+      <div class="flex grow flex-col max-w-full" style="border: 3px solid fuchsia">
         <!-- Tab headers: -->
-        <div class="flex" style="border: 2px solid mediumaquamarine">
+        <div class="flex flex-wrap" style="border: 2px solid red">
           <div
             v-for="tab in group.tabs"
             class="tab-header flex justify-between whitespace-nowrap"
@@ -229,7 +229,7 @@
 
 <style scoped>
   .tab-group {
-    border: 2px solid violet;
+    border: 2px solid lightgreen;
   }
   .tab-group.active {
     background: rgba(100, 0, 0, 0.7);

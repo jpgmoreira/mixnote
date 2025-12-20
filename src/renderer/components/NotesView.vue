@@ -5,7 +5,7 @@
   import { storeToRefs } from 'pinia';
 
   const MIN_GROUP_WIDTH = 30; // px.
-  const MIN_LAST_GROUP_WIDTH = 50; // px.
+  const MIN_LAST_GROUP_WIDTH = 90; // px.
 
   const notesStore = useNotesStore();
 

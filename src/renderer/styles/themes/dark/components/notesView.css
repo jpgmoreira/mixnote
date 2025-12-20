@@ -81,7 +81,6 @@
   font-size: 13px;
   cursor: pointer;
   user-select: none;
-  max-width: 220px;
 }
 
 .theme-dark .notes-view .tab-header:hover {
@@ -90,9 +89,9 @@
 
 /* Active tab */
 .theme-dark .notes-view .tab-header.active {
-  background: #282828;
+  background: #3b3b3b;
   border: 1px solid #41464b;
-  border-bottom: 1px solid #232323;
+  border-bottom: none;
   color: #ffffff;
 }
 

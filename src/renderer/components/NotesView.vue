@@ -194,6 +194,13 @@
       <div class="grow" style="border: 2px solid blue">
         <!-- Tab headers: -->
         <div class="flex" style="border: 2px solid mediumaquamarine">
+          <div
+            v-for="tab in group.tabs"
+            class="tab-header"
+            :class="{ preview: tab.preview, active: tab.active }"
+          >
+            {{ notesStore.getTabTitle(tab) }}
+          </div>
           <!-- Tab group buttons -->
           <div class="ml-auto flex" @click.stop>
             <button type="button" v-if="tabGroups.length > 1" @click="closeTabGroup(group.id)">

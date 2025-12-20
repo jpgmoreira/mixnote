@@ -3,7 +3,7 @@ import { toRaw } from 'vue';
 import { EventEmitter } from '@common/events/eventEmitter';
 import { Events } from '@renderer/events';
 import { StartupDTO } from '@common/dto/startupDTO';
-import { getEmptyTabGroup, TabGroup } from '@common/schemas/tabs';
+import { getEmptyTabGroup, Tab, TabGroup } from '@common/schemas/tabs';
 import { InvokeChannels } from '@preload/channels/invoke';
 import { Note } from '@common/schemas/note';
 import { randomId } from '@common/utils/utils';
@@ -41,6 +41,17 @@ export const useNotesStore = defineStore('notes', {
         window.api.invoke(InvokeChannels.updateTabGroups, toRaw(this.tabGroups));
       }, 500);
     },
+    setActiveTab(group: TabGroup, tabId: string) {
+      group.tabs.forEach((tab) => (tab.active = false));
+      const tab = group.tabs.find((tab) => tab.id === tabId);
+      if (!tab) throw new Error('Tab not found!');
+      tab.active = true;
+    },
+    getTabTitle(tab: Tab) {
+      const note = this.notes[tab.noteId];
+      if (!note) throw new Error('Note not found!');
+      return note.title;
+    },
     async explorerNoteClicked(noteId: string) {
       if (!this.tabGroups || !this.tabGroups.length) {
         throw new Error('No tab groups!');
@@ -58,7 +69,7 @@ export const useNotesStore = defineStore('notes', {
       }
       const tab = activeGroup.tabs.find((tab) => tab.noteId === noteId);
       if (tab) {
-        activeGroup.activeTab = tab.id;
+        this.setActiveTab(activeGroup, tab.id);
         return;
       }
       // 3. Open it in a preview tab in the current tab group.
@@ -69,11 +80,12 @@ export const useNotesStore = defineStore('notes', {
           id: tabId,
           noteId,
           preview: true,
+          active: true,
         };
         activeGroup.tabs.push(previewTab);
       }
       previewTab.noteId = noteId;
-      activeGroup.activeTab = previewTab.id;
+      this.setActiveTab(activeGroup, previewTab.id);
     },
   },
 });

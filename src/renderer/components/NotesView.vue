@@ -69,6 +69,10 @@
     } else {
       tabGroups.value[index - 1].width += tabGroups.value[index].width;
     }
+    const group = tabGroups.value[index];
+    for (const tab of group.tabs) {
+      notesStore.closeTab(group, tab.id);
+    }
     tabGroups.value.splice(index, 1);
   }
 
@@ -196,11 +200,12 @@
         <div class="flex" style="border: 2px solid mediumaquamarine">
           <div
             v-for="tab in group.tabs"
-            class="tab-header whitespace-nowrap"
+            class="tab-header flex justify-between whitespace-nowrap"
             :class="{ preview: tab.preview, active: tab.active }"
             @click="notesStore.tabHeaderClick(group, tab.id)"
           >
-            {{ notesStore.getTabTitle(tab) }}
+            <span class="tab-title">{{ notesStore.getTabTitle(tab) }}</span>
+            <span @click="notesStore.closeTab(group, tab.id)">x</span>
           </div>
           <!-- Tab group buttons -->
           <div class="ml-auto flex" @click.stop>
@@ -229,7 +234,7 @@
   .tab-group.active {
     background: rgba(100, 0, 0, 0.7);
   }
-  .tab-header.preview {
+  .tab-header.preview .tab-title {
     font-style: italic;
   }
   .tab-header.active {

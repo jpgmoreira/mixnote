@@ -74,6 +74,21 @@ export const useNotesStore = defineStore('notes', {
       if (!activeTab) return null;
       return this.notes[activeTab.noteId] || null;
     },
+    closeTab(group: TabGroup, tabId: string) {
+      if (!this.tabGroups) throw new Error('No tab groups!');
+      const tab = group.tabs.find((t) => t.id === tabId);
+      if (!tab) throw new Error('Tab not found!');
+      const noteId = tab.noteId;
+      group.tabs = group.tabs.filter((t) => t.id !== tabId);
+      for (const group of this.tabGroups) {
+        for (const tab of group.tabs) {
+          if (tab.noteId === noteId) {
+            return;
+          }
+        }
+      }
+      delete this.notes[noteId];
+    },
     async explorerNoteClicked(noteId: string) {
       if (!this.tabGroups || !this.tabGroups.length) {
         throw new Error('No tab groups!');

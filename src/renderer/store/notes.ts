@@ -19,6 +19,7 @@ EventEmitter.instance.on(Events.clearProfileData, () => {
 /**
  * In the back-end there is a separate manager for the notes and for the tabs.
  * Here I keep both data in the same store to simplify the use.
+ * The logic is split between this Pinia store and the NotesView component.
  */
 export const useNotesStore = defineStore('notes', {
   state: () => ({

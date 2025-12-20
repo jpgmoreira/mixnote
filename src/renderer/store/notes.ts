@@ -5,7 +5,7 @@ import { Events } from '@renderer/events';
 import { StartupDTO } from '@common/dto/startupDTO';
 import { Tab, TabGroup } from '@common/schemas/tabs';
 import { InvokeChannels } from '@preload/channels/invoke';
-import { Note } from '@common/schemas/note';
+import { getEmptyNote, Note } from '@common/schemas/note';
 import { randomId } from '@common/utils/utils';
 
 EventEmitter.instance.on(Events.loadStartupData, (data: StartupDTO) => {
@@ -60,6 +60,11 @@ export const useNotesStore = defineStore('notes', {
     getTabTitle(tab: Tab) {
       const note = this.notes[tab.noteId];
       return note?.title || '';
+    },
+    getActiveNote(group: TabGroup) {
+      const activeTab = group.tabs.find((tab) => tab.active);
+      if (!activeTab) return null;
+      return this.notes[activeTab.noteId] || null;
     },
     async explorerNoteClicked(noteId: string) {
       if (!this.tabGroups || !this.tabGroups.length) {

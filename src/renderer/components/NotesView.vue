@@ -176,7 +176,7 @@
     <div
       v-if="tabGroups"
       v-for="(group, index) in tabGroups"
-      class="tab-group flex"
+      class="tab-group flex overflow-hidden"
       :key="group.id"
       :style="computeTabGroupStyle(group)"
       @click="setActiveGroup(index)"
@@ -191,12 +191,12 @@
         @click.stop
       ></div>
       <!-- Tab area: -->
-      <div class="grow" style="border: 2px solid blue">
+      <div class="flex grow flex-col" style="border: 2px solid blue">
         <!-- Tab headers: -->
         <div class="flex" style="border: 2px solid mediumaquamarine">
           <div
             v-for="tab in group.tabs"
-            class="tab-header"
+            class="tab-header whitespace-nowrap"
             :class="{ preview: tab.preview, active: tab.active }"
           >
             {{ notesStore.getTabTitle(tab) }}
@@ -211,6 +211,10 @@
               <button type="button" @click="addTabGroup">||</button>
             </template>
           </div>
+        </div>
+        <!-- Tab content -->
+        <div class="grow" style="border: 3px solid sienna" v-if="notesStore.getActiveNote(group)">
+          {{ notesStore.getActiveNote(group) }}
         </div>
       </div>
     </div>

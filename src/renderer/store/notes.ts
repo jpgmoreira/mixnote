@@ -1,5 +1,4 @@
 import { defineStore } from 'pinia';
-import { toRaw } from 'vue';
 import { EventEmitter } from '@common/events/eventEmitter';
 import { Events } from '@renderer/events';
 import { StartupDTO } from '@common/dto/startupDTO';

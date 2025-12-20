@@ -224,6 +224,9 @@
   .tab-group.active {
     background: rgba(100, 0, 0, 0.7);
   }
+  .tab-header.preview {
+    font-style: italic;
+  }
   .resizer {
     height: 100%;
     width: 5px;

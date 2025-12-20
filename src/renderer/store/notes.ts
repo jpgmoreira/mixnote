@@ -3,7 +3,7 @@ import { toRaw } from 'vue';
 import { EventEmitter } from '@common/events/eventEmitter';
 import { Events } from '@renderer/events';
 import { StartupDTO } from '@common/dto/startupDTO';
-import { getEmptyTabGroup, Tab, TabGroup } from '@common/schemas/tabs';
+import { Tab, TabGroup } from '@common/schemas/tabs';
 import { InvokeChannels } from '@preload/channels/invoke';
 import { Note } from '@common/schemas/note';
 import { randomId } from '@common/utils/utils';
@@ -29,7 +29,13 @@ export const useNotesStore = defineStore('notes', {
   actions: {
     initData(data: StartupDTO) {
       this.tabGroups = data.tabGroups;
-      // TODO: Fetch initially open notes here.
+      if (this.tabGroups) {
+        for (const group of this.tabGroups) {
+          for (const tab of group.tabs) {
+            this.fetchNote(tab.noteId);
+          }
+        }
+      }
     },
     clear() {
       this.tabGroups = null;
@@ -41,6 +47,10 @@ export const useNotesStore = defineStore('notes', {
         window.api.invoke(InvokeChannels.updateTabGroups, toRaw(this.tabGroups));
       }, 500);
     },
+    async fetchNote(noteId: string) {
+      const note = await window.api.invoke<Note>(InvokeChannels.getNote, noteId);
+      this.notes[noteId] = note;
+    },
     setActiveTab(group: TabGroup, tabId: string) {
       group.tabs.forEach((tab) => (tab.active = false));
       const tab = group.tabs.find((tab) => tab.id === tabId);
@@ -49,8 +59,7 @@ export const useNotesStore = defineStore('notes', {
     },
     getTabTitle(tab: Tab) {
       const note = this.notes[tab.noteId];
-      if (!note) throw new Error('Note not found!');
-      return note.title;
+      return note?.title || '';
     },
     async explorerNoteClicked(noteId: string) {
       if (!this.tabGroups || !this.tabGroups.length) {
@@ -58,8 +67,7 @@ export const useNotesStore = defineStore('notes', {
       }
       // 1. If the note is not in the front, request it from the back:
       if (!(noteId in this.notes)) {
-        const note = await window.api.invoke<Note>(InvokeChannels.getNote, noteId);
-        this.notes[noteId] = note;
+        await this.fetchNote(noteId);
       }
       // 2. Verify if the note is already open in the current tab group:
       let activeGroup = this.tabGroups.find((g) => g.active);

@@ -43,6 +43,7 @@
       id: randomId(),
       width: 0,
       active: false,
+      activeTab: null,
       tabs: [],
     };
     tabGroups.value.push(newTabGroup);
@@ -96,7 +97,7 @@
 
   //  --- Watches: ---
 
-  watch(tabGroups, notesStore.tabGroupsUpdated, { deep: true });
+  watch(tabGroups, notesStore.updateTabGroups, { deep: true });
 
   //  --- Hooks: ---
 

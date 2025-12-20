@@ -8,6 +8,8 @@ import { UISettings } from '@common/schemas/ui';
 import { UIManager } from '@main/data/managers/uiManager';
 import { TabGroup } from '@common/schemas/tabs';
 import { TabsManager } from '@main/data/managers/tabsManager';
+import { Note } from '@common/schemas/note';
+import { NotesManager } from '@main/data/managers/notesManager';
 
 ipcMain.handle(
   InvokeChannels.createProfile,
@@ -70,5 +72,12 @@ ipcMain.handle(
   InvokeChannels.updateTabGroups,
   async (_: IpcMainInvokeEvent, groups: TabGroup[]) => {
     TabsManager.instance.updateGroups(groups);
+  }
+);
+
+ipcMain.handle(
+  InvokeChannels.getNote,
+  async (_: IpcMainInvokeEvent, noteId: string): Promise<Note> => {
+    return NotesManager.instance.getNote(noteId);
   }
 );

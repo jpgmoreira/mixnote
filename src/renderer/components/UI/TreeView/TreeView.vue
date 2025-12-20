@@ -19,6 +19,7 @@
   import { useUIStore } from '@renderer/store/ui';
   import { toLocaleNumber } from '@common/utils/utils';
   import { hasBit } from '@common/utils/bitMask';
+  import { useNotesStore } from '@renderer/store/notes';
   import verticalIndent from '@renderer/assets/images/vertical.png';
   import middleIndent from '@renderer/assets/images/middle.png';
   import endIndent from '@renderer/assets/images/end.png';
@@ -73,6 +74,7 @@
   const indentSpanWidth = 20;
 
   const uiStore = useUIStore();
+  const notesStore = useNotesStore();
 
   const keys: ModifierKeys = {
     ctrl: false,
@@ -349,6 +351,14 @@
       isSearching.value = Boolean(text);
     });
     updateTree(newTree);
+  }
+
+  // --- Node click: ---
+
+  function nodeClick(node: Node) {
+    if (node.type === 'file') {
+      notesStore.explorerNoteClicked(node.noteId);
+    }
   }
 
   // --- Movement: ---
@@ -636,10 +646,11 @@
               @click="toggleDirOpen(node)"
             ></span>
 
-            <div class="flex items-center" @click="handleSelection(node)">
+            <div class="flex items-center">
               <input
                 v-if="props.checkbox"
                 type="checkbox"
+                @click="handleSelection(node)"
                 :checked="node.selected"
                 :indeterminate="isCheckIndeterminate(node)"
                 :disabled="isNodeDisabled(node)"
@@ -672,6 +683,7 @@
                 @keydown.esc="undoRenaming"
                 @blur="applyRenaming"
                 @click.right.stop="(e: MouseEvent) => showContextMenu(node.type, node, e)"
+                @click="nodeClick(node)"
               />
               <span v-if="node.type === 'dir' && props.filesHint" class="files-hint">
                 ({{ fileHintText(node) }})

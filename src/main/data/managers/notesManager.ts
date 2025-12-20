@@ -1,11 +1,10 @@
 import { FileProxy } from '../fileProxy';
 import path from 'path';
 import { DATA_DIR } from '@main/constants';
-import { getEmptyUISettings, UISettings } from '@common/schemas/ui';
-import { buildId } from '@common/utils/utils';
 import { ensureDirExists } from '@main/utils/utils';
-import { getEmptyNote } from '@common/schemas/note';
+import { getEmptyNote, Note } from '@common/schemas/note';
 import { ProfileManager } from './profileManager';
+import fs from 'fs';
 
 /**
  * Singleton for managing notes.
@@ -38,6 +37,17 @@ export class NotesManager {
     new FileProxy(fPath, note);
     ProfileManager.instance.addNotes(1);
     return note.id;
+  }
+
+  public async getNote(noteId: string): Promise<Note> {
+    if (!this.profileId) throw new Error('Profile not initialized!');
+    const fPath = path.join(DATA_DIR, 'profileData', this.profileId, 'notes', `${noteId}.json`);
+    if (!fs.existsSync(fPath)) {
+      throw new Error(`Note does not exist!: ${noteId}`);
+    }
+    const content = await fs.promises.readFile(fPath, 'utf-8');
+    const json = JSON.parse(content) as Note;
+    return json;
   }
 
   public clear() {

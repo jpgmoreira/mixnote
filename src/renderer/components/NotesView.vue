@@ -3,6 +3,7 @@
   import { randomId } from '@common/utils/utils';
   import { useNotesStore } from '@renderer/store/notes';
   import { storeToRefs } from 'pinia';
+  import Editor from './Editor.vue';
 
   const MIN_GROUP_WIDTH = 30; // px.
   const MIN_LAST_GROUP_WIDTH = 90; // px.
@@ -195,7 +196,7 @@
         @click.stop
       ></div>
       <!-- Tab area: -->
-      <div class="flex grow flex-col max-w-full">
+      <div class="flex grow flex-col max-w-full relative">
         <!-- Tab headers: -->
         <div class="flex flex-wrap">
           <div
@@ -219,8 +220,11 @@
           </div>
         </div>
         <!-- Tab content -->
-        <div class="grow" v-if="notesStore.hasActiveNote(group)">
-          {{ notesStore.getActiveNote(group) }}
+        <div v-if="notesStore.hasActiveNote(group)" class="grow">
+          <Editor />
+        </div>
+        <div v-else class="absolute-center text-lg opacity-70 whitespace-nowrap">
+          No note selected
         </div>
       </div>
     </div>

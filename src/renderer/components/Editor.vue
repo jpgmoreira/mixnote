@@ -1,6 +1,6 @@
 <script lang="ts" setup>
   import { ref } from 'vue';
-  import { MdEditor } from 'md-editor-v3';
+  import { MdEditor, type ExposeParam } from 'md-editor-v3';
   import { Note } from '@common/schemas/note';
   import { useNotesStore } from '@renderer/store/notes';
 
@@ -9,8 +9,27 @@
     note: Note | null;
   }>();
 
+  const headRef = ref<ExposeParam>();
+
   const headContent = ref(props.note?.head || '');
   const notesStore = useNotesStore();
+
+  function fileToDataUrl(file: File): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+
+  function uploadImage(files: File[]) {
+    files.forEach(async (file) => {
+      const dataUrl = await fileToDataUrl(file);
+      const md = `![Imagem](${dataUrl})`;
+      headRef.value?.insert(() => ({ targetValue: md }));
+    });
+  }
 </script>
 
 <template>
@@ -21,7 +40,9 @@
         theme="dark"
         codeTheme="atom"
         language="en-US"
-        :toolbarsExclude="['mermaid', 'image']"
+        ref="headRef"
+        :toolbarsExclude="['mermaid']"
+        @onUploadImg="uploadImage"
       />
     </div>
     <div v-else>SOURCE</div>

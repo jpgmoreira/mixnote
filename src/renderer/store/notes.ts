@@ -89,6 +89,11 @@ export const useNotesStore = defineStore('notes', {
       }
       delete this.notes[noteId];
     },
+    updateNoteContent(noteId: string, field: 'head' | 'body', content: string) {
+      if (!(noteId in this.notes)) throw new Error('Cannot update non-existent note!');
+      const note = this.notes[noteId];
+      note[field] = content;
+    },
     async explorerNoteClicked(noteId: string) {
       if (!this.tabGroups || !this.tabGroups.length) {
         throw new Error('No tab groups!');

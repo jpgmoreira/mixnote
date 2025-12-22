@@ -22,7 +22,7 @@
    Active Tab Group
    ========================= */
 
-.theme-dark .notes-view .tab-group.active::before {
+.theme-dark .notes-view .tab-group.active::after {
   content: '';
   position: absolute;
   top: 0;

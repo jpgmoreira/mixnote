@@ -4,6 +4,7 @@
   import { useNotesStore } from '@renderer/store/notes';
   import { storeToRefs } from 'pinia';
   import Editor from './Editor.vue';
+  import { TabGroup } from '@common/schemas/tabs';
 
   const MIN_GROUP_WIDTH = 30; // px.
   const MIN_LAST_GROUP_WIDTH = 90; // px.
@@ -44,7 +45,7 @@
       id: randomId(),
       width: 0,
       active: false,
-      activeTab: null,
+      source: false,
       tabs: [],
     };
     tabGroups.value.push(newTabGroup);
@@ -92,12 +93,21 @@
     if (!tabGroups.value) throw new Error('Uninitialized tab groups.');
     const groups = tabGroups.value;
     if (!groups.length) return;
+    if (groups.findIndex((g) => g.active) === index) return;
     groups.forEach((group) => (group.active = false));
     if (index < groups.length) {
       groups[index].active = true;
     } else {
       groups[0].active = true;
     }
+  }
+
+  function hasActiveTab(group: TabGroup) {
+    return group.tabs.some((t) => t.active);
+  }
+
+  function toggleGroupSource(group: TabGroup) {
+    group.source = !group.source;
   }
 
   //  --- Watches: ---
@@ -176,7 +186,7 @@
 </script>
 
 <template>
-  <div class="notes-view flex grow relative" ref="groups-container">
+  <div class="notes-view flex" ref="groups-container">
     <!-- Tab groups -->
     <div
       v-if="tabGroups"
@@ -210,6 +220,9 @@
           </div>
           <!-- Tab group buttons -->
           <div class="ml-auto flex" @click.stop>
+            <button type="button" v-if="hasActiveTab(group)" @click="toggleGroupSource(group)">
+              <>
+            </button>
             <button type="button" v-if="tabGroups.length > 1" @click="closeTabGroup(group.id)">
               x
             </button>
@@ -220,10 +233,10 @@
           </div>
         </div>
         <!-- Tab content -->
-        <div v-if="notesStore.hasActiveNote(group)" class="grow">
-          <Editor />
+        <div v-if="notesStore.hasActiveNote(group)" class="grow relative overflow-y-auto">
+          <Editor :source="group.source" :note="notesStore.getActiveNote(group)" />
         </div>
-        <div v-else class="absolute-center text-lg opacity-70 whitespace-nowrap">
+        <div v-else class="absolute-center text-lg opacity-70 whitespace-nowrap select-none">
           No note selected
         </div>
       </div>

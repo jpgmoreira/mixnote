@@ -26,7 +26,7 @@
   function uploadImage(files: File[]) {
     files.forEach(async (file) => {
       const dataUrl = await fileToDataUrl(file);
-      const md = `![Imagem](${dataUrl})`;
+      const md = `<img src="${dataUrl}" />`;
       headRef.value?.insert(() => ({ targetValue: md }));
     });
   }
@@ -43,6 +43,7 @@
         ref="headRef"
         :toolbarsExclude="['mermaid']"
         @onUploadImg="uploadImage"
+        :noUploadImg="true"
       />
     </div>
     <div v-else>SOURCE</div>

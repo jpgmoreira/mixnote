@@ -5,6 +5,7 @@
   import { storeToRefs } from 'pinia';
   import Editor from './Editor/Editor.vue';
   import { TabGroup } from '@common/schemas/tabs';
+  import EditorContainer from './Editor/EditorContainer.vue';
 
   const MIN_GROUP_WIDTH = 30; // px.
   const MIN_LAST_GROUP_WIDTH = 90; // px.
@@ -222,7 +223,7 @@
         </div>
         <!-- Tab content -->
         <div v-if="notesStore.hasActiveNote(group)" class="grow relative overflow-y-auto">
-          <Editor :note="notesStore.getActiveNote(group)" />
+          <EditorContainer :note="notesStore.getActiveNote(group)!" />
         </div>
         <div v-else class="absolute-center text-lg opacity-70 whitespace-nowrap select-none">
           No note selected

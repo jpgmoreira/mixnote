@@ -7,7 +7,6 @@ import { config } from 'md-editor-v3';
 
 const atomDarkCss = new URL('node_modules/highlight.js/styles/atom-one-dark.css', import.meta.url)
   .href;
-
 const katexCss = new URL('node_modules/katex/dist/katex.css', import.meta.url).href;
 
 config({

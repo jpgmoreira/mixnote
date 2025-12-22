@@ -3,7 +3,7 @@
   import { randomId } from '@common/utils/utils';
   import { useNotesStore } from '@renderer/store/notes';
   import { storeToRefs } from 'pinia';
-  import Editor from './Editor.vue';
+  import Editor from './Editor/Editor.vue';
   import { TabGroup } from '@common/schemas/tabs';
 
   const MIN_GROUP_WIDTH = 30; // px.
@@ -45,7 +45,6 @@
       id: randomId(),
       width: 0,
       active: false,
-      source: false,
       tabs: [],
     };
     tabGroups.value.push(newTabGroup);
@@ -100,14 +99,6 @@
     } else {
       groups[0].active = true;
     }
-  }
-
-  function hasActiveTab(group: TabGroup) {
-    return group.tabs.some((t) => t.active);
-  }
-
-  function toggleGroupSource(group: TabGroup) {
-    group.source = !group.source;
   }
 
   //  --- Watches: ---
@@ -220,9 +211,6 @@
           </div>
           <!-- Tab group buttons -->
           <div class="ml-auto flex" @click.stop>
-            <button type="button" v-if="hasActiveTab(group)" @click="toggleGroupSource(group)">
-              <>
-            </button>
             <button type="button" v-if="tabGroups.length > 1" @click="closeTabGroup(group.id)">
               x
             </button>
@@ -234,7 +222,7 @@
         </div>
         <!-- Tab content -->
         <div v-if="notesStore.hasActiveNote(group)" class="grow relative overflow-y-auto">
-          <Editor :source="group.source" :note="notesStore.getActiveNote(group)" />
+          <Editor :note="notesStore.getActiveNote(group)" />
         </div>
         <div v-else class="absolute-center text-lg opacity-70 whitespace-nowrap select-none">
           No note selected

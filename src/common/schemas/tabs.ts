@@ -9,7 +9,7 @@ export type TabGroup = {
   id: string;
   width: number; // percentage, 0 - 1.
   active: boolean;
-  source: boolean;
+  source: boolean; // TODO: Remove if not needed!
   tabs: Tab[];
 };
 

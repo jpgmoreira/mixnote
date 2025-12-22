@@ -36,6 +36,9 @@
   "dependencies": {
     "@electron-toolkit/preload": "^3.0.2",
     "@electron-toolkit/utils": "^4.0.0",
+    "highlight.js": "^11.11.1",
+    "katex": "^0.16.27",
+    "md-editor-v3": "^6.2.1",
     "pinia": "^3.0.4",
     "slugify": "^1.6.6",
     "vue-router": "^4.6.3"

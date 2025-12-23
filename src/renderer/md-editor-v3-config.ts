@@ -1,6 +1,8 @@
 import 'md-editor-v3/lib/style.css';
 import 'highlight.js/styles/atom-one-dark.css';
 import 'katex/dist/katex.css';
+import prettier from 'prettier/standalone';
+import parserMarkdown from 'prettier/plugins/markdown';
 import katex from 'katex';
 import hljs from 'highlight.js';
 import { config } from 'md-editor-v3';
@@ -23,6 +25,10 @@ config({
     katex: {
       instance: katex,
       css: katexCss,
+    },
+    prettier: {
+      prettierInstance: prettier,
+      parserMarkdownInstance: parserMarkdown,
     },
   },
 });

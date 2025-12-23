@@ -1,11 +1,16 @@
 <script lang="ts" setup>
-  import { useTemplateRef } from 'vue';
+  import { ref, useTemplateRef } from 'vue';
   import { Note } from '@common/schemas/note';
   import { useNotesStore } from '@renderer/store/notes';
   import Editor from './Editor/Editor.vue';
+  import { FocusIcon } from 'lucide-vue-next';
   const props = defineProps<{ note: Note }>();
   const notesStore = useNotesStore();
   const bodyRef = useTemplateRef('body-ref');
+  const focus = ref(false);
+  function toggleFocus() {
+    focus.value = !focus.value;
+  }
   function bodyBlur() {
     if (!bodyRef.value) throw new Error('No body ref!');
     const content = bodyRef.value.getContent();
@@ -14,9 +19,17 @@
 </script>
 
 <template>
-  <div class="editor-container h-full relative overflow-y-auto">
+  <div class="editor-container h-full relative overflow-y-auto overflow-x-hidden">
     <div class="flex flex-col absolute top-0 left-0 w-full min-h-full">
-      <textarea class="head-textarea" placeholder="HEAD" spellcheck="false"></textarea>
+      <div class="flex">
+        <textarea
+          v-if="!focus"
+          class="head-textarea grow"
+          placeholder="HEAD"
+          spellcheck="false"
+        ></textarea>
+        <FocusIcon class="head-focus" @click="toggleFocus" />
+      </div>
       <Editor
         class="grow"
         ref="body-ref"

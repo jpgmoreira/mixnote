@@ -2,6 +2,7 @@
   import { ref, useTemplateRef } from 'vue';
   import { MdEditor, ToolbarNames, type ExposeParam } from 'md-editor-v3';
   import CustomPreview from './CustomPreview.vue';
+  import ColorPicker from './ColorPicker.vue';
 
   const props = defineProps<{ content: string }>();
   const content = ref(props.content);
@@ -18,6 +19,7 @@
     'sub',
     'sup',
     'quote',
+    0,
     '-',
     'unorderedList',
     'orderedList',
@@ -67,7 +69,11 @@
     noEcharts
     :autoFoldThreshold="999999"
     placeholder="HEAD"
-  />
+  >
+    <template #defToolbars>
+      <ColorPicker />
+    </template>
+  </MdEditor>
 </template>
 
 <style>

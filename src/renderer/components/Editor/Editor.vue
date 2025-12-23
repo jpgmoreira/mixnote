@@ -260,4 +260,10 @@
     font-weight: bold;
     line-height: 1;
   }
+
+  /* Editor */
+  .md-editor .cm-content {
+    font-family: 'Fira Code', 'JetBrains Mono', monospace !important;
+    font-size: 14px !important;
+  }
 </style>

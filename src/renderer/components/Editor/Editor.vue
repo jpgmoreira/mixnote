@@ -39,5 +39,8 @@
     :noUploadImg="true"
     noImgZoomIn
     :previewComponent="CustomPreview"
+    :toolbarsExclude="['pageFullscreen', 'fullscreen']"
+    noMermaid
+    noEcharts
   />
 </template>

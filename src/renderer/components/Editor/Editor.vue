@@ -170,7 +170,7 @@
   }
 
   /* Autocomplete */
-  .cm-tooltip {
+  .md-editor .cm-tooltip {
     display: none;
     pointer-events: none;
   }
@@ -180,7 +180,7 @@
     border: none !important;
   }
   .md-editor,
-  .cm-scroller {
+  .md-editor .cm-scroller {
     background-color: #222222 !important;
   }
   .md-editor-custom-scrollbar__track {
@@ -188,5 +188,12 @@
   }
   .md-editor-custom-scrollbar__thumb {
     background-color: #3b3b3b !important;
+  }
+  .md-editor blockquote {
+    background-color: #161616 !important;
+  }
+  .md-editor hr {
+    border-color: #4d4d4d !important;
+    border-width: 2px !important;
   }
 </style>

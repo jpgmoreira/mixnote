@@ -6,6 +6,7 @@ import parserMarkdown from 'prettier/plugins/markdown';
 import katex from 'katex';
 import hljs from 'highlight.js';
 import { config } from 'md-editor-v3';
+import { lineNumbers } from '@codemirror/view';
 
 const atomDarkCss = new URL('node_modules/highlight.js/styles/atom-one-dark.css', import.meta.url)
   .href;
@@ -74,5 +75,14 @@ config({
         }
       });
     });
+  },
+  codeMirrorExtensions(extensions) {
+    return [
+      ...extensions,
+      {
+        type: 'lineNumbers',
+        extension: lineNumbers(),
+      },
+    ];
   },
 });

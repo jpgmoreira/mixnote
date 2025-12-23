@@ -231,6 +231,9 @@
   .md-editor-table-shape-col-include {
     background-color: #424242 !important;
   }
+  .cm-lineNumbers {
+    background-color: #222222;
+  }
 
   /* Checkboxes */
   .md-editor-preview .task-list-item {

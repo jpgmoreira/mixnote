@@ -3,7 +3,6 @@
   import { Note } from '@common/schemas/note';
   import { useNotesStore } from '@renderer/store/notes';
   import Editor from './Editor/Editor.vue';
-  import { FocusIcon } from 'lucide-vue-next';
   const props = defineProps<{ note: Note }>();
   const notesStore = useNotesStore();
   const bodyRef = useTemplateRef('body-ref');
@@ -21,15 +20,7 @@
 <template>
   <div class="editor-container h-full relative overflow-y-auto overflow-x-hidden">
     <div class="flex flex-col absolute top-0 left-0 w-full min-h-full">
-      <div class="flex">
-        <textarea
-          v-if="!focus"
-          class="head-textarea grow"
-          placeholder="HEAD"
-          spellcheck="false"
-        ></textarea>
-        <FocusIcon class="head-focus" @click="toggleFocus" />
-      </div>
+      <textarea class="head-textarea" placeholder="HEAD" spellcheck="false"></textarea>
       <Editor
         class="grow"
         ref="body-ref"

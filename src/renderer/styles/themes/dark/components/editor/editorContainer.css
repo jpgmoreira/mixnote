@@ -2,23 +2,9 @@
   background-color: #222222;
   field-sizing: content;
   resize: none;
-  margin-right: -20px;
   padding: 5px 8px;
 }
 .theme-dark .editor-container .head-textarea::placeholder {
   color: #7e7e7b;
   font-weight: 400;
-}
-.theme-dark .editor-container .head-focus {
-  width: 20px;
-  min-width: 20px;
-  opacity: 0.4;
-  position: sticky;
-  right: 1px;
-  top: -1px;
-  cursor: pointer;
-  margin-left: auto;
-}
-.theme-dark .editor-container .head-focus:hover {
-  opacity: 1;
 }

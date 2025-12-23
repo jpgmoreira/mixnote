@@ -69,6 +69,11 @@
 </template>
 
 <style>
+  /* General fixes */
+  .md-editor-preview * {
+    line-height: 1.3rem !important;
+  }
+
   /* Toolbar */
   .md-editor-toolbar-wrapper {
     padding: 0 !important;
@@ -140,6 +145,7 @@
     border-top-left-radius: 0 !important;
     border-top-right-radius: 0 !important;
     font-size: 0.91rem !important;
+    line-height: 1.3rem !important;
   }
   .md-editor-code-block {
     margin-top: 1px;
@@ -176,6 +182,9 @@
   }
 
   /* Tables */
+  .md-editor-preview table * {
+    line-height: 1rem !important;
+  }
   .md-editor-preview table th {
     background-color: #353535 !important;
     border-color: #4d4d4d !important;

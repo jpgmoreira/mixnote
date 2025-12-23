@@ -211,4 +211,35 @@
     border-color: #4d4d4d !important;
     border-width: 2px !important;
   }
+
+  /* Checkboxes */
+  .md-editor-preview .task-list-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .md-editor-preview .task-list-item-checkbox {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 15px;
+    height: 15px;
+    border: 1.5px solid #555555;
+    border-radius: 4px;
+    background-color: #1e1e1e;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+  }
+  .md-editor-preview .task-list-item-checkbox:checked {
+    background-color: #d19a66;
+    border-color: #db720f;
+  }
+  .md-editor-preview .task-list-item-checkbox:checked::after {
+    content: '✓';
+    color: #1a1a1a;
+    position: absolute;
+    font-size: 18px;
+    font-weight: bold;
+    line-height: 1;
+  }
 </style>

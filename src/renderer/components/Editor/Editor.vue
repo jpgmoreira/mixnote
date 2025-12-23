@@ -80,26 +80,29 @@
     flex-wrap: wrap;
   }
   .md-editor-toolbar-item {
-    padding: 0 !important;
+    padding: 2px !important;
   }
   .md-editor-icon {
     padding: 0 !important;
   }
   .md-editor-divider {
-    margin: 0 !important;
+    margin: 3px !important;
   }
 
   /* Footer */
-  .md-editor-footer-item {
+  .md-editor-footer,
+  .md-editor-footer-left,
+  .md-editor-footer-right {
+    height: fit-content !important;
   }
 
   /* Resizer */
   .md-editor-custom-scrollbar__track {
-    display: none;
+    display: none !important;
   }
   .md-editor-resize-operate {
     height: 100%;
-    padding: 2px;
+    padding: 1.2px;
     background: rgb(66, 66, 66) !important;
     cursor: col-resize;
     z-index: 10;

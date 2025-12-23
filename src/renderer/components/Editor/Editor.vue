@@ -80,7 +80,7 @@
     flex-wrap: wrap;
   }
   .md-editor-toolbar-item {
-    padding: 2px !important;
+    padding: 3px !important;
   }
   .md-editor-icon {
     padding: 0 !important;
@@ -94,6 +94,7 @@
   .md-editor-footer-left,
   .md-editor-footer-right {
     height: fit-content !important;
+    padding: 1px !important;
   }
 
   /* Resizer */
@@ -110,5 +111,35 @@
   .md-editor-resize-operate:hover,
   .md-editor-resize-operate:active {
     background: #0087e7 !important;
+  }
+
+  /* Code editor */
+  .md-editor-code {
+    margin: 15px 0 !important;
+  }
+  .md-editor-code-head {
+    display: flex !important;
+    justify-content: end !important;
+    border: 1px solid #292929 !important;
+  }
+  .md-editor-code-flag {
+    display: none !important;
+  }
+  .md-editor-code-lang {
+    color: #d19a66 !important;
+    font-weight: bold !important;
+    text-transform: uppercase;
+    font-size: 11.5px;
+  }
+  .md-editor-code pre {
+    padding: 0 !important;
+    border: none !important;
+  }
+  .md-editor-code code {
+    border-top-left-radius: 0 !important;
+    border-top-right-radius: 0 !important;
+  }
+  .md-editor-code-block {
+    margin-top: 1px;
   }
 </style>

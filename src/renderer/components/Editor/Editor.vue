@@ -59,12 +59,14 @@
     language="en-US"
     theme="dark"
     @onUploadImg="uploadImage"
-    :noUploadImg="true"
+    noUploadImg
     noImgZoomIn
     :previewComponent="CustomPreview"
     :toolbars="toolbars"
     noMermaid
     noEcharts
+    :autoFoldThreshold="999999"
+    placeholder="HEAD"
   />
 </template>
 

@@ -192,7 +192,7 @@
       <!-- Resizer -->
       <div
         v-if="index > 0"
-        class="resizer"
+        class="custom-resizer"
         :class="{ resizing: isResizingIndex(index) }"
         @mousedown="resizerMouseDown($event, index)"
         @click.stop

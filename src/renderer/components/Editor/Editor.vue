@@ -44,3 +44,17 @@
     noEcharts
   />
 </template>
+
+<style>
+  .md-editor-toolbar-left,
+  .md-editor-toolbar-right {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .md-editor-footer {
+    display: none;
+  }
+  .md-editor-custom-scrollbar__track {
+    display: none;
+  }
+</style>

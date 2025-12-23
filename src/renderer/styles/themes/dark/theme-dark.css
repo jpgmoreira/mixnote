@@ -3,6 +3,7 @@
 @import 'elements/controls.css';
 @import 'elements/table.css';
 @import 'elements/text.css';
+@import 'elements/resizer.css';
 @import 'components/modal.css';
 @import 'components/header.css';
 @import 'components/toast.css';

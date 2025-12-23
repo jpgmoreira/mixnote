@@ -48,7 +48,7 @@
         <TreeView class="select-none" files-hint file-icon checkbox />
       </div>
       <div
-        class="separator shrink-0"
+        class="custom-resizer shrink-0"
         :class="{ resizing: isResizing }"
         @mousedown="isResizing = true"
       ></div>
@@ -63,16 +63,6 @@
   .notes-page.resizing {
     cursor: ew-resize;
   }
-  .separator {
-    width: 5px;
-    background: rgb(66, 66, 66);
-  }
-  .separator:hover,
-  .separator.resizing {
-    background: #0087e7;
-    cursor: ew-resize;
-  }
-
   .caret-button {
     transition: transform 0.2s ease;
   }

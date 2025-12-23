@@ -1,11 +1,16 @@
 <script lang="ts" setup>
-  import { ref, useTemplateRef } from 'vue';
+  import { ref, useTemplateRef, watch } from 'vue';
   import { MdEditor, ToolbarNames, type ExposeParam } from 'md-editor-v3';
   import CustomPreview from './CustomPreview.vue';
   import ColorPicker from './ColorPicker.vue';
 
+  defineExpose({
+    getContent,
+  });
+
   const emit = defineEmits<{
-    (e: 'change', content: string): void;
+    (e: 'change'): void;
+    (e: 'blur'): void;
   }>();
 
   const props = defineProps<{ initial: string }>();
@@ -60,6 +65,17 @@
   function insertColor(color: string) {
     editorRef.value?.insert(() => ({ targetValue: color }));
   }
+
+  function getContent() {
+    return content.value;
+  }
+
+  // Beware: can cause unexpected behavior if updating the content on every change.
+  // You should update it just on blur.
+  watch(
+    () => props.initial,
+    (newValue) => (content.value = newValue)
+  );
 </script>
 
 <template>
@@ -77,7 +93,8 @@
     noEcharts
     :autoFoldThreshold="999999"
     placeholder="HEAD"
-    @onChange="emit('change', content)"
+    @onChange="emit('change')"
+    @onBlur="emit('blur')"
   >
     <template #defToolbars>
       <ColorPicker @select="insertColor" />

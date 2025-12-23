@@ -1,0 +1,10 @@
+.theme-dark .editor-container .head-textarea {
+  background-color: #222222;
+  field-sizing: content;
+  resize: none;
+  padding: 5px 8px;
+}
+.theme-dark .editor-container .head-textarea::placeholder {
+  color: #7e7e7b;
+  font-weight: 400;
+}

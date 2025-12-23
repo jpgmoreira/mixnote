@@ -14,5 +14,16 @@
 </script>
 
 <template>
-  <Editor ref="body-ref" :initial="props.note.body" @blur="bodyBlur" />
+  <div class="editor-container h-full relative overflow-y-auto">
+    <div class="flex flex-col absolute top-0 left-0 w-full min-h-full">
+      <textarea class="head-textarea" placeholder="HEAD" spellcheck="false"></textarea>
+      <Editor
+        class="grow"
+        ref="body-ref"
+        :initial="props.note.body"
+        @blur="bodyBlur"
+        placeholder="BODY"
+      />
+    </div>
+  </div>
 </template>

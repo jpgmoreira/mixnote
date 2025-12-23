@@ -13,7 +13,7 @@
     (e: 'blur'): void;
   }>();
 
-  const props = defineProps<{ initial: string }>();
+  const props = defineProps<{ initial: string; placeholder?: string }>();
   const content = ref(props.initial);
   const editorRef = useTemplateRef<ExposeParam>('editor-ref');
 
@@ -92,7 +92,7 @@
     noMermaid
     noEcharts
     :autoFoldThreshold="999999"
-    placeholder="HEAD"
+    :placeholder="props.placeholder || ''"
     @onChange="emit('change')"
     @onBlur="emit('blur')"
   >

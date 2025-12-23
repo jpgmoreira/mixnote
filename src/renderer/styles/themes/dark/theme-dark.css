@@ -13,6 +13,7 @@
 @import 'components/treeview/contextMenu.css';
 @import 'components/treeview/treeView.css';
 @import 'components/editor/editor.css';
+@import 'components/editor/editorContainer.css';
 
 .theme-dark * {
   color: white;

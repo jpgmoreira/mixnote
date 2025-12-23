@@ -175,6 +175,21 @@
     pointer-events: none;
   }
 
+  /* Tables */
+  .md-editor-preview table th {
+    background-color: #353535 !important;
+    border-color: #4d4d4d !important;
+    border-bottom: none !important;
+    border-top: none !important;
+  }
+  .md-editor-preview table tbody td {
+    background-color: #2b2b2b !important;
+    border-color: #4d4d4d !important;
+  }
+  .md-editor-preview table tbody tr:hover td {
+    background-color: #313131 !important;
+  }
+
   /* Colors */
   .md-editor {
     border: none !important;

@@ -95,14 +95,20 @@
 }
 
 /* Close button (x) */
+.theme-dark .notes-view .tab-header .lucide {
+  width: 14px;
+}
+
 .theme-dark .notes-view .tab-header span:last-child {
   opacity: 0.5;
-  padding: 0 4px;
-  font-size: 14px;
+  padding-left: 4px;
 }
 
 .theme-dark .notes-view .tab-header span:last-child:hover {
   opacity: 1;
+}
+
+.theme-dark .notes-view .tab-header span:last-child:hover * {
   color: #ff6b6b;
 }
 
@@ -110,13 +116,20 @@
    Tab Group Buttons
    ========================= */
 
-.theme-dark .notes-view .tab-group button {
+.theme-dark .notes-view .tab-actions button {
   background: transparent;
   border: none;
-  color: #aaa;
   padding: 4px 8px;
   cursor: pointer;
   font-size: 14px;
+}
+
+.theme-dark .notes-view .tab-actions .lucide *,
+.theme-dark .notes-view .tab-header .lucide * {
+  color: #aaa;
+}
+.theme-dark .notes-view .tab-actions .lucide {
+  width: 17px;
 }
 
 .theme-dark .notes-view .tab-group button:hover {

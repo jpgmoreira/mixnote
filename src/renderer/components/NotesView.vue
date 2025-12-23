@@ -3,10 +3,11 @@
   import { randomId } from '@common/utils/utils';
   import { useNotesStore } from '@renderer/store/notes';
   import { storeToRefs } from 'pinia';
+  import { Columns2Icon, BrushCleaningIcon, XIcon } from 'lucide-vue-next';
   import EditorContainer from './EditorContainer.vue';
 
   const MIN_GROUP_WIDTH = 30; // px.
-  const MIN_LAST_GROUP_WIDTH = 90; // px.
+  const MIN_LAST_GROUP_WIDTH = 30; // px.
 
   const notesStore = useNotesStore();
 
@@ -202,16 +203,16 @@
             @click="notesStore.tabHeaderClick(group, tab.id)"
           >
             <span class="tab-title">{{ notesStore.getTabTitle(tab) }}</span>
-            <span @click="notesStore.closeTab(group, tab.id)">x</span>
+            <span @click="notesStore.closeTab(group, tab.id)"><XIcon /></span>
           </div>
           <!-- Tab group buttons -->
-          <div class="ml-auto flex" @click.stop>
+          <div class="ml-auto flex tab-actions" @click.stop>
             <button type="button" v-if="tabGroups.length > 1" @click="closeTabGroup(group.id)">
-              x
+              <XIcon />
             </button>
             <template v-if="index === tabGroups.length - 1">
-              <button type="button" @click="resetGroupWidths">R</button>
-              <button type="button" @click="addTabGroup">||</button>
+              <button type="button" @click="resetGroupWidths"><BrushCleaningIcon /></button>
+              <button type="button" @click="addTabGroup"><Columns2Icon /></button>
             </template>
           </div>
         </div>

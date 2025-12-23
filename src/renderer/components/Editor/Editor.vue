@@ -211,6 +211,15 @@
     border-color: #4d4d4d !important;
     border-width: 2px !important;
   }
+  .md-editor-dropdown {
+    background-color: #222222 !important;
+  }
+  .md-editor-table-shape-col-default {
+    background-color: #0f0f0f !important;
+  }
+  .md-editor-table-shape-col-include {
+    background-color: #424242 !important;
+  }
 
   /* Checkboxes */
   .md-editor-preview .task-list-item {

@@ -52,6 +52,10 @@
   }
 
   //  --- ---
+
+  function insertColor(color: string) {
+    editorRef.value?.insert(() => ({ targetValue: color }));
+  }
 </script>
 
 <template>
@@ -71,7 +75,7 @@
     placeholder="HEAD"
   >
     <template #defToolbars>
-      <ColorPicker />
+      <ColorPicker @select="insertColor" />
     </template>
   </MdEditor>
 </template>

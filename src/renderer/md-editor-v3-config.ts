@@ -33,6 +33,7 @@ config({
     },
   },
   editorConfig: {
+    renderDelay: 0,
     languageUserDefined: {
       'en-US': {
         toolbarTips: {

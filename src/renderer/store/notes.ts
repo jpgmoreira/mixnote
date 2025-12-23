@@ -90,7 +90,7 @@ export const useNotesStore = defineStore('notes', {
       delete this.notes[noteId];
     },
     updateNoteContent(noteId: string, field: 'head' | 'body', content: string) {
-      if (!(noteId in this.notes)) throw new Error('Cannot update non-existent note!');
+      if (!(noteId in this.notes)) throw new Error('Cannot update non-existing note!');
       const note = this.notes[noteId];
       note[field] = content;
     },

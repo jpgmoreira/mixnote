@@ -68,8 +68,10 @@ config({
           token.children.forEach((child) => {
             if (child.type === 'text') {
               child.content = child.content
+                .replace(/-->/g, '→')
                 .replace(/->/g, '→')
                 .replace(/<-/g, '←')
+                .replace(/==>/g, '⇒')
                 .replace(/=>/g, '⇒');
             }
           });

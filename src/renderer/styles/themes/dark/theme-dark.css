@@ -12,6 +12,7 @@
 @import 'components/treeview/checkbox.css';
 @import 'components/treeview/contextMenu.css';
 @import 'components/treeview/treeView.css';
+@import 'components/editor/editor.css';
 
 .theme-dark * {
   color: white;

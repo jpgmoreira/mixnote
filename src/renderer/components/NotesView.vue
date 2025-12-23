@@ -3,7 +3,7 @@
   import { randomId } from '@common/utils/utils';
   import { useNotesStore } from '@renderer/store/notes';
   import { storeToRefs } from 'pinia';
-  import EditorContainer from './Editor/EditorContainer.vue';
+  import EditorContainer from './EditorContainer.vue';
 
   const MIN_GROUP_WIDTH = 30; // px.
   const MIN_LAST_GROUP_WIDTH = 90; // px.

@@ -102,39 +102,3 @@
     </div>
   </NormalToolbar>
 </template>
-
-<style scoped>
-  .color-container.active {
-    border: 1px solid #2c2c2c;
-    background-color: #222222;
-    border-radius: 4px;
-    top: 21px;
-    width: 103px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 3px;
-    padding: 3px;
-    max-height: 150px;
-    overflow-y: auto;
-    position: absolute;
-    z-index: 20000;
-  }
-  .color-container:not(.active) {
-    display: none;
-  }
-  .color-row {
-    display: flex;
-    gap: 3px;
-  }
-  .color-box {
-    width: 20px;
-    height: 20px;
-  }
-  .color-box:hover {
-    transform: scale(1.1);
-  }
-  .color-container::-webkit-scrollbar {
-    width: 5px;
-    height: 5px;
-  }
-</style>

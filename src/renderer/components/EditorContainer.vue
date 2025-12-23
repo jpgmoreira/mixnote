@@ -20,12 +20,18 @@
 <template>
   <div class="editor-container h-full relative overflow-y-auto overflow-x-hidden">
     <div class="flex flex-col absolute top-0 left-0 w-full min-h-full">
-      <textarea class="head-textarea" placeholder="HEAD" spellcheck="false"></textarea>
+      <textarea
+        v-if="!focus"
+        class="head-textarea"
+        placeholder="HEAD"
+        spellcheck="false"
+      ></textarea>
       <Editor
         class="grow"
         ref="body-ref"
         :initial="props.note.body"
         @blur="bodyBlur"
+        @toggle-focus-mode="toggleFocus"
         placeholder="BODY"
       />
     </div>

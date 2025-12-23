@@ -3,6 +3,7 @@
   import { MdEditor, ToolbarNames, type ExposeParam } from 'md-editor-v3';
   import CustomPreview from './CustomPreview.vue';
   import ColorPicker from './ColorPicker.vue';
+  import Focus from './Focus.vue';
 
   defineExpose({
     getContent,
@@ -11,6 +12,7 @@
   const emit = defineEmits<{
     (e: 'change'): void;
     (e: 'blur'): void;
+    (e: 'toggleFocusMode'): void;
   }>();
 
   const props = defineProps<{ initial: string; placeholder?: string }>();
@@ -37,6 +39,7 @@
     'link',
     '-',
     'prettier',
+    1,
     'preview',
     'previewOnly',
   ];
@@ -98,6 +101,7 @@
   >
     <template #defToolbars>
       <ColorPicker @select="insertColor" />
+      <Focus @toggle="emit('toggleFocusMode')" />
     </template>
   </MdEditor>
 </template>

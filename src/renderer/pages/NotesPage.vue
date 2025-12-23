@@ -47,11 +47,7 @@
       <div :style="treeAreaStyle">
         <TreeView class="select-none" files-hint file-icon checkbox />
       </div>
-      <div
-        class="custom-resizer shrink-0"
-        :class="{ resizing: isResizing }"
-        @mousedown="isResizing = true"
-      ></div>
+      <div class="custom-resizer shrink-0" @mousedown="isResizing = true"></div>
       <div class="flex flex-col grow" :style="editorAreaStyle">
         <NotesView />
       </div>

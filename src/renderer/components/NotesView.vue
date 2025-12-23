@@ -3,8 +3,6 @@
   import { randomId } from '@common/utils/utils';
   import { useNotesStore } from '@renderer/store/notes';
   import { storeToRefs } from 'pinia';
-  import Editor from './Editor/Editor.vue';
-  import { TabGroup } from '@common/schemas/tabs';
   import EditorContainer from './Editor/EditorContainer.vue';
 
   const MIN_GROUP_WIDTH = 30; // px.
@@ -84,9 +82,6 @@
     resize.left = e.clientX;
     document.body.style.cursor = 'col-resize';
     document.body.style.userSelect = 'none';
-  }
-  function isResizingIndex(index: number) {
-    return resize.isResizing && resize.index === index;
   }
 
   function setActiveGroup(index: number) {
@@ -193,7 +188,6 @@
       <div
         v-if="index > 0"
         class="custom-resizer"
-        :class="{ resizing: isResizingIndex(index) }"
         @mousedown="resizerMouseDown($event, index)"
         @click.stop
       ></div>

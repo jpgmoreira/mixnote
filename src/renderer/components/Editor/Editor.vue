@@ -1,11 +1,34 @@
 <script lang="ts" setup>
   import { ref, useTemplateRef } from 'vue';
-  import { MdEditor, type ExposeParam } from 'md-editor-v3';
+  import { MdEditor, ToolbarNames, type ExposeParam } from 'md-editor-v3';
   import CustomPreview from './CustomPreview.vue';
 
   const props = defineProps<{ content: string }>();
   const content = ref(props.content);
   const editorRef = useTemplateRef<ExposeParam>('editor-ref');
+
+  const toolbars: ToolbarNames[] = [
+    'revoke',
+    'next',
+    '-',
+    'bold',
+    'underline',
+    'italic',
+    'strikeThrough',
+    'sub',
+    'sup',
+    'quote',
+    '-',
+    'unorderedList',
+    'orderedList',
+    'task',
+    'table',
+    'link',
+    '-',
+    'prettier',
+    'preview',
+    'previewOnly',
+  ];
 
   // --- Paste images: ---
 
@@ -39,22 +62,50 @@
     :noUploadImg="true"
     noImgZoomIn
     :previewComponent="CustomPreview"
-    :toolbarsExclude="['pageFullscreen', 'fullscreen']"
+    :toolbars="toolbars"
     noMermaid
     noEcharts
   />
 </template>
 
 <style>
+  /* Toolbar */
+  .md-editor-toolbar-wrapper {
+    padding: 0 !important;
+  }
   .md-editor-toolbar-left,
   .md-editor-toolbar-right {
+    padding: 0 !important;
     display: flex;
     flex-wrap: wrap;
   }
-  .md-editor-footer {
-    display: none;
+  .md-editor-toolbar-item {
+    padding: 0 !important;
   }
+  .md-editor-icon {
+    padding: 0 !important;
+  }
+  .md-editor-divider {
+    margin: 0 !important;
+  }
+
+  /* Footer */
+  .md-editor-footer-item {
+  }
+
+  /* Resizer */
   .md-editor-custom-scrollbar__track {
     display: none;
+  }
+  .md-editor-resize-operate {
+    height: 100%;
+    padding: 2px;
+    background: rgb(66, 66, 66) !important;
+    cursor: col-resize;
+    z-index: 10;
+  }
+  .md-editor-resize-operate:hover,
+  .md-editor-resize-operate:active {
+    background: #0087e7 !important;
   }
 </style>

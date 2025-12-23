@@ -1,5 +1,4 @@
-.theme-dark .custom-resizer,
-.theme-dark .md-editor-resize-operate {
+.theme-dark .custom-resizer {
   height: 100%;
   padding: 2px;
   background: rgb(66, 66, 66);
@@ -7,8 +6,7 @@
   z-index: 10;
 }
 
-.theme-dark .custom-resizer.resizing,
-.theme-dark .custom-resizer:hover,
-.theme-dark .md-editor-resize-operate:hover {
+.theme-dark .custom-resizer:active,
+.theme-dark .custom-resizer:hover {
   background: #0087e7;
 }

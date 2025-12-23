@@ -98,9 +98,6 @@
   }
 
   /* Resizer */
-  .md-editor-custom-scrollbar__track {
-    display: none !important;
-  }
   .md-editor-resize-operate {
     height: 100%;
     padding: 1.2px;
@@ -138,8 +135,33 @@
   .md-editor-code code {
     border-top-left-radius: 0 !important;
     border-top-right-radius: 0 !important;
+    font-size: 0.91rem !important;
   }
   .md-editor-code-block {
     margin-top: 1px;
+  }
+
+  /* Inline code */
+  .md-editor-preview code:not(.md-editor-code code):not(pre code) {
+    padding: 0.15em 0.35em !important;
+    font-size: 0.9rem !important;
+    font-family: 'Fira Code', 'JetBrains Mono', monospace !important;
+    color: #d19a66 !important;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+
+  /* Unordered lists */
+  .md-editor-preview ul {
+    list-style: disc !important;
+  }
+
+  .md-editor-preview ul ul {
+    list-style: circle !important;
+  }
+
+  /* Ordered lists */
+  .md-editor-preview ol {
+    list-style: decimal !important;
   }
 </style>

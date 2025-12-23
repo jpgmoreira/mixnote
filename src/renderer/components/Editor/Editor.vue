@@ -72,6 +72,7 @@
   /* Toolbar */
   .md-editor-toolbar-wrapper {
     padding: 0 !important;
+    border-color: #3a3a3a !important;
   }
   .md-editor-toolbar-left,
   .md-editor-toolbar-right {
@@ -87,6 +88,7 @@
   }
   .md-editor-divider {
     margin: 3px !important;
+    background-color: #535353 !important;
   }
 
   /* Footer */
@@ -95,6 +97,7 @@
   .md-editor-footer-right {
     height: fit-content !important;
     padding: 1px !important;
+    border-color: #3a3a3a !important;
   }
 
   /* Resizer */
@@ -117,7 +120,8 @@
   .md-editor-code-head {
     display: flex !important;
     justify-content: end !important;
-    border: 1px solid #292929 !important;
+    border: 1px solid #363636 !important;
+    background-color: #1f1f1f !important;
   }
   .md-editor-code-flag {
     display: none !important;
@@ -163,5 +167,26 @@
   /* Ordered lists */
   .md-editor-preview ol {
     list-style: decimal !important;
+  }
+
+  /* Autocomplete */
+  .cm-tooltip {
+    display: none;
+    pointer-events: none;
+  }
+
+  /* Colors */
+  .md-editor {
+    border: none !important;
+  }
+  .md-editor,
+  .cm-scroller {
+    background-color: #222222 !important;
+  }
+  .md-editor-custom-scrollbar__track {
+    background-color: #222222 !important;
+  }
+  .md-editor-custom-scrollbar__thumb {
+    background-color: #3b3b3b !important;
   }
 </style>

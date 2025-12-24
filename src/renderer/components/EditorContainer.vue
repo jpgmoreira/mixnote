@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import { ref, useTemplateRef } from 'vue';
+  import { ref, useTemplateRef, watch } from 'vue';
   import { Note } from '@common/schemas/note';
   import { useNotesStore } from '@renderer/store/notes';
   import { parseTimestamp } from '@common/utils/dateUtils';
@@ -23,6 +23,12 @@
       notesStore.updateNoteContent(props.note.id, field, content);
     }, 500);
   }
+  watch(
+    () => props.note.head,
+    (newVal) => {
+      headContent.value = newVal;
+    }
+  );
 </script>
 
 <template>

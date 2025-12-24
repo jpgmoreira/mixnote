@@ -99,8 +99,8 @@ export const useNotesStore = defineStore('notes', {
       window.api.invoke(InvokeChannels.updateNoteContent, noteId, field, content, now);
     },
     async renameNote(noteId: string, newName: string) {
+      await window.api.invoke(InvokeChannels.renameNote, noteId, newName);
       if (noteId in this.notes) {
-        await window.api.invoke(InvokeChannels.renameNote, noteId, newName);
         const note = this.notes[noteId];
         note.title = newName;
       }

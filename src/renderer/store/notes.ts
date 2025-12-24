@@ -32,7 +32,7 @@ export const useNotesStore = defineStore('notes', {
       if (this.tabGroups) {
         for (const group of this.tabGroups) {
           for (const tab of group.tabs) {
-            this.fetchNote(tab.noteId);
+            this.getNote(tab.noteId);
           }
         }
       }
@@ -47,9 +47,11 @@ export const useNotesStore = defineStore('notes', {
         window.api.invoke(InvokeChannels.updateTabGroups, toRawDeep(this.tabGroups));
       }, 500);
     },
-    async fetchNote(noteId: string) {
+    async getNote(noteId: string) {
+      if (noteId in this.notes) return this.notes[noteId];
       const note = await window.api.invoke<Note>(InvokeChannels.getNote, noteId);
       this.notes[noteId] = note;
+      return note;
     },
     setActiveTab(group: TabGroup, tabId: string) {
       group.tabs.forEach((tab) => (tab.active = tab.id === tabId));
@@ -120,9 +122,7 @@ export const useNotesStore = defineStore('notes', {
         throw new Error('No tab groups!');
       }
       // 1. If the note is not in the front, request it from the back:
-      if (!(noteId in this.notes)) {
-        await this.fetchNote(noteId);
-      }
+      await this.getNote(noteId);
       // 2. Verify if the note is already open in the current tab group:
       let activeGroup = this.tabGroups.find((g) => g.active);
       if (!activeGroup) {

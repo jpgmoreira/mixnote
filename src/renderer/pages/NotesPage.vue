@@ -70,7 +70,7 @@
       <div class="custom-resizer shrink-0" @mousedown="isResizing = true"></div>
       <div class="flex flex-col grow" :style="editorAreaStyle">
         <NotesView v-if="view === 'notes'" />
-        <PreFlashcards :n-selected-files="treeRef?.nSelectedFiles || 0" v-else />
+        <PreFlashcards v-else :n-selected-files="treeRef?.nSelectedFiles || 0" />
       </div>
     </div>
   </div>

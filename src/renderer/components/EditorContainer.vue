@@ -50,7 +50,7 @@
         placeholder="HEAD"
         spellcheck="false"
         v-model="headContent"
-        @change="noteChange('head')"
+        @input="noteChange('head')"
       ></textarea>
       <Editor
         class="grow"

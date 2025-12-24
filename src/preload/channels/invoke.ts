@@ -15,4 +15,5 @@ export enum InvokeChannels {
   updateNoteContent = 'update-note-content',
   renameNote = 'rename-note',
   getTabGroups = 'get-tab-groups',
+  flashcardsFilter = 'flashcards-filter',
 }

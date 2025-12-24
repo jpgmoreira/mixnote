@@ -105,3 +105,10 @@ ipcMain.handle(
 ipcMain.handle(InvokeChannels.getTabGroups, async (_: IpcMainInvokeEvent): Promise<TabGroup[]> => {
   return TabsManager.instance.getGroups();
 });
+
+ipcMain.handle(
+  InvokeChannels.getTabGroups,
+  async (_: IpcMainInvokeEvent, isStart: boolean): Promise<Note | null> => {
+    return NotesManager.instance.flashcardsFilter(isStart);
+  }
+);

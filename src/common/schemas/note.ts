@@ -1,5 +1,7 @@
 import { buildId } from '@common/utils/utils';
 
+export type NoteFrequency = 'high' | 'normal' | 'low';
+
 export type Note = {
   id: string;
   title: string;
@@ -7,6 +9,7 @@ export type Note = {
   lastModified: number;
   head: string;
   body: string;
+  frequency?: NoteFrequency; // Not persisted. Used only on flashcards.
 };
 
 export function getEmptyNote(title: string, timestamp: number): Note {

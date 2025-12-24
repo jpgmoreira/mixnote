@@ -2,10 +2,12 @@ import { FileProxy } from '../fileProxy';
 import path from 'path';
 import { DATA_DIR } from '@main/constants';
 import { ensureDirExists } from '@main/utils/utils';
-import { getEmptyNote, Note } from '@common/schemas/note';
+import { getEmptyNote, Note, NoteFrequency } from '@common/schemas/note';
 import { ProfileManager } from './profileManager';
 import fs from 'fs';
 import { TabsManager } from './tabsManager';
+import { TreeManager } from './treeManager';
+import { shuffleArray } from '@common/utils/utils';
 
 /**
  * Singleton for managing notes.
@@ -17,6 +19,15 @@ export class NotesManager {
 
   private constructor() {}
 
+  private filteredIds: string[] = [];
+  private indexes: Record<NoteFrequency, number> = {
+    high: -1,
+    low: -1,
+    normal: -1,
+  };
+  private highIds: Set<string> = new Set();
+  private lowIds: Set<string> = new Set();
+
   public static get instance(): NotesManager {
     if (!this.#instance) {
       this.#instance = new NotesManager();
@@ -24,8 +35,20 @@ export class NotesManager {
     return this.#instance;
   }
 
+  private resetData() {
+    this.filteredIds = [];
+    this.indexes = {
+      high: -1,
+      low: -1,
+      normal: -1,
+    };
+    this.highIds.clear();
+    this.lowIds.clear();
+  }
+
   public loadProfile(profileId: string) {
     this.profileId = profileId;
+    this.resetData();
   }
 
   public createNote(title: string): string {
@@ -47,8 +70,8 @@ export class NotesManager {
       throw new Error(`Note does not exist!: ${noteId}`);
     }
     const content = await fs.promises.readFile(fPath, 'utf-8');
-    const json = JSON.parse(content) as Note;
-    return json;
+    const note = JSON.parse(content) as Note;
+    return note;
   }
 
   public async updateNoteContent(
@@ -84,7 +107,56 @@ export class NotesManager {
     TabsManager.instance.noteDeleted(noteId);
   }
 
+  private canChooseFrequency(frequency: NoteFrequency): Boolean {
+    if (frequency === 'high') return this.highIds.size > 0;
+    if (frequency === 'low') return this.lowIds.size > 0;
+    return this.filteredIds.length > this.highIds.size + this.lowIds.size;
+  }
+
+  public async getNextFlashcard(): Promise<Note | null> {
+    if (!this.filteredIds.length) return null;
+    // TODO: Update to use probabilities from user settings.
+    let frequency: NoteFrequency = 'normal';
+    do {
+      const prob = Math.random();
+      if (prob < 0.3) frequency = 'high';
+      else if (prob < 0.3 + 0.1) frequency = 'low';
+    } while (!this.canChooseFrequency(frequency));
+    let verifier = (noteId: string) => !this.lowIds.has(noteId) && !this.highIds.has(noteId);
+    if (frequency === 'low') {
+      verifier = (noteId: string) => this.lowIds.has(noteId);
+    } else if (frequency === 'high') {
+      verifier = (noteId: string) => this.highIds.has(noteId);
+    }
+    let noteId = this.filteredIds[0];
+    do {
+      this.indexes[frequency] = (this.indexes[frequency] + 1) % this.filteredIds.length;
+      this.filteredIds[this.indexes[frequency]];
+      if (frequency === 'normal' && this.indexes[frequency] === 0) {
+        shuffleArray(this.filteredIds);
+      }
+    } while (!verifier(noteId));
+    return this.getNote(noteId);
+  }
+
+  public async flashcardsFilter(isStart: boolean): Promise<Note | null> {
+    const noteIds = TreeManager.instance.getSelectedNotes();
+    this.filteredIds = noteIds;
+    shuffleArray(this.filteredIds);
+    if (isStart) {
+      this.indexes = {
+        high: -1,
+        low: -1,
+        normal: -1,
+      };
+      this.highIds.clear();
+      this.lowIds.clear();
+    }
+    return this.getNextFlashcard();
+  }
+
   public clear() {
     this.profileId = null;
+    this.resetData();
   }
 }

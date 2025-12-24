@@ -659,44 +659,50 @@
             ></span>
 
             <div class="flex items-center">
-              <input
-                v-if="props.checkbox"
-                type="checkbox"
-                @click="handleSelection(node)"
-                :checked="node.selected"
-                :indeterminate="isCheckIndeterminate(node)"
-                :disabled="isNodeDisabled(node)"
-                :class="{
-                  indeterminate: isCheckIndeterminate(node),
-                }"
-              />
+              <div
+                class="flex items-center"
+                @click="
+                  handleSelection(node);
+                  nodeClick(node);
+                "
+              >
+                <input
+                  v-if="props.checkbox"
+                  type="checkbox"
+                  :checked="node.selected"
+                  :indeterminate="isCheckIndeterminate(node)"
+                  :disabled="isNodeDisabled(node)"
+                  :class="{
+                    indeterminate: isCheckIndeterminate(node),
+                  }"
+                />
 
-              <span
-                v-if="node.type === 'file' && props.fileIcon"
-                class="file-icon"
-                :class="{ 'cursor-not-allowed': isNodeDisabled(node) }"
-              ></span>
-              <span
-                v-if="node.type === 'dir' && props.dirIcon"
-                class="dir-icon"
-                :class="{ 'cursor-not-allowed': isNodeDisabled(node) }"
-              ></span>
+                <span
+                  v-if="node.type === 'file' && props.fileIcon"
+                  class="file-icon"
+                  :class="{ 'cursor-not-allowed': isNodeDisabled(node) }"
+                ></span>
+                <span
+                  v-if="node.type === 'dir' && props.dirIcon"
+                  class="dir-icon"
+                  :class="{ 'cursor-not-allowed': isNodeDisabled(node) }"
+                ></span>
 
-              <input
-                v-model.trim="node.text"
-                class="node-input"
-                :class="{
-                  selected: node.selected,
-                  'cursor-not-allowed': isNodeDisabled(node),
-                }"
-                :readonly="renamingNode !== node"
-                @mousedown.prevent
-                @keydown.enter="applyRenaming"
-                @keydown.esc="undoRenaming"
-                @blur="applyRenaming"
-                @click.right.stop="(e: MouseEvent) => showContextMenu(node.type, node, e)"
-                @click="nodeClick(node)"
-              />
+                <input
+                  v-model.trim="node.text"
+                  class="node-input"
+                  :class="{
+                    selected: node.selected,
+                    'cursor-not-allowed': isNodeDisabled(node),
+                  }"
+                  :readonly="renamingNode !== node"
+                  @mousedown.prevent
+                  @keydown.enter="applyRenaming"
+                  @keydown.esc="undoRenaming"
+                  @blur="applyRenaming"
+                  @click.right.stop="(e: MouseEvent) => showContextMenu(node.type, node, e)"
+                />
+              </div>
               <span v-if="node.type === 'dir' && props.filesHint" class="files-hint">
                 ({{ fileHintText(node) }})
               </span>

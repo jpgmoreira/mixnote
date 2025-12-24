@@ -132,10 +132,10 @@ export class NotesManager {
     let noteId = this.filteredIds[0];
     do {
       this.indexes[frequency] = (this.indexes[frequency] + 1) % this.filteredIds.length;
-      noteId = this.filteredIds[this.indexes[frequency]];
       if (frequency === 'normal' && this.indexes[frequency] === 0) {
         shuffleArray(this.filteredIds);
       }
+      noteId = this.filteredIds[this.indexes[frequency]];
     } while (!verifier(noteId));
     return this.getNote(noteId);
   }

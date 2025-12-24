@@ -1,13 +1,15 @@
 <script lang="ts" setup>
-  import { ref, onMounted } from 'vue';
+  import { ref, onActivated } from 'vue';
   import { Note } from '@common/schemas/note';
   import { useRouter } from 'vue-router';
   import { useNotesStore } from '@renderer/store/notes';
+  import { InvokeChannels } from '@preload/channels/invoke';
   const router = useRouter();
   const notesStore = useNotesStore();
   const noteIds = ref<Note[]>([]);
   const idx = ref(0);
   const reveal = ref(false);
+  const currentNote = ref<Note | null>(null);
   const edit = ref(false);
   function startEditing() {
     edit.value = true;
@@ -23,6 +25,10 @@
       },
     });
   }
+  onActivated(async () => {
+    const firstNote = await window.api.invoke<Note | null>(InvokeChannels.flashcardsFilter, true);
+    currentNote.value = firstNote;
+  });
 </script>
 
 <template>

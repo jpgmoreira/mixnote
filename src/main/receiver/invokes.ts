@@ -107,7 +107,7 @@ ipcMain.handle(InvokeChannels.getTabGroups, async (_: IpcMainInvokeEvent): Promi
 });
 
 ipcMain.handle(
-  InvokeChannels.getTabGroups,
+  InvokeChannels.flashcardsFilter,
   async (_: IpcMainInvokeEvent, isStart: boolean): Promise<Note | null> => {
     return NotesManager.instance.flashcardsFilter(isStart);
   }

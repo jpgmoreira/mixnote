@@ -107,7 +107,7 @@ export class NotesManager {
     TabsManager.instance.noteDeleted(noteId);
   }
 
-  private canChooseFrequency(frequency: NoteFrequency): Boolean {
+  private canChooseFrequency(frequency: NoteFrequency): boolean {
     if (frequency === 'high') return this.highIds.size > 0;
     if (frequency === 'low') return this.lowIds.size > 0;
     return this.filteredIds.length > this.highIds.size + this.lowIds.size;
@@ -132,7 +132,7 @@ export class NotesManager {
     let noteId = this.filteredIds[0];
     do {
       this.indexes[frequency] = (this.indexes[frequency] + 1) % this.filteredIds.length;
-      this.filteredIds[this.indexes[frequency]];
+      noteId = this.filteredIds[this.indexes[frequency]];
       if (frequency === 'normal' && this.indexes[frequency] === 0) {
         shuffleArray(this.filteredIds);
       }

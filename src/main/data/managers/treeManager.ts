@@ -454,9 +454,6 @@ export class TreeManager {
       }
     }
     node.text = newName;
-    if (node.type === 'file') {
-      // TODO: NotesManager, rename note.
-    }
     return { status: 'success' };
   }
 
@@ -559,8 +556,7 @@ export class TreeManager {
 
   private async deleteCallback(node: Node) {
     if (node.type !== 'file') return;
-    // TODO: NotesManager, delete note;
-    // await SessionsManager.instance.deleteSession(node.sessionId);
+    await NotesManager.instance.deleteNote(node.noteId);
   }
 
   public async deleteNode(nodeId: string) {

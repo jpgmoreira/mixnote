@@ -72,6 +72,16 @@ export class NotesManager {
     await fs.promises.writeFile(fPath, JSON.stringify(note), 'utf-8');
   }
 
+  public async deleteNote(noteId: string) {
+    if (!this.profileId) throw new Error('Profile not initialized!');
+    const fPath = path.join(DATA_DIR, 'profileData', this.profileId, 'notes', `${noteId}.json`);
+    if (!fs.existsSync(fPath)) {
+      throw new Error(`Note does not exist!: ${noteId}`);
+    }
+    await fs.promises.unlink(fPath);
+    ProfileManager.instance.addNotes(-1);
+  }
+
   public clear() {
     this.profileId = null;
   }

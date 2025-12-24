@@ -2,9 +2,12 @@
   import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
   import { useUIStore } from '@renderer/store/ui';
   import { useNotesStore } from '@renderer/store/notes';
+  import { useRoute } from 'vue-router';
   import Header from '@renderer/components/Header.vue';
   import TreeView from '@renderer/components/UI/TreeView/TreeView.vue';
   import NotesView from '@renderer/components/NotesView.vue';
+
+  const route = useRoute();
 
   const uiStore = useUIStore();
   const notesStore = useNotesStore();
@@ -14,6 +17,8 @@
   const treeAreaWidth = ref(initialExplorerWidth);
   const editorAreaWidth = ref(window.innerWidth - initialExplorerWidth);
   const isResizing = ref(false);
+
+  const view = computed(() => route.params.view);
 
   const treeAreaStyle = computed(() => ({
     width: `${treeAreaWidth.value}px`,
@@ -59,7 +64,8 @@
       </div>
       <div class="custom-resizer shrink-0" @mousedown="isResizing = true"></div>
       <div class="flex flex-col grow" :style="editorAreaStyle">
-        <NotesView />
+        <NotesView v-if="view === 'notes'" />
+        <div v-else>AAAAA</div>
       </div>
     </div>
   </div>

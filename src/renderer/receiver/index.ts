@@ -11,7 +11,13 @@ window.api.on(OnChannels.startup, (data: StartupDTO) => {
   EventEmitter.instance.emit(Events.loadStartupData, data);
   document.documentElement.classList.add('theme-dark');
   const title = data.profile ? `${data.profile.name}@${APP_NAME}` : APP_NAME;
-  const route = data.profile ? '/notes' : '/login';
   document.title = title;
-  router.replace(route);
+  if (data.profile) {
+    router.replace({
+      name: 'notes',
+      params: { view: 'notes' },
+    });
+  } else {
+    router.replace('/login');
+  }
 });

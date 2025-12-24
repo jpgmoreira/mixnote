@@ -5,7 +5,8 @@ import LoginPage from '@renderer/pages/login/LoginPage.vue';
 
 const routes = [
   {
-    path: '/notes',
+    path: '/notes/:view',
+    name: 'notes',
     component: NotesPage,
   },
   {

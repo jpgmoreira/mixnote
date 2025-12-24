@@ -2,7 +2,14 @@
 
 <template>
   <header class="nav-header flex justify-between">
-    <RouterLink to="/notes" class="router-link">Notes</RouterLink>
+    <div class="flex">
+      <RouterLink :to="{ name: 'notes', params: { view: 'notes' } }" class="router-link">
+        Notes
+      </RouterLink>
+      <RouterLink :to="{ name: 'notes', params: { view: 'flashcards' } }" class="router-link">
+        Flashcards
+      </RouterLink>
+    </div>
     <div class="flex">
       <RouterLink to="/settings" class="router-link">Settings</RouterLink>
     </div>

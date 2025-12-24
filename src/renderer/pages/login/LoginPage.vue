@@ -45,7 +45,10 @@
       modals.create = false;
       names.create = '';
       document.title = `${name}@${APP_NAME}`;
-      router.replace('/notes');
+      router.replace({
+        name: 'notes',
+        params: { view: 'notes' },
+      });
     }
   }
 
@@ -69,7 +72,10 @@
       uiStore.showToast(result.errorMsg, 'error');
     } else if (result.status === 'success') {
       document.title = `${name}@${APP_NAME}`;
-      router.replace('/notes');
+      router.replace({
+        name: 'notes',
+        params: { view: 'notes' },
+      });
     }
   }
 

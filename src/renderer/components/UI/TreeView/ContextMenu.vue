@@ -11,6 +11,7 @@
     nOpenDirs: number;
     isSearching: boolean;
     activeNode: Node | null;
+    selectionOnly?: boolean;
     x: number;
     y: number;
   };
@@ -49,25 +50,25 @@
 
   // Root sections
   const rootSections = computed(() => ({
-    create: !props.isSearching,
+    create: !props.selectionOnly && !props.isSearching,
     select: showRootSelection.value,
-    move: nSelectedNodes.value > 0,
-    delete: nSelectedNodes.value > 0,
+    move: !props.selectionOnly && nSelectedNodes.value > 0,
+    delete: !props.selectionOnly && nSelectedNodes.value > 0,
   }));
 
   // Dir sections
   const dirSections = computed(() => ({
-    create: !props.isSearching,
-    move: Boolean(!props.activeNode?.selected && nSelectedNodes.value),
-    change: true,
+    create: !props.selectionOnly && !props.isSearching,
+    move: !props.selectionOnly && Boolean(!props.activeNode?.selected && nSelectedNodes.value),
+    change: !props.selectionOnly,
   }));
 
   // File sections
   const fileSections = computed(() => ({
-    open: props.activeNode?.type === 'file',
-    create: !props.isSearching,
-    move: Boolean(!props.activeNode?.selected && nSelectedFiles.value),
-    change: true,
+    open: !props.selectionOnly && props.activeNode?.type === 'file',
+    create: !props.selectionOnly && !props.isSearching,
+    move: !props.selectionOnly && Boolean(!props.activeNode?.selected && nSelectedFiles.value),
+    change: !props.selectionOnly,
   }));
 
   const anySectionVisible = computed(

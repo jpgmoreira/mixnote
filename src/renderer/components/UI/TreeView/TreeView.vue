@@ -51,6 +51,7 @@
       search?: boolean;
       dirIcon?: boolean;
       fileIcon?: boolean;
+      selectionOnly?: boolean;
     }>(),
     {
       checkbox: false,
@@ -58,6 +59,7 @@
       search: false,
       dirIcon: false,
       fileIcon: false,
+      selectionOnly: false,
     }
   );
 
@@ -358,12 +360,14 @@
   // --- Node click: ---
 
   function nodeClick(node: Node) {
+    if (props.selectionOnly) return;
     if (node.type === 'file') {
       notesStore.explorerNoteClicked(node.noteId);
     }
   }
 
   function openNote() {
+    if (props.selectionOnly) return;
     const node = contextState.activeNode;
     if (!node) return;
     if (node.type === 'file') {
@@ -595,6 +599,7 @@
       :n-selected-folders="nSelectedFolders"
       :n-open-dirs="tree?.nOpenDirs || 0"
       :is-searching="isSearching"
+      :selection-only="props.selectionOnly"
       v-bind="contextState"
       @create-node="createNode"
       @create-node-above="createNodeAbove"

@@ -57,6 +57,7 @@
           files-hint
           file-icon
           :checkbox="view === 'flashcards'"
+          :selectionOnly="view === 'flashcards'"
           @rename="notesStore.renameNote"
           @delete-single="notesStore.refreshTabs"
           @delete-multiple="notesStore.refreshTabs"

@@ -363,6 +363,15 @@
     }
   }
 
+  function openNote() {
+    const node = contextState.activeNode;
+    if (!node) return;
+    if (node.type === 'file') {
+      notesStore.explorerNoteClicked(node.noteId);
+      notesStore.explorerNoteClicked(node.noteId);
+    }
+  }
+
   // --- Movement: ---
 
   async function moveSelection(channel: TreeChannels) {
@@ -596,6 +605,7 @@
       @collapse-all="collapseAll"
       @clear-selection="clearSelection"
       @select-all="selectAll"
+      @open-note="openNote"
       @move-selected-files-above="() => moveSelection(TreeChannels.moveSelectedFilesAbove)"
       @move-selected-files-below="() => moveSelection(TreeChannels.moveSelectedFilesBelow)"
       @move-selected-folders-above="() => moveSelection(TreeChannels.moveSelectedFoldersAbove)"

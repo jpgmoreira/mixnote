@@ -16,6 +16,7 @@
   };
 
   const emit = defineEmits<{
+    (e: 'openNote'): void;
     (e: 'createNode', type: NodeType): void;
     (e: 'createNodeAbove', type: NodeType): void;
     (e: 'createNodeBelow', type: NodeType): void;
@@ -63,6 +64,7 @@
 
   // File sections
   const fileSections = computed(() => ({
+    open: props.activeNode?.type === 'file',
     create: !props.isSearching,
     move: Boolean(!props.activeNode?.selected && nSelectedFiles.value),
     change: true,
@@ -161,6 +163,10 @@
 
     <!-- File context -->
     <div v-else-if="props.type === 'file'">
+      <div v-if="fileSections.open">
+        <div class="item" @click="emit('openNote')">Open</div>
+      </div>
+
       <div v-if="fileSections.create">
         <div class="item" @click="emit('createNodeAbove', 'file')">Create note above</div>
         <div class="item" @click="emit('createNodeBelow', 'file')">Create note below</div>

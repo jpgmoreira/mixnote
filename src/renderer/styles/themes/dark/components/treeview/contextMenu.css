@@ -1,4 +1,5 @@
 .theme-dark .treeview .context-menu {
+  z-index: 20;
   background-color: #1e1e1e;
   color: #e2e2e2;
   border: 1px solid #2e2e2e;

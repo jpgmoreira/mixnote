@@ -121,6 +121,7 @@ export class NotesManager {
       const prob = Math.random();
       if (prob < 0.3) frequency = 'high';
       else if (prob < 0.3 + 0.1) frequency = 'low';
+      else frequency = 'normal';
     } while (!this.canChooseFrequency(frequency));
     let verifier = (noteId: string) => !this.lowIds.has(noteId) && !this.highIds.has(noteId);
     if (frequency === 'low') {
@@ -142,7 +143,6 @@ export class NotesManager {
   public async flashcardsFilter(isStart: boolean): Promise<Note | null> {
     const noteIds = TreeManager.instance.getSelectedNotes();
     this.filteredIds = noteIds;
-    shuffleArray(this.filteredIds);
     if (isStart) {
       this.indexes = {
         high: -1,

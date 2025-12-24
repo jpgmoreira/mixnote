@@ -3,7 +3,7 @@
   import { randomId } from '@common/utils/utils';
   import { useNotesStore } from '@renderer/store/notes';
   import { storeToRefs } from 'pinia';
-  import { Columns2Icon, BrushCleaningIcon, XIcon } from 'lucide-vue-next';
+  import { Columns2Icon, AlignHorizontalDistributeCenterIcon, XIcon } from 'lucide-vue-next';
   import EditorContainer from './EditorContainer.vue';
 
   const MIN_GROUP_WIDTH = 30; // px.
@@ -211,7 +211,9 @@
               <XIcon />
             </button>
             <template v-if="index === tabGroups.length - 1">
-              <button type="button" @click="resetGroupWidths"><BrushCleaningIcon /></button>
+              <button v-if="tabGroups.length > 1" type="button" @click="resetGroupWidths">
+                <AlignHorizontalDistributeCenterIcon />
+              </button>
               <button type="button" @click="addTabGroup"><Columns2Icon /></button>
             </template>
           </div>

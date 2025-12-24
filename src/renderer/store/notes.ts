@@ -98,6 +98,13 @@ export const useNotesStore = defineStore('notes', {
       note.lastModified = now;
       window.api.invoke(InvokeChannels.updateNoteContent, noteId, field, content, now);
     },
+    async renameNote(noteId: string, newName: string) {
+      if (noteId in this.notes) {
+        await window.api.invoke(InvokeChannels.renameNote, noteId, newName);
+        const note = this.notes[noteId];
+        note.title = newName;
+      }
+    },
     async explorerNoteClicked(noteId: string) {
       if (!this.tabGroups || !this.tabGroups.length) {
         throw new Error('No tab groups!');

@@ -13,4 +13,5 @@ export enum InvokeChannels {
   updateTabGroups = 'update-tab-groups',
   getNote = 'get-note',
   updateNoteContent = 'update-note-content',
+  renameNote = 'rename-note',
 }

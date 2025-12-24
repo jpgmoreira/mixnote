@@ -62,7 +62,7 @@
   );
 
   const emit = defineEmits<{
-    (e: 'rename', newName: string): void;
+    (e: 'rename', noteId: string, newName: string): void;
     (e: 'deleteSingle', noteId: string): void;
     (e: 'deleteMultiple'): void;
   }>();
@@ -236,7 +236,9 @@
         uiStore.showToast(result.errorMsg, 'error');
         node.text = originalName.value;
       } else {
-        emit('rename', newName);
+        if (node.type === 'file') {
+          emit('rename', node.noteId, newName);
+        }
       }
     }
     renamingNode.value = null;
@@ -671,7 +673,7 @@
               ></span>
 
               <input
-                v-model="node.text"
+                v-model.trim="node.text"
                 class="node-input"
                 :class="{
                   selected: node.selected,

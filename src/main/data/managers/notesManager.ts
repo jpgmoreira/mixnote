@@ -64,6 +64,14 @@ export class NotesManager {
     await fs.promises.writeFile(fPath, JSON.stringify(note), 'utf-8');
   }
 
+  public async renameNote(noteId: string, newName: string) {
+    if (!this.profileId) throw new Error('Profile not initialized!');
+    const fPath = path.join(DATA_DIR, 'profileData', this.profileId, 'notes', `${noteId}.json`);
+    const note = await this.getNote(noteId);
+    note.title = newName;
+    await fs.promises.writeFile(fPath, JSON.stringify(note), 'utf-8');
+  }
+
   public clear() {
     this.profileId = null;
   }

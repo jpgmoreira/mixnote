@@ -1,11 +1,13 @@
 <script lang="ts" setup>
   import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
   import { useUIStore } from '@renderer/store/ui';
+  import { useNotesStore } from '@renderer/store/notes';
   import Header from '@renderer/components/Header.vue';
   import TreeView from '@renderer/components/UI/TreeView/TreeView.vue';
   import NotesView from '@renderer/components/NotesView.vue';
 
   const uiStore = useUIStore();
+  const notesStore = useNotesStore();
 
   const initialExplorerWidth = uiStore.settings.explorerWidth;
 
@@ -45,7 +47,13 @@
     <Header />
     <div class="flex grow">
       <div :style="treeAreaStyle">
-        <TreeView class="select-none" files-hint file-icon checkbox />
+        <TreeView
+          class="select-none"
+          files-hint
+          file-icon
+          checkbox
+          @rename="notesStore.renameNote"
+        />
       </div>
       <div class="custom-resizer shrink-0" @mousedown="isResizing = true"></div>
       <div class="flex flex-col grow" :style="editorAreaStyle">

@@ -7,14 +7,21 @@
   const props = defineProps<{ note: Note }>();
   const notesStore = useNotesStore();
   const bodyRef = useTemplateRef('body-ref');
+  const headContent = ref(props.note.head);
+  const noteChangeTimer = ref<ReturnType<typeof setTimeout> | undefined>(undefined);
   const focus = ref(false);
   function toggleFocus() {
     focus.value = !focus.value;
   }
-  function bodyBlur() {
-    if (!bodyRef.value) throw new Error('No body ref!');
-    const content = bodyRef.value.getContent();
-    notesStore.updateNoteContent(props.note.id, 'body', content);
+  function noteChange(field: 'head' | 'body') {
+    clearTimeout(noteChangeTimer.value);
+    noteChangeTimer.value = setTimeout(() => {
+      if (!bodyRef.value) return;
+      let content = '';
+      if (field === 'head') content = headContent.value;
+      else content = bodyRef.value.getContent();
+      notesStore.updateNoteContent(props.note.id, field, content);
+    }, 500);
   }
 </script>
 
@@ -42,12 +49,14 @@
         class="head-textarea"
         placeholder="HEAD"
         spellcheck="false"
+        v-model="headContent"
+        @change="noteChange('head')"
       ></textarea>
       <Editor
         class="grow"
         ref="body-ref"
         :initial="props.note.body"
-        @blur="bodyBlur"
+        @change="noteChange('body')"
         @toggle-focus-mode="toggleFocus"
         placeholder="BODY"
       />

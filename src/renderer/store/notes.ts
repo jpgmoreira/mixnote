@@ -90,9 +90,13 @@ export const useNotesStore = defineStore('notes', {
       delete this.notes[noteId];
     },
     updateNoteContent(noteId: string, field: 'head' | 'body', content: string) {
+      // Should be debounced somewhere else.
       if (!(noteId in this.notes)) throw new Error('Cannot update non-existing note!');
+      const now = Date.now();
       const note = this.notes[noteId];
       note[field] = content;
+      note.lastModified = now;
+      window.api.invoke(InvokeChannels.updateNoteContent, noteId, field, content, now);
     },
     async explorerNoteClicked(noteId: string) {
       if (!this.tabGroups || !this.tabGroups.length) {

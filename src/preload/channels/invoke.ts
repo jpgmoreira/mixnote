@@ -12,4 +12,5 @@ export enum InvokeChannels {
   updateUISettings = 'update-ui-settings',
   updateTabGroups = 'update-tab-groups',
   getNote = 'get-note',
+  updateNoteContent = 'update-note-content',
 }

@@ -81,3 +81,16 @@ ipcMain.handle(
     return NotesManager.instance.getNote(noteId);
   }
 );
+
+ipcMain.handle(
+  InvokeChannels.updateNoteContent,
+  async (
+    _: IpcMainInvokeEvent,
+    noteId: string,
+    field: 'head' | 'body',
+    content: string,
+    timestamp: number
+  ) => {
+    return NotesManager.instance.updateNoteContent(noteId, field, content, timestamp);
+  }
+);

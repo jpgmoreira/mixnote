@@ -74,7 +74,7 @@
   }
 
   // Beware: can cause unexpected behavior if updating the content on every change.
-  // You should update it just on blur.
+  // You should update it just on blur, or use a debounce on change.
   watch(
     () => props.initial,
     (newValue) => (content.value = newValue)
@@ -94,7 +94,7 @@
     :toolbars="toolbars"
     noMermaid
     noEcharts
-    :autoFoldThreshold="999999"
+    :autoFoldThreshold="Infinity"
     :placeholder="props.placeholder || ''"
     @onChange="emit('change')"
     @onBlur="emit('blur')"

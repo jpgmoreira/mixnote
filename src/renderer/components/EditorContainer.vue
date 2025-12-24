@@ -40,13 +40,17 @@
           {{ props.note.title }}
         </div>
         <div class="flex flex-wrap">
-          <div class="grow whitespace-nowrap">
-            <b>Created at:</b>
-            {{ parseTimestamp(props.note.createdAt) }}
+          <div class="grow min-w-0 overflow-hidden">
+            <div class="whitespace-nowrap truncate">
+              <b>Created at:</b>
+              {{ parseTimestamp(props.note.createdAt) }}
+            </div>
           </div>
-          <div class="grow whitespace-nowrap">
-            <b>Last modified:</b>
-            {{ parseTimestamp(props.note.lastModified) }}
+          <div class="grow min-w-0 overflow-hidden">
+            <div class="whitespace-nowrap truncate">
+              <b>Last modified:</b>
+              {{ parseTimestamp(props.note.lastModified) }}
+            </div>
           </div>
         </div>
       </div>

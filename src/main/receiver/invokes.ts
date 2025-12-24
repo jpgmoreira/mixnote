@@ -101,3 +101,7 @@ ipcMain.handle(
     return NotesManager.instance.renameNote(noteId, newName);
   }
 );
+
+ipcMain.handle(InvokeChannels.getTabGroups, async (_: IpcMainInvokeEvent): Promise<TabGroup[]> => {
+  return TabsManager.instance.getGroups();
+});

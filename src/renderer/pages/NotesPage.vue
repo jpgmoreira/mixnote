@@ -53,6 +53,8 @@
           file-icon
           checkbox
           @rename="notesStore.renameNote"
+          @delete-single="notesStore.refreshTabs"
+          @delete-multiple="notesStore.refreshTabs"
         />
       </div>
       <div class="custom-resizer shrink-0" @mousedown="isResizing = true"></div>

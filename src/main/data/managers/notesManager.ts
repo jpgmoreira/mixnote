@@ -5,6 +5,7 @@ import { ensureDirExists } from '@main/utils/utils';
 import { getEmptyNote, Note } from '@common/schemas/note';
 import { ProfileManager } from './profileManager';
 import fs from 'fs';
+import { TabsManager } from './tabsManager';
 
 /**
  * Singleton for managing notes.
@@ -80,6 +81,7 @@ export class NotesManager {
     }
     await fs.promises.unlink(fPath);
     ProfileManager.instance.addNotes(-1);
+    TabsManager.instance.noteDeleted(noteId);
   }
 
   public clear() {

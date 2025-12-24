@@ -98,6 +98,16 @@ export const useNotesStore = defineStore('notes', {
       note.lastModified = now;
       window.api.invoke(InvokeChannels.updateNoteContent, noteId, field, content, now);
     },
+    async refreshTabs() {
+      this.tabGroups = await window.api.invoke<TabGroup[]>(InvokeChannels.getTabGroups);
+      for (const group of this.tabGroups) {
+        for (const tab of group.tabs) {
+          if (!(tab.noteId in this.notes)) {
+            delete this.notes[tab.noteId];
+          }
+        }
+      }
+    },
     async renameNote(noteId: string, newName: string) {
       await window.api.invoke(InvokeChannels.renameNote, noteId, newName);
       if (noteId in this.notes) {

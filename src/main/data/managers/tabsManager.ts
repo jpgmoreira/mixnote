@@ -2,7 +2,7 @@ import { FileProxy } from '../fileProxy';
 import path from 'path';
 import { DATA_DIR } from '@main/constants';
 import { getEmptyTabGroup, TabGroup } from '@common/schemas/tabs';
-import { randomId } from '@common/utils/utils';
+import { randomId, toRawDeep } from '@common/utils/utils';
 
 type TabsManagerProxy = {
   groups: TabGroup[];
@@ -43,12 +43,19 @@ export class TabsManager {
 
   public getGroups(): TabGroup[] {
     if (!this.target) throw new Error('Cannot get tab groups before initialization!');
-    return structuredClone(this.target.groups);
+    return structuredClone(toRawDeep(this.target.groups));
   }
 
   public updateGroups(groups: TabGroup[]) {
     if (!this.proxy) throw new Error('Proxy not initialized');
     this.proxy.groups = groups;
+  }
+
+  public noteDeleted(noteId: string) {
+    if (!this.proxy) throw new Error('Proxy not initialized');
+    for (const group of this.proxy.groups) {
+      group.tabs = group.tabs.filter((t) => t.noteId !== noteId);
+    }
   }
 
   public clear() {

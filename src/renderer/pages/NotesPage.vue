@@ -1,11 +1,12 @@
 <script lang="ts" setup>
-  import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
+  import { ref, computed, useTemplateRef, onMounted, onBeforeUnmount } from 'vue';
   import { useUIStore } from '@renderer/store/ui';
   import { useNotesStore } from '@renderer/store/notes';
   import { useRoute } from 'vue-router';
   import Header from '@renderer/components/Header.vue';
   import TreeView from '@renderer/components/UI/TreeView/TreeView.vue';
   import NotesView from '@renderer/components/NotesView.vue';
+  import PreFlashcards from '@renderer/components/PreFlashcards.vue';
 
   const route = useRoute();
 
@@ -13,6 +14,8 @@
   const notesStore = useNotesStore();
 
   const initialExplorerWidth = uiStore.settings.explorerWidth;
+
+  const treeRef = useTemplateRef('tree-ref');
 
   const treeAreaWidth = ref(initialExplorerWidth);
   const editorAreaWidth = ref(window.innerWidth - initialExplorerWidth);
@@ -53,6 +56,7 @@
     <div class="flex grow">
       <div :style="treeAreaStyle">
         <TreeView
+          ref="tree-ref"
           class="select-none"
           files-hint
           file-icon
@@ -66,7 +70,7 @@
       <div class="custom-resizer shrink-0" @mousedown="isResizing = true"></div>
       <div class="flex flex-col grow" :style="editorAreaStyle">
         <NotesView v-if="view === 'notes'" />
-        <div v-else>AAAAA</div>
+        <PreFlashcards :n-selected-files="treeRef?.nSelectedFiles || 0" v-else />
       </div>
     </div>
   </div>

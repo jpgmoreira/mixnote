@@ -136,6 +136,14 @@
     return val === '1' ? '1 folder' : `${val} folders`;
   });
 
+  // --- Exposes: ---
+
+  const nSelectedFiles = computed(() => tree.value?.nSelectedFiles || 0);
+
+  defineExpose({
+    nSelectedFiles,
+  });
+
   // --- Context menu: ---
 
   function showContextMenu(type: ContextState['type'], targetNode: Node | null, e: MouseEvent) {

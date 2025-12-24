@@ -34,7 +34,7 @@
 <template>
   <div class="editor-container h-full relative overflow-y-auto overflow-x-hidden">
     <div class="flex flex-col absolute top-0 left-0 w-full min-h-full">
-      <div v-if="!focus" class="p-1">
+      <div v-if="!focus" class="p-1 note-info">
         <div class="whitespace-nowrap">
           <b>Title:</b>
           {{ props.note.title }}

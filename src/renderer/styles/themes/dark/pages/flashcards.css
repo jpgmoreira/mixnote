@@ -161,7 +161,7 @@
 /* ===============================
    ANIMATION
 ================================ */
-@keyframes flashcardFadeIn {
+/* @keyframes flashcardFadeIn {
   from {
     opacity: 0;
     transform: translateY(-4px);
@@ -170,4 +170,4 @@
     opacity: 1;
     transform: translateY(0);
   }
-}
+} */

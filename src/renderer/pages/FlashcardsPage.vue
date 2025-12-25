@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import { ref, onActivated, useTemplateRef, watch, nextTick } from 'vue';
+  import { ref, reactive, onActivated, useTemplateRef, watch, nextTick } from 'vue';
   import { Note, NoteFrequency } from '@common/schemas/note';
   import { useRouter } from 'vue-router';
   import { useNotesStore } from '@renderer/store/notes';
@@ -7,9 +7,14 @@
   import { FocusIcon } from 'lucide-vue-next';
   import Editor from '@renderer/components/Editor/Editor.vue';
   import SelectionList from '@renderer/components/UI/SelectionList.vue';
+  import Modal from '@renderer/components/UI/Modal.vue';
   const MAX_NOTE_IDS_HISTORY = 100;
   const router = useRouter();
   const notesStore = useNotesStore();
+  const modalState = reactive({
+    visible: false,
+    isDeleting: false,
+  });
   const noteIds = ref<string[]>([]);
   const idx = ref(-1);
   const reveal = ref(false);
@@ -155,6 +160,34 @@
     class="flashcards-page flex flex-col h-screen"
     :class="{ edit, focus: bodyFocus }"
   >
+    <Modal
+      :visible="modalState.visible"
+      :frozen="modalState.isDeleting"
+      @close="modalState.visible = false"
+    >
+      <template #header>Delete note</template>
+      <template #body>
+        <div>
+          Are you sure you want to delete the
+          <strong>"{{ currentNote?.title }}"</strong>
+          note?
+        </div>
+        <div class="text-danger my-2">This action cannot be undone!</div>
+        <div v-if="modalState.isDeleting" class="text-danger flex items-center">
+          <span class="loader mr-2"></span>
+          Deleting...
+        </div>
+      </template>
+      <template #footer>
+        <div class="flex justify-between">
+          <button type="button" class="btn-secondary" @click="modalState.visible = false">
+            Cancel
+          </button>
+          <button type="button" class="btn-danger">Delete</button>
+        </div>
+      </template>
+    </Modal>
+
     <FocusIcon v-if="reveal" class="focus-icon" @click="toggleBodyFocus" />
 
     <main class="flashcards-main grow overflow-y-auto">
@@ -213,7 +246,7 @@
       <template v-else>
         <button class="btn-primary" @click="undoEditing">Cancel</button>
         <button class="btn-primary" @click="saveEditing">Save</button>
-        <button class="btn-danger">Delete</button>
+        <button class="btn-danger" @click="modalState.visible = true">Delete</button>
       </template>
 
       <div

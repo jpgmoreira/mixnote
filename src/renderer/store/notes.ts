@@ -109,11 +109,15 @@ export const useNotesStore = defineStore('notes', {
     },
     async refreshTabs() {
       this.tabGroups = await window.api.invoke<TabGroup[]>(InvokeChannels.getTabGroups);
+      const ids = new Set<string>();
       for (const group of this.tabGroups) {
         for (const tab of group.tabs) {
-          if (!(tab.noteId in this.notes)) {
-            delete this.notes[tab.noteId];
-          }
+          ids.add(tab.noteId);
+        }
+      }
+      for (const noteId of Object.keys(this.notes)) {
+        if (!ids.has(noteId)) {
+          delete this.notes[noteId];
         }
       }
     },

@@ -24,6 +24,7 @@
   import verticalIndent from '@renderer/assets/images/vertical.png';
   import middleIndent from '@renderer/assets/images/middle.png';
   import endIndent from '@renderer/assets/images/end.png';
+  import DeleteModal from './DeleteModal.vue';
 
   // --- Types: ---
 
@@ -36,7 +37,7 @@
     y: number;
   };
 
-  type ModalState = {
+  export type ModalState = {
     visible: boolean;
     currentNode: Node | null;
     multiple: boolean;
@@ -539,72 +540,13 @@
     @mouseenter="containerMouseEnter"
     @mouseleave="containerMouseLeave"
   >
-    <!-- The modal belongs to here, because the delete node operation belongs to here,
-   and the modal must intercept the delete node operation to request for confirmation. -->
-    <Modal :visible="modalState.visible" :frozen="modalState.isDeleting" @close="closeModal">
-      <template #header>
-        <div v-if="!modalState.multiple && modalState.currentNode?.type === 'dir'">
-          Delete folder
-          <strong>"{{ modalState.currentNode.text }}"</strong>
-        </div>
-        <div v-else-if="!modalState.multiple && modalState.currentNode?.type === 'file'">
-          Delete note
-          <strong>"{{ modalState.currentNode.text }}"</strong>
-        </div>
-        <div v-else>Delete selection</div>
-      </template>
-      <template #body>
-        <div class="flex flex-col text-center">
-          <template v-if="!modalState.multiple && modalState.currentNode">
-            <span>
-              Are you sure you want to delete the
-              <strong>"{{ modalState.currentNode.text }}"</strong>
-              {{ modalState.currentNode.type === 'dir' ? 'folder' : 'note' }}?
-            </span>
-            <span class="text-danger my-2">This action cannot be undone!</span>
-            <div v-if="modalState.isDeleting" class="text-danger flex items-center">
-              <span class="loader mr-2"></span>
-              Deleting...
-            </div>
-          </template>
-          <template v-else>
-            <span>
-              Are you sure you want to delete
-              <strong>{{ tree?.nSelectedFiles || 0 }}</strong>
-              {{ tree?.nSelectedFiles === 1 ? 'note' : 'notes' }}
-              and
-              <strong>{{ nSelectedFolders }}</strong>
-              {{ nSelectedFolders === 1 ? 'folder' : 'folders' }}?
-            </span>
-            <span class="text-danger my-2">This action cannot be undone!</span>
-            <div v-if="modalState.isDeleting" class="text-danger flex items-center">
-              <span class="loader mr-2"></span>
-              Deleting...
-            </div>
-          </template>
-        </div>
-      </template>
-      <template #footer>
-        <div class="flex justify-between">
-          <button
-            type="button"
-            class="btn-secondary"
-            :disabled="modalState.isDeleting"
-            @click="closeModal"
-          >
-            Cancel
-          </button>
-          <button
-            type="button"
-            class="btn-danger"
-            :disabled="modalState.isDeleting"
-            @click="handleDeletion"
-          >
-            Delete
-          </button>
-        </div>
-      </template>
-    </Modal>
+    <DeleteModal
+      :modal-state="modalState"
+      :close-modal="closeModal"
+      :tree="tree"
+      :n-selected-folders="nSelectedFolders"
+      :handle-deletion="handleDeletion"
+    />
 
     <ContextMenu
       class="z-[3]"

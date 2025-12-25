@@ -1,0 +1,5 @@
+.theme-dark .flashcards-page .head-container textarea {
+  resize: none;
+  field-sizing: content;
+  width: 100%;
+}

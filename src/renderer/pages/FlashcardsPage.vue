@@ -4,6 +4,7 @@
   import { useRouter } from 'vue-router';
   import { useNotesStore } from '@renderer/store/notes';
   import { InvokeChannels } from '@preload/channels/invoke';
+  import Editor from '@renderer/components/Editor/Editor.vue';
   const MAX_NOTE_IDS_HISTORY = 100;
   const router = useRouter();
   const notesStore = useNotesStore();
@@ -91,13 +92,19 @@
 
 <template>
   <div class="flashcards-page flex flex-col h-screen">
-    <div v-if="currentNote">
-      <div>{{ currentNote.title }}</div>
-      <div>{{ currentNote.head }}</div>
-      <div v-if="reveal">{{ currentNote.body }}</div>
+    <div v-if="currentNote" class="flex flex-col grow">
+      <div class="head-container flex">
+        <textarea readonly>{{ currentNote.head }}</textarea>
+      </div>
+      <div class="flex grow">
+        <Editor v-if="reveal" class="min-h-full" :initial="currentNote.body" />
+      </div>
     </div>
     <div v-else>No note to show!</div>
-    <footer class="flex justify-evenly mt-auto p-2 select-none" style="border: 1px solid orchid">
+    <footer
+      class="flex justify-evenly mt-auto p-2 select-none sticky bottom-0 left-0 right-0"
+      style="border: 1px solid orchid"
+    >
       <template v-if="!edit">
         <button type="button" class="btn-primary" @click="startEditing" :disabled="!currentNote">
           Edit

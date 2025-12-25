@@ -128,6 +128,14 @@
   background-color: #313131 !important;
 }
 
+/* Scrollbar */
+.md-editor-custom-scrollbar__track {
+  background-color: #222222 !important;
+}
+.md-editor-custom-scrollbar__thumb {
+  background-color: #3b3b3b !important;
+}
+
 /* Colors */
 .md-editor {
   border: none !important;
@@ -135,12 +143,6 @@
 .md-editor,
 .md-editor .cm-scroller {
   background-color: #222222 !important;
-}
-.md-editor-custom-scrollbar__track {
-  background-color: #222222 !important;
-}
-.md-editor-custom-scrollbar__thumb {
-  background-color: #3b3b3b !important;
 }
 .md-editor blockquote {
   background-color: #161616 !important;

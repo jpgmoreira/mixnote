@@ -37,7 +37,6 @@
       reveal.value = true;
       return;
     }
-    reveal.value = false;
     isFetching.value = true;
     try {
       if (idx.value === noteIds.value.length - 1) {
@@ -56,6 +55,7 @@
       }
     } finally {
       isFetching.value = false;
+      reveal.value = false;
     }
   }
   async function goPrev() {
@@ -65,13 +65,13 @@
       return;
     }
     if (idx.value <= 0) return;
-    reveal.value = true;
     isFetching.value = true;
     try {
       idx.value--;
       currentNote.value = await notesStore.getNote(noteIds.value[idx.value], false);
     } finally {
       isFetching.value = false;
+      reveal.value = true;
     }
   }
   function clear() {

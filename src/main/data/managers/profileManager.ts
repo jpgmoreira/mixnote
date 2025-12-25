@@ -9,7 +9,7 @@ import path from 'path';
 import { DATA_DIR } from '@main/constants';
 import fs from 'node:fs';
 import { GenericResponseDTO } from '@common/dto/genericResponseDTO';
-import { buildId, sleep } from '@common/utils/utils';
+import { buildId } from '@common/utils/utils';
 
 /**
  * Singleton for managing profiles.
@@ -106,7 +106,6 @@ export class ProfileManager {
   }
 
   public async deleteProfile(profileId: string): Promise<GenericResponseDTO> {
-    await sleep(5000);
     try {
       const folderPath = path.join(DATA_DIR, 'profileData', profileId);
       fs.rmSync(folderPath, { recursive: true, force: true });

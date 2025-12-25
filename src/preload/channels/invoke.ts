@@ -19,4 +19,5 @@ export enum InvokeChannels {
   flashcardsFilter = 'flashcards-filter',
   getNextFlashcard = 'get-next-flashcard',
   setNoteFrequency = 'set-note-frequency',
+  deleteNote = 'delete-note',
 }

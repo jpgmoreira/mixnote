@@ -105,6 +105,12 @@ export class NotesManager {
     await fs.promises.writeFile(fPath, JSON.stringify(note), 'utf-8');
   }
 
+  private fixFlashcardIdsAfterDeletion(noteId: string) {
+    this.filteredIds = this.filteredIds.filter((id) => id !== noteId);
+    this.highIds.delete(noteId);
+    this.lowIds.delete(noteId);
+  }
+
   public async deleteNote(noteId: string) {
     if (!this.profileId) throw new Error('Profile not initialized!');
     const fPath = path.join(DATA_DIR, 'profileData', this.profileId, 'notes', `${noteId}.json`);
@@ -114,6 +120,7 @@ export class NotesManager {
     await fs.promises.unlink(fPath);
     ProfileManager.instance.addNotes(-1);
     TabsManager.instance.noteDeleted(noteId);
+    this.fixFlashcardIdsAfterDeletion(noteId);
   }
 
   private canChooseFrequency(frequency: NoteFrequency): boolean {

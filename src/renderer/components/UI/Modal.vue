@@ -5,6 +5,7 @@
       type: Boolean,
       required: true,
     },
+    // TODO: This "frozen" parameter makes no sense. You could control it in the parent component only.
     frozen: {
       type: Boolean,
       required: false,

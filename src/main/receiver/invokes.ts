@@ -10,6 +10,8 @@ import { TabGroup } from '@common/schemas/tabs';
 import { TabsManager } from '@main/data/managers/tabsManager';
 import { Note, NoteFrequency } from '@common/schemas/note';
 import { NotesManager } from '@main/data/managers/notesManager';
+import { TreeManager } from '@main/data/managers/treeManager';
+import { sleep } from '@common/utils/utils';
 
 ipcMain.handle(
   InvokeChannels.createProfile,
@@ -34,8 +36,10 @@ ipcMain.handle(
 
 ipcMain.handle(
   InvokeChannels.deleteProfile,
-  async (_: IpcMainInvokeEvent, profileId: string): Promise<GenericResponseDTO> =>
-    ProfileManager.instance.deleteProfile(profileId)
+  async (_: IpcMainInvokeEvent, profileId: string): Promise<GenericResponseDTO> => {
+    await sleep(5000);
+    return ProfileManager.instance.deleteProfile(profileId);
+  }
 );
 
 ipcMain.handle(
@@ -81,6 +85,11 @@ ipcMain.handle(
     return NotesManager.instance.getNote(noteId);
   }
 );
+
+ipcMain.handle(InvokeChannels.deleteNote, async (_: IpcMainInvokeEvent, noteId: string) => {
+  await sleep(2000);
+  TreeManager.instance.noteWasDeleted(noteId);
+});
 
 ipcMain.handle(
   InvokeChannels.updateNoteField,

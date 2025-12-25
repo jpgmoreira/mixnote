@@ -109,6 +109,7 @@
   const originalName = ref('');
   const searchText = ref('');
   const scrollTimer = ref<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const firstActivation = ref(true);
 
   const isSearching = ref(false);
   const showFilesSelectedBadge = ref(false);
@@ -507,12 +508,24 @@
 
   // --- Hooks: ---
 
-  onActivated(() => {
-    if (!scrollContainer.value) return;
-    scrollContainer.value.scrollTop = lastScrollTop.value;
+  onActivated(async () => {
+    if (firstActivation.value) {
+      firstActivation.value = false;
+      return;
+    }
+    console.log('NOT FIRST ACTIVATION');
+    const newTree = await window.api.invoke<TreeOperationResponseDTO>(
+      TreeChannels.getState,
+      lastScrollTop.value
+    );
+    updateTree(newTree);
+    scrollContainer.value!.scrollTop = lastScrollTop.value;
   });
   onMounted(async () => {
-    tree.value = await window.api.invoke(TreeChannels.getState, initialScrollTop);
+    tree.value = await window.api.invoke<TreeOperationResponseDTO>(
+      TreeChannels.getState,
+      initialScrollTop
+    );
     hasLoaded.value = true;
     await nextTick();
     if (scrollContainer.value) {

@@ -3,6 +3,7 @@
   import { Note, NoteFrequency } from '@common/schemas/note';
   import { useRouter } from 'vue-router';
   import { useNotesStore } from '@renderer/store/notes';
+  import { useUIStore } from '@renderer/store/ui';
   import { InvokeChannels } from '@preload/channels/invoke';
   import { FocusIcon } from 'lucide-vue-next';
   import Editor from '@renderer/components/Editor/Editor.vue';
@@ -11,6 +12,7 @@
   const MAX_NOTE_IDS_HISTORY = 100;
   const router = useRouter();
   const notesStore = useNotesStore();
+  const uiStore = useUIStore();
   const modalState = reactive({
     visible: false,
     isDeleting: false,
@@ -40,15 +42,18 @@
       value: 'high',
     },
   ];
+
   function startEditing() {
     if (!currentNote.value) throw new Error('Cannot edit without a note!');
     edit.value = true;
   }
+
   function undoEditing() {
     edit.value = false;
     if (bodyRef.value) bodyRef.value.resetContent();
     if (headRef.value) headRef.value.value = currentNote.value?.head || '';
   }
+
   function saveEditing() {
     if (!currentNote.value) throw new Error('Cannot save without a note!');
     edit.value = false;
@@ -56,7 +61,9 @@
     if (headRef.value) currentNote.value.head = headRef.value.value;
     currentNote.value.lastModified = Date.now();
     notesStore.updateNote(currentNote.value);
+    uiStore.showToast('Note saved!', 'success');
   }
+
   function exit() {
     router.replace({
       name: 'notes',
@@ -65,6 +72,7 @@
       },
     });
   }
+
   async function goNext() {
     if (isFetching.value) return;
     if (!reveal.value) {
@@ -93,6 +101,7 @@
       reveal.value = false;
     }
   }
+
   async function goPrev() {
     if (isFetching.value) return;
     if (reveal.value) {
@@ -109,6 +118,7 @@
       reveal.value = true;
     }
   }
+
   function clear() {
     reveal.value = false;
     edit.value = false;
@@ -120,15 +130,55 @@
     bodyFocus.value = false;
     seen.value.clear();
   }
+
   function toggleBodyFocus() {
     if (!reveal.value) return;
     bodyFocus.value = !bodyFocus.value;
   }
+
   function toggleFrequency(value: NoteFrequency) {
     if (!currentNote.value) throw new Error('Current note is null!');
     currentNote.value.frequency = value;
     window.api.invoke(InvokeChannels.setNoteFrequency, currentNote.value.id, value);
   }
+
+  function closeModal() {
+    if (modalState.isDeleting) return;
+    modalState.visible = false;
+  }
+
+  async function deleteNote() {
+    if (!currentNote.value) throw new Error('Cannot delete note without a note!');
+    if (modalState.isDeleting) return;
+    modalState.isDeleting = true;
+    const noteId = currentNote.value.id;
+    await window.api.invoke(InvokeChannels.deleteNote, noteId);
+    notesStore.refreshTabs();
+    for (let i = idx.value; i >= 0; i--) {
+      if (noteIds.value[i] === noteId) {
+        idx.value--;
+      }
+    }
+    noteIds.value = noteIds.value.filter((id) => id !== noteId);
+    idx.value = Math.min(idx.value, noteIds.value.length - 1);
+    reveal.value = true;
+    // Deleted the latest note seen:
+    if (idx.value === noteIds.value.length - 1) {
+      await goNext();
+    }
+    // Deleted some note in the middle:
+    else if (idx.value >= 0 && idx.value < noteIds.value.length - 1) {
+      currentNote.value = await notesStore.getNote(noteIds.value[idx.value], false);
+      await nextTick();
+      if (headRef.value) headRef.value.value = currentNote.value.head;
+      if (bodyRef.value) bodyRef.value.resetContent();
+    }
+    edit.value = false;
+    modalState.isDeleting = false;
+    modalState.visible = false;
+    uiStore.showToast('Note deleted!', 'success');
+  }
+
   onActivated(async () => {
     clear();
     isLoading.value = true;
@@ -160,11 +210,7 @@
     class="flashcards-page flex flex-col h-screen"
     :class="{ edit, focus: bodyFocus }"
   >
-    <Modal
-      :visible="modalState.visible"
-      :frozen="modalState.isDeleting"
-      @close="modalState.visible = false"
-    >
+    <Modal :visible="modalState.visible" @close="closeModal">
       <template #header>Delete note</template>
       <template #body>
         <div>
@@ -180,10 +226,22 @@
       </template>
       <template #footer>
         <div class="flex justify-between">
-          <button type="button" class="btn-secondary" @click="modalState.visible = false">
+          <button
+            type="button"
+            class="btn-secondary"
+            :disabled="modalState.isDeleting"
+            @click="closeModal"
+          >
             Cancel
           </button>
-          <button type="button" class="btn-danger">Delete</button>
+          <button
+            type="button"
+            class="btn-danger"
+            :disabled="modalState.isDeleting"
+            @click="deleteNote"
+          >
+            Delete
+          </button>
         </div>
       </template>
     </Modal>

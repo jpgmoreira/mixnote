@@ -563,13 +563,13 @@ export class TreeManager {
     const node = this.target.idToNode[nodeId];
     if (!node) return;
     this.removeNodeFromTree(node);
-    await this.deleteCallback(node);
     if (node.type === 'dir') {
       this.deleteSubtree(node);
     }
     delete this.target.idToNode[nodeId];
     this.refresh(true);
     this.calculateUiDepths();
+    await this.deleteCallback(node);
   }
 
   public async deleteSelectedNodes() {
@@ -711,5 +711,13 @@ export class TreeManager {
     }
     this.refresh(true);
     this.calculateUiDepths();
+  }
+
+  // --- Application-specific: ---
+
+  public noteWasDeleted(noteId: string) {
+    const node = this.expandedFlat.find((node) => node.type === 'file' && node.noteId === noteId);
+    if (!node) throw new Error(`Node not found for note: ${noteId}`);
+    this.deleteNode(node.id);
   }
 }

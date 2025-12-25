@@ -44,6 +44,14 @@
     if (bodyRef.value) bodyRef.value.resetContent();
     if (headRef.value) headRef.value.value = currentNote.value?.head || '';
   }
+  function saveEditing() {
+    if (!currentNote.value) throw new Error('Cannot save without a note!');
+    edit.value = false;
+    if (bodyRef.value) currentNote.value.body = bodyRef.value.getContent();
+    if (headRef.value) currentNote.value.head = headRef.value.value;
+    currentNote.value.lastModified = Date.now();
+    notesStore.updateNote(currentNote.value);
+  }
   function exit() {
     router.replace({
       name: 'notes',
@@ -204,7 +212,7 @@
 
       <template v-else>
         <button class="btn-primary" @click="undoEditing">Cancel</button>
-        <button class="btn-primary">Save</button>
+        <button class="btn-primary" @click="saveEditing">Save</button>
         <button class="btn-danger">Delete</button>
       </template>
 

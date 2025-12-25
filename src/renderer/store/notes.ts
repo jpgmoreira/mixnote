@@ -102,6 +102,11 @@ export const useNotesStore = defineStore('notes', {
       note.lastModified = now;
       window.api.invoke(InvokeChannels.updateNoteField, noteId, field, content, now);
     },
+    updateNote(note: Note) {
+      const clone = structuredClone(toRawDeep(note));
+      if (note.id in this.notes) this.notes[note.id] = clone;
+      window.api.invoke(InvokeChannels.updateNote, clone);
+    },
     async refreshTabs() {
       this.tabGroups = await window.api.invoke<TabGroup[]>(InvokeChannels.getTabGroups);
       for (const group of this.tabGroups) {

@@ -95,6 +95,10 @@ ipcMain.handle(
   }
 );
 
+ipcMain.handle(InvokeChannels.updateNote, async (_: IpcMainInvokeEvent, note: Note) => {
+  NotesManager.instance.updateNote(note);
+});
+
 ipcMain.handle(
   InvokeChannels.renameNote,
   async (_: IpcMainInvokeEvent, noteId: string, newName: string) => {

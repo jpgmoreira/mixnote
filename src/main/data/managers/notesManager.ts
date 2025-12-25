@@ -91,6 +91,12 @@ export class NotesManager {
     await fs.promises.writeFile(fPath, JSON.stringify(note), 'utf-8');
   }
 
+  public async updateNote(note: Note) {
+    if (!this.profileId) throw new Error('Profile not initialized!');
+    const fPath = path.join(DATA_DIR, 'profileData', this.profileId, 'notes', `${note.id}.json`);
+    await fs.promises.writeFile(fPath, JSON.stringify(note), 'utf-8');
+  }
+
   public async renameNote(noteId: string, newName: string) {
     if (!this.profileId) throw new Error('Profile not initialized!');
     const fPath = path.join(DATA_DIR, 'profileData', this.profileId, 'notes', `${noteId}.json`);

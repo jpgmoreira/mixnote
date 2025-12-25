@@ -513,7 +513,6 @@
       firstActivation.value = false;
       return;
     }
-    console.log('NOT FIRST ACTIVATION');
     const newTree = await window.api.invoke<TreeOperationResponseDTO>(
       TreeChannels.getState,
       lastScrollTop.value

@@ -154,24 +154,23 @@
     const noteId = currentNote.value.id;
     await window.api.invoke(InvokeChannels.deleteNote, noteId);
     notesStore.refreshTabs();
-    for (let i = idx.value; i >= 0; i--) {
+    // Remove note from note ids, update idx.
+    for (let i = idx.value - 1; i >= 0; i--) {
       if (noteIds.value[i] === noteId) {
         idx.value--;
       }
     }
     noteIds.value = noteIds.value.filter((id) => id !== noteId);
     idx.value = Math.min(idx.value, noteIds.value.length - 1);
-    reveal.value = true;
-    // Deleted the latest note seen:
+    // If deleted the latest note seen:
     if (idx.value === noteIds.value.length - 1) {
+      reveal.value = true;
       await goNext();
     }
-    // Deleted some note in the middle:
-    else if (idx.value >= 0 && idx.value < noteIds.value.length - 1) {
+    // If deleted some note in the middle:
+    else {
+      reveal.value = false;
       currentNote.value = await notesStore.getNote(noteIds.value[idx.value], false);
-      await nextTick();
-      if (headRef.value) headRef.value.value = currentNote.value.head;
-      if (bodyRef.value) bodyRef.value.resetContent();
     }
     edit.value = false;
     modalState.isDeleting = false;
@@ -252,9 +251,12 @@
       <!-- HEAD -->
       <div v-if="currentNote && !bodyFocus" class="flashcard-head-wrapper">
         <div class="flashcard-head">
-          <textarea ref="head-textarea" :readonly="!edit" spellcheck="false">{{
-            currentNote.head
-          }}</textarea>
+          <textarea
+            ref="head-textarea"
+            :readonly="!edit"
+            spellcheck="false"
+            :value="currentNote.head"
+          ></textarea>
         </div>
       </div>
 

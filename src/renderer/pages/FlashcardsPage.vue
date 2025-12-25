@@ -4,6 +4,7 @@
   import { useRouter } from 'vue-router';
   import { useNotesStore } from '@renderer/store/notes';
   import { InvokeChannels } from '@preload/channels/invoke';
+  import { FocusIcon } from 'lucide-vue-next';
   import Editor from '@renderer/components/Editor/Editor.vue';
   const MAX_NOTE_IDS_HISTORY = 100;
   const router = useRouter();
@@ -83,6 +84,7 @@
     bodyFocus.value = false;
   }
   function toggleBodyFocus() {
+    if (!reveal.value) return;
     bodyFocus.value = !bodyFocus.value;
   }
   onActivated(async () => {
@@ -105,22 +107,25 @@
 </script>
 
 <template>
-  <div class="flashcards-page flex flex-col h-screen">
-    <div v-if="currentNote" class="flex flex-col grow">
-      <div v-if="!bodyFocus" class="head-container flex">
-        <textarea readonly>{{ currentNote.head }}</textarea>
+  <div class="flashcards-page flex flex-col h-screen" :class="{ edit }">
+    <FocusIcon v-if="reveal" @click="toggleBodyFocus" class="focus-icon" />
+    <div class="flex flex-col relative grow overflow-y-auto">
+      <div v-if="currentNote" class="note-container flex flex-col grow">
+        <div v-if="!bodyFocus" class="head-container flex">
+          <textarea :readonly="!edit">{{ currentNote.head }}</textarea>
+        </div>
+        <div class="flex grow">
+          <Editor
+            v-if="reveal"
+            ref="body-editor"
+            class="min-h-full"
+            :initial="currentNote.body"
+            @toggle-focus-mode="toggleBodyFocus"
+          />
+        </div>
       </div>
-      <div class="flex grow">
-        <Editor
-          v-if="reveal"
-          ref="body-editor"
-          class="min-h-full"
-          :initial="currentNote.body"
-          @toggle-focus-mode="toggleBodyFocus"
-        />
-      </div>
+      <div v-else class="absolute-center text-xl opacity-70">No note to show!</div>
     </div>
-    <div v-else>No note to show!</div>
     <footer
       class="flex justify-evenly mt-auto p-2 select-none sticky bottom-0 left-0 right-0"
       style="border: 1px solid orchid"

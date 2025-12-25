@@ -1,5 +1,18 @@
+.theme-dark .flashcards-page .focus-icon {
+  position: fixed;
+  top: 3px;
+  right: 12px;
+  z-index: 9999;
+  cursor: pointer;
+}
+
 .theme-dark .flashcards-page .head-container textarea {
   resize: none;
   field-sizing: content;
   width: 100%;
+}
+
+.theme-dark .flashcards-page:not(.edit) .md-editor-toolbar-wrapper,
+.theme-dark .flashcards-page:not(.edit) .md-editor-footer {
+  display: none;
 }

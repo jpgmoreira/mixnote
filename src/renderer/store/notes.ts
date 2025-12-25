@@ -23,6 +23,7 @@ EventEmitter.instance.on(Events.clearProfileData, () => {
 export const useNotesStore = defineStore('notes', {
   state: () => ({
     notes: {} as Record<string, Note>,
+    nSelectedNotes: 0,
     tabGroups: null as TabGroup[] | null,
     tabGroupsTimer: undefined as ReturnType<typeof setTimeout> | undefined,
   }),
@@ -40,6 +41,7 @@ export const useNotesStore = defineStore('notes', {
     clear() {
       this.tabGroups = null;
       this.notes = {};
+      this.nSelectedNotes = 0;
     },
     updateTabGroups() {
       clearTimeout(this.tabGroupsTimer);

@@ -1,9 +1,8 @@
 <script lang="ts" setup>
   import { useRouter } from 'vue-router';
-  const props = defineProps<{
-    nSelectedFiles: number;
-  }>();
+  import { useNotesStore } from '@renderer/store/notes';
   const router = useRouter();
+  const notesStore = useNotesStore();
   function goFlashcards() {
     router.replace('/flashcards');
   }
@@ -16,7 +15,7 @@
     <div class="section">
       <div class="row">
         <span class="label">Selected notes</span>
-        <span class="value">{{ nSelectedFiles }}</span>
+        <span class="value">{{ notesStore.nSelectedNotes }}</span>
       </div>
     </div>
 

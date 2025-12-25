@@ -17,19 +17,20 @@
   const edit = ref(false);
   const isFetching = ref(false);
   const bodyFocus = ref(false);
+  const seen = ref<Set<string>>(new Set());
   const bodyRef = useTemplateRef('body-editor');
   const frequencyOptions: { text: string; value: NoteFrequency }[] = [
     {
-      text: 'High',
-      value: 'high',
+      text: 'Low',
+      value: 'low',
     },
     {
       text: 'Normal',
       value: 'normal',
     },
     {
-      text: 'Low',
-      value: 'low',
+      text: 'High',
+      value: 'high',
     },
   ];
   function startEditing() {
@@ -63,6 +64,7 @@
             noteIds.value.shift();
           }
           idx.value = noteIds.value.length - 1;
+          seen.value.add(nextNote.id);
         }
       } else {
         idx.value++;
@@ -97,6 +99,7 @@
     idx.value = -1;
     isFetching.value = false;
     bodyFocus.value = false;
+    seen.value.clear();
   }
   function toggleBodyFocus() {
     if (!reveal.value) return;
@@ -114,6 +117,7 @@
     if (firstNote) {
       noteIds.value.push(firstNote.id);
       idx.value = 0;
+      seen.value.add(firstNote.id);
     }
   });
   watch(reveal, (newVal) => {
@@ -152,7 +156,7 @@
         </div>
       </div>
 
-      <!-- FREQUENCY -->
+      <!-- META -->
       <div v-if="currentNote && reveal && !bodyFocus" class="flex justify-center my-2 gap-2">
         <span>Frequency:</span>
         <SelectionList
@@ -163,12 +167,12 @@
       </div>
 
       <div v-else-if="!currentNote" class="absolute-center text-xl opacity-70">
-        No note to show!
+        No notes to show!
       </div>
     </main>
 
     <!-- FOOTER -->
-    <footer v-if="!bodyFocus" class="flashcards-footer select-none">
+    <footer v-if="!bodyFocus" class="flashcards-footer select-none relative">
       <template v-if="!edit">
         <button class="btn-primary" @click="startEditing" :disabled="!currentNote">Edit</button>
         <button
@@ -187,6 +191,15 @@
         <button class="btn-primary">Save</button>
         <button class="btn-danger">Delete</button>
       </template>
+
+      <div
+        v-if="!edit && noteIds.length > 0"
+        class="card-counter absolute right-0 bottom-full flex items-center"
+      >
+        <span class="whitespace-nowrap">
+          Cards seen: {{ seen.size }} of {{ notesStore.nSelectedNotes }}
+        </span>
+      </div>
     </footer>
   </div>
 </template>

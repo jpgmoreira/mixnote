@@ -148,13 +148,14 @@
 }
 
 /* ===============================
-   EMPTY STATE
+   CARD COUNTER
 ================================ */
-.theme-dark .absolute-center {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+.theme-dark .flashcards-page .card-counter {
+  padding: 3px 6px;
+  font-size: 14px;
+  background: rgba(30, 30, 30, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: rgba(230, 230, 230, 0.75);
 }
 
 /* ===============================

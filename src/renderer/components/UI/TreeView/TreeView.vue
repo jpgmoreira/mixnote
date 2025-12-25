@@ -14,6 +14,7 @@
     useTemplateRef,
     computed,
     onActivated,
+    watch,
   } from 'vue';
   import { GenericResponseDTO } from '@common/dto/genericResponseDTO';
   import { useUIStore } from '@renderer/store/ui';
@@ -136,13 +137,17 @@
     return val === '1' ? '1 folder' : `${val} folders`;
   });
 
-  // --- Exposes: ---
-
   const nSelectedFiles = computed(() => tree.value?.nSelectedFiles || 0);
 
-  defineExpose({
+  // --- Watches: ---
+
+  watch(
     nSelectedFiles,
-  });
+    (newValue) => {
+      notesStore.nSelectedNotes = newValue;
+    },
+    { immediate: true }
+  );
 
   // --- Context menu: ---
 

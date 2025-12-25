@@ -1,18 +1,152 @@
-.theme-dark .flashcards-page .focus-icon {
-  position: fixed;
-  top: 3px;
-  right: 12px;
-  z-index: 9999;
-  cursor: pointer;
+/* ===============================
+   PAGE
+================================ */
+.theme-dark .flashcards-page {
+  background: #0e0e0e;
+  color: #e6e6e6;
 }
 
-.theme-dark .flashcards-page .head-container textarea {
+/* ===============================
+   MAIN
+================================ */
+.theme-dark .flashcards-main {
+  position: relative;
+  padding: 2rem 1rem;
+}
+
+/* ===============================
+   HEAD
+================================ */
+.theme-dark .flashcard-head-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.theme-dark .flashcard-head {
+  width: 100%;
+  max-width: 720px;
+  background: #141414;
+  border-radius: 14px;
+  padding: 1.25rem 1.5rem;
+  box-shadow:
+    0 10px 40px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.theme-dark .flashcard-head textarea {
+  width: 100%;
   resize: none;
   field-sizing: content;
-  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: inherit;
+  font-size: 1.05rem;
+  line-height: 1.55;
+  padding: 0;
 }
 
+/* ===============================
+   BODY CARD
+================================ */
+.theme-dark .flashcard-body-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.theme-dark .flashcard-body-card {
+  width: 95%;
+  background: #222222;
+  border-radius: 18px;
+  padding: 10px 13px;
+  box-shadow:
+    0 18px 60px rgba(0, 0, 0, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  animation: flashcardFadeIn 0.15s ease-out;
+}
+
+/* ===============================
+   FOCUS MODE (ZEN)
+================================ */
+.theme-dark .flashcards-page.focus .flashcards-main {
+  padding: 0;
+}
+
+.theme-dark .flashcards-page.focus .flashcard-head-wrapper {
+  display: none;
+}
+
+.theme-dark .flashcards-page.focus .flashcard-body-wrapper {
+  min-height: 100vh;
+  align-items: stretch;
+}
+
+.theme-dark .flashcards-page.focus .flashcard-body-card {
+  max-width: none;
+  width: 100%;
+  min-height: 100vh;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* ===============================
+   FOOTER (MAIS CLARO)
+================================ */
+.theme-dark .flashcards-footer {
+  display: flex;
+  justify-content: space-evenly;
+  padding: 0.4rem;
+  background: linear-gradient(to top, rgba(40, 40, 40, 0.95), rgba(30, 30, 30, 0.85));
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(8px);
+}
+
+/* ===============================
+   FOCUS ICON
+================================ */
+.theme-dark .flashcards-page .focus-icon {
+  position: fixed;
+  top: 10px;
+  right: 15px;
+  z-index: 99999;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.15s ease;
+}
+
+.theme-dark .flashcards-page .focus-icon:hover {
+  opacity: 1;
+}
+
+/* ===============================
+   EDIT MODE
+================================ */
 .theme-dark .flashcards-page:not(.edit) .md-editor-toolbar-wrapper,
 .theme-dark .flashcards-page:not(.edit) .md-editor-footer {
   display: none;
+}
+
+/* ===============================
+   EMPTY STATE
+================================ */
+.theme-dark .absolute-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* ===============================
+   ANIMATION
+================================ */
+@keyframes flashcardFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

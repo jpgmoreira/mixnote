@@ -107,45 +107,52 @@
 </script>
 
 <template>
-  <div class="flashcards-page flex flex-col h-screen" :class="{ edit }">
-    <FocusIcon v-if="reveal" @click="toggleBodyFocus" class="focus-icon" />
-    <div class="flex flex-col relative grow overflow-y-auto">
-      <div v-if="currentNote" class="note-container flex flex-col grow">
-        <div v-if="!bodyFocus" class="head-container flex">
-          <textarea :readonly="!edit">{{ currentNote.head }}</textarea>
+  <div class="flashcards-page flex flex-col h-screen" :class="{ edit, focus: bodyFocus }">
+    <FocusIcon v-if="reveal" class="focus-icon" @click="toggleBodyFocus" />
+
+    <main class="flashcards-main grow overflow-y-auto">
+      <!-- HEAD -->
+      <div v-if="currentNote && !bodyFocus" class="flashcard-head-wrapper">
+        <div class="flashcard-head">
+          <textarea :readonly="!edit" spellcheck="false">{{ currentNote.head }}</textarea>
         </div>
-        <div class="flex grow">
+      </div>
+
+      <!-- BODY -->
+      <div v-if="currentNote && reveal" class="flashcard-body-wrapper">
+        <div class="flashcard-body-card">
           <Editor
-            v-if="reveal"
             ref="body-editor"
-            class="min-h-full"
             :initial="currentNote.body"
             @toggle-focus-mode="toggleBodyFocus"
           />
         </div>
       </div>
-      <div v-else class="absolute-center text-xl opacity-70">No note to show!</div>
-    </div>
-    <footer
-      class="flex justify-evenly mt-auto p-2 select-none sticky bottom-0 left-0 right-0"
-      style="border: 1px solid orchid"
-    >
+
+      <div v-else-if="!currentNote" class="absolute-center text-xl opacity-70">
+        No note to show!
+      </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer v-if="!bodyFocus" class="flashcards-footer select-none">
       <template v-if="!edit">
-        <button type="button" class="btn-primary" @click="startEditing" :disabled="!currentNote">
-          Edit
-        </button>
-        <button type="button" class="btn-primary" @click="goPrev" :disabled="idx <= 0 && !reveal">
+        <button class="btn-primary" @click="startEditing" :disabled="!currentNote">Edit</button>
+        <button
+          class="btn-primary"
+          @click="goPrev"
+          :disabled="(idx <= 0 && !reveal) || !currentNote"
+        >
           Prev
         </button>
-        <button type="button" class="btn-primary" @click="goNext" :disabled="!currentNote">
-          Next
-        </button>
-        <button type="button" class="btn-primary" @click="exit">Exit</button>
+        <button class="btn-primary" @click="goNext" :disabled="!currentNote">Next</button>
+        <button class="btn-primary" @click="exit">Exit</button>
       </template>
+
       <template v-else>
-        <button type="button" class="btn-primary" @click="undoEditing">Cancel</button>
-        <button type="button" class="btn-primary">Save</button>
-        <button type="button" class="btn-danger">Delete</button>
+        <button class="btn-primary" @click="undoEditing">Cancel</button>
+        <button class="btn-primary">Save</button>
+        <button class="btn-danger">Delete</button>
       </template>
     </footer>
   </div>

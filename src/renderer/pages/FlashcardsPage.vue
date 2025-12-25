@@ -102,6 +102,11 @@
     if (!reveal.value) return;
     bodyFocus.value = !bodyFocus.value;
   }
+  function toggleFrequency(value: NoteFrequency) {
+    if (!currentNote.value) throw new Error('Current note is null!');
+    currentNote.value.frequency = value;
+    window.api.invoke(InvokeChannels.setNoteFrequency, currentNote.value.id, value);
+  }
   onActivated(async () => {
     clear();
     const firstNote = await window.api.invoke<Note | null>(InvokeChannels.flashcardsFilter, true);
@@ -150,7 +155,11 @@
       <!-- FREQUENCY -->
       <div v-if="currentNote && reveal && !bodyFocus" class="flex justify-center my-2 gap-2">
         <span>Frequency:</span>
-        <SelectionList :options="frequencyOptions" :selected="[currentNote.frequency!]" />
+        <SelectionList
+          :options="frequencyOptions"
+          :selected="[currentNote.frequency!]"
+          @toggle="toggleFrequency"
+        />
       </div>
 
       <div v-else-if="!currentNote" class="absolute-center text-xl opacity-70">

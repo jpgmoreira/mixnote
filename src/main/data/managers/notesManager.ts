@@ -77,7 +77,7 @@ export class NotesManager {
     return note;
   }
 
-  public async updateNoteContent(
+  public async updateNoteField(
     noteId: string,
     field: 'head' | 'body',
     content: string,
@@ -140,7 +140,8 @@ export class NotesManager {
       }
       noteId = this.filteredIds[this.indexes[frequency]];
     } while (!verifier(noteId));
-    return this.getNote(noteId);
+    const note = await this.getNote(noteId);
+    return note;
   }
 
   public async flashcardsFilter(isStart: boolean): Promise<Note | null> {
@@ -156,6 +157,14 @@ export class NotesManager {
       this.lowIds.clear();
     }
     return this.getNextFlashcard();
+  }
+
+  public setNoteFrequency(noteId: string, frequency: NoteFrequency) {
+    this.highIds.delete(noteId);
+    this.lowIds.delete(noteId);
+    if (frequency === 'normal') return;
+    if (frequency === 'high') this.highIds.add(noteId);
+    if (frequency === 'low') this.lowIds.add(noteId);
   }
 
   public clear() {

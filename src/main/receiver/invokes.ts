@@ -8,7 +8,7 @@ import { UISettings } from '@common/schemas/ui';
 import { UIManager } from '@main/data/managers/uiManager';
 import { TabGroup } from '@common/schemas/tabs';
 import { TabsManager } from '@main/data/managers/tabsManager';
-import { Note } from '@common/schemas/note';
+import { Note, NoteFrequency } from '@common/schemas/note';
 import { NotesManager } from '@main/data/managers/notesManager';
 
 ipcMain.handle(
@@ -83,7 +83,7 @@ ipcMain.handle(
 );
 
 ipcMain.handle(
-  InvokeChannels.updateNoteContent,
+  InvokeChannels.updateNoteField,
   async (
     _: IpcMainInvokeEvent,
     noteId: string,
@@ -91,14 +91,14 @@ ipcMain.handle(
     content: string,
     timestamp: number
   ) => {
-    return NotesManager.instance.updateNoteContent(noteId, field, content, timestamp);
+    NotesManager.instance.updateNoteField(noteId, field, content, timestamp);
   }
 );
 
 ipcMain.handle(
   InvokeChannels.renameNote,
   async (_: IpcMainInvokeEvent, noteId: string, newName: string) => {
-    return NotesManager.instance.renameNote(noteId, newName);
+    NotesManager.instance.renameNote(noteId, newName);
   }
 );
 
@@ -117,5 +117,12 @@ ipcMain.handle(
   InvokeChannels.getNextFlashcard,
   async (_: IpcMainInvokeEvent): Promise<Note | null> => {
     return NotesManager.instance.getNextFlashcard();
+  }
+);
+
+ipcMain.handle(
+  InvokeChannels.setNoteFrequency,
+  async (_: IpcMainInvokeEvent, noteId: string, frequency: NoteFrequency) => {
+    NotesManager.instance.setNoteFrequency(noteId, frequency);
   }
 );

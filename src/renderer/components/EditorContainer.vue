@@ -20,7 +20,7 @@
       let content = '';
       if (field === 'head') content = headContent.value;
       else content = bodyRef.value.getContent();
-      notesStore.updateNoteContent(props.note.id, field, content);
+      notesStore.updateNoteField(props.note.id, field, content);
     }, 500);
   }
   watch(

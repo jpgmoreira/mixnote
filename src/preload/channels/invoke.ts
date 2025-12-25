@@ -12,9 +12,10 @@ export enum InvokeChannels {
   updateUISettings = 'update-ui-settings',
   updateTabGroups = 'update-tab-groups',
   getNote = 'get-note',
-  updateNoteContent = 'update-note-content',
+  updateNoteField = 'update-note-field',
   renameNote = 'rename-note',
   getTabGroups = 'get-tab-groups',
   flashcardsFilter = 'flashcards-filter',
   getNextFlashcard = 'get-next-flashcard',
+  setNoteFrequency = 'set-note-frequency',
 }

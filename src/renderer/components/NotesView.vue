@@ -200,6 +200,7 @@
             v-for="tab in group.tabs"
             class="tab-header flex justify-between whitespace-nowrap"
             :class="{ preview: tab.preview, active: tab.active }"
+            @mousedown.middle.stop="notesStore.closeTab(group, tab.id)"
             @click="notesStore.tabHeaderClick(group, tab.id)"
           >
             <span class="tab-title">{{ notesStore.getTabTitle(tab) }}</span>

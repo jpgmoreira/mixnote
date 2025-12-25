@@ -1,11 +1,12 @@
 <script lang="ts" setup>
   import { ref, onActivated, useTemplateRef, watch, nextTick } from 'vue';
-  import { Note } from '@common/schemas/note';
+  import { Note, NoteFrequency } from '@common/schemas/note';
   import { useRouter } from 'vue-router';
   import { useNotesStore } from '@renderer/store/notes';
   import { InvokeChannels } from '@preload/channels/invoke';
   import { FocusIcon } from 'lucide-vue-next';
   import Editor from '@renderer/components/Editor/Editor.vue';
+  import SelectionList from '@renderer/components/UI/SelectionList.vue';
   const MAX_NOTE_IDS_HISTORY = 100;
   const router = useRouter();
   const notesStore = useNotesStore();
@@ -17,6 +18,20 @@
   const isFetching = ref(false);
   const bodyFocus = ref(false);
   const bodyRef = useTemplateRef('body-editor');
+  const frequencyOptions: { text: string; value: NoteFrequency }[] = [
+    {
+      text: 'High',
+      value: 'high',
+    },
+    {
+      text: 'Normal',
+      value: 'normal',
+    },
+    {
+      text: 'Low',
+      value: 'low',
+    },
+  ];
   function startEditing() {
     edit.value = true;
   }
@@ -130,6 +145,12 @@
             @toggle-focus-mode="toggleBodyFocus"
           />
         </div>
+      </div>
+
+      <!-- FREQUENCY -->
+      <div v-if="currentNote && reveal && !bodyFocus" class="flex justify-center my-2 gap-2">
+        <span>Frequency:</span>
+        <SelectionList :options="frequencyOptions" :selected="[currentNote.frequency!]" />
       </div>
 
       <div v-else-if="!currentNote" class="absolute-center text-xl opacity-70">

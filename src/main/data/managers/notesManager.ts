@@ -71,6 +71,9 @@ export class NotesManager {
     }
     const content = await fs.promises.readFile(fPath, 'utf-8');
     const note = JSON.parse(content) as Note;
+    note.frequency = 'normal';
+    if (this.lowIds.has(noteId)) note.frequency = 'low';
+    if (this.highIds.has(noteId)) note.frequency = 'high';
     return note;
   }
 

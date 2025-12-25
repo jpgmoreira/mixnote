@@ -112,3 +112,10 @@ ipcMain.handle(
     return NotesManager.instance.flashcardsFilter(isStart);
   }
 );
+
+ipcMain.handle(
+  InvokeChannels.getNextFlashcard,
+  async (_: IpcMainInvokeEvent): Promise<Note | null> => {
+    return NotesManager.instance.getNextFlashcard();
+  }
+);

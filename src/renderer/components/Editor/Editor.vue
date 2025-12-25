@@ -7,7 +7,7 @@
 
   defineExpose({
     getContent,
-    togglePreviewOnly,
+    setPreviewOnly,
   });
 
   const emit = defineEmits<{
@@ -77,8 +77,8 @@
     return content.value;
   }
 
-  function togglePreviewOnly() {
-    editorRef.value?.togglePreviewOnly();
+  function setPreviewOnly(value: boolean) {
+    editorRef.value?.togglePreviewOnly(value);
   }
 
   // Beware: can cause unexpected behavior if updating the content on every change.

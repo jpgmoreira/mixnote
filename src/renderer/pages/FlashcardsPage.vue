@@ -100,9 +100,12 @@
     bodyFocus.value = false;
     nextTick(() => {
       if (newVal) {
-        bodyRef.value?.togglePreviewOnly();
+        bodyRef.value?.setPreviewOnly(true);
       }
     });
+  });
+  watch(edit, (newVal) => {
+    bodyRef.value?.setPreviewOnly(!newVal);
   });
 </script>
 

@@ -16,9 +16,11 @@
   const currentNote = ref<Note | null>(null);
   const edit = ref(false);
   const isFetching = ref(false);
+  const isLoading = ref(false);
   const bodyFocus = ref(false);
   const seen = ref<Set<string>>(new Set());
   const bodyRef = useTemplateRef('body-editor');
+  const headRef = useTemplateRef('head-textarea');
   const frequencyOptions: { text: string; value: NoteFrequency }[] = [
     {
       text: 'Low',
@@ -34,10 +36,13 @@
     },
   ];
   function startEditing() {
+    if (!currentNote.value) throw new Error('Cannot edit without a note!');
     edit.value = true;
   }
   function undoEditing() {
     edit.value = false;
+    if (bodyRef.value) bodyRef.value.resetContent();
+    if (headRef.value) headRef.value.value = currentNote.value?.head || '';
   }
   function exit() {
     router.replace({
@@ -98,6 +103,7 @@
     currentNote.value = null;
     idx.value = -1;
     isFetching.value = false;
+    isLoading.value = false;
     bodyFocus.value = false;
     seen.value.clear();
   }
@@ -112,6 +118,7 @@
   }
   onActivated(async () => {
     clear();
+    isLoading.value = true;
     const firstNote = await window.api.invoke<Note | null>(InvokeChannels.flashcardsFilter, true);
     currentNote.value = firstNote;
     if (firstNote) {
@@ -119,6 +126,7 @@
       idx.value = 0;
       seen.value.add(firstNote.id);
     }
+    isLoading.value = false;
   });
   watch(reveal, (newVal) => {
     bodyFocus.value = false;
@@ -134,14 +142,20 @@
 </script>
 
 <template>
-  <div class="flashcards-page flex flex-col h-screen" :class="{ edit, focus: bodyFocus }">
+  <div
+    v-if="!isLoading"
+    class="flashcards-page flex flex-col h-screen"
+    :class="{ edit, focus: bodyFocus }"
+  >
     <FocusIcon v-if="reveal" class="focus-icon" @click="toggleBodyFocus" />
 
     <main class="flashcards-main grow overflow-y-auto">
       <!-- HEAD -->
       <div v-if="currentNote && !bodyFocus" class="flashcard-head-wrapper">
         <div class="flashcard-head">
-          <textarea :readonly="!edit" spellcheck="false">{{ currentNote.head }}</textarea>
+          <textarea ref="head-textarea" :readonly="!edit" spellcheck="false">{{
+            currentNote.head
+          }}</textarea>
         </div>
       </div>
 
@@ -174,7 +188,9 @@
     <!-- FOOTER -->
     <footer v-if="!bodyFocus" class="flashcards-footer select-none relative">
       <template v-if="!edit">
-        <button class="btn-primary" @click="startEditing" :disabled="!currentNote">Edit</button>
+        <button class="btn-primary" @click="startEditing" :disabled="!currentNote || !reveal">
+          Edit
+        </button>
         <button
           class="btn-primary"
           @click="goPrev"

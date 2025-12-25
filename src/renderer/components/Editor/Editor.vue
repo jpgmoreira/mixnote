@@ -7,6 +7,7 @@
 
   defineExpose({
     getContent,
+    resetContent,
     setPreviewOnly,
   });
 
@@ -75,6 +76,10 @@
 
   function getContent() {
     return content.value;
+  }
+
+  function resetContent() {
+    content.value = props.initial;
   }
 
   function setPreviewOnly(value: boolean) {

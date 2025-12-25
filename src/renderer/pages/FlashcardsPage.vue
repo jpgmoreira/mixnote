@@ -54,6 +54,22 @@
       isFetching.value = false;
     }
   }
+  async function goPrev() {
+    if (isFetching.value) return;
+    if (reveal.value) {
+      reveal.value = false;
+      return;
+    }
+    if (idx.value <= 0) return;
+    reveal.value = true;
+    isFetching.value = true;
+    try {
+      idx.value--;
+      currentNote.value = await notesStore.getNote(noteIds.value[idx.value], false);
+    } finally {
+      isFetching.value = false;
+    }
+  }
   function clear() {
     reveal.value = false;
     edit.value = false;
@@ -81,11 +97,17 @@
       <div v-if="reveal">{{ currentNote.body }}</div>
     </div>
     <div v-else>No note to show!</div>
-    <footer class="flex justify-evenly mt-auto p-2" style="border: 1px solid orchid">
+    <footer class="flex justify-evenly mt-auto p-2 select-none" style="border: 1px solid orchid">
       <template v-if="!edit">
-        <button type="button" class="btn-primary">Prev</button>
-        <button type="button" class="btn-primary" @click="goNext">Next</button>
-        <button type="button" class="btn-primary" @click="startEditing">Edit</button>
+        <button type="button" class="btn-primary" @click="startEditing" :disabled="!currentNote">
+          Edit
+        </button>
+        <button type="button" class="btn-primary" @click="goPrev" :disabled="idx <= 0 && !reveal">
+          Prev
+        </button>
+        <button type="button" class="btn-primary" @click="goNext" :disabled="!currentNote">
+          Next
+        </button>
         <button type="button" class="btn-primary" @click="exit">Exit</button>
       </template>
       <template v-else>

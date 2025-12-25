@@ -7,6 +7,7 @@
 
   defineExpose({
     getContent,
+    togglePreviewOnly,
   });
 
   const emit = defineEmits<{
@@ -15,7 +16,10 @@
     (e: 'toggleFocusMode'): void;
   }>();
 
-  const props = defineProps<{ initial: string; placeholder?: string }>();
+  const props = defineProps<{
+    initial: string;
+    placeholder?: string;
+  }>();
   const content = ref(props.initial);
   const editorRef = useTemplateRef<ExposeParam>('editor-ref');
 
@@ -71,6 +75,10 @@
 
   function getContent() {
     return content.value;
+  }
+
+  function togglePreviewOnly() {
+    editorRef.value?.togglePreviewOnly();
   }
 
   // Beware: can cause unexpected behavior if updating the content on every change.

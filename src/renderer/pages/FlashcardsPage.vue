@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import { ref, onActivated } from 'vue';
+  import { ref, onActivated, useTemplateRef, watch, nextTick } from 'vue';
   import { Note } from '@common/schemas/note';
   import { useRouter } from 'vue-router';
   import { useNotesStore } from '@renderer/store/notes';
@@ -14,6 +14,8 @@
   const currentNote = ref<Note | null>(null);
   const edit = ref(false);
   const isFetching = ref(false);
+  const bodyFocus = ref(false);
+  const bodyRef = useTemplateRef('body-editor');
   function startEditing() {
     edit.value = true;
   }
@@ -78,6 +80,10 @@
     currentNote.value = null;
     idx.value = -1;
     isFetching.value = false;
+    bodyFocus.value = false;
+  }
+  function toggleBodyFocus() {
+    bodyFocus.value = !bodyFocus.value;
   }
   onActivated(async () => {
     clear();
@@ -88,16 +94,30 @@
       idx.value = 0;
     }
   });
+  watch(reveal, (newVal) => {
+    bodyFocus.value = false;
+    nextTick(() => {
+      if (newVal) {
+        bodyRef.value?.togglePreviewOnly();
+      }
+    });
+  });
 </script>
 
 <template>
   <div class="flashcards-page flex flex-col h-screen">
     <div v-if="currentNote" class="flex flex-col grow">
-      <div class="head-container flex">
+      <div v-if="!bodyFocus" class="head-container flex">
         <textarea readonly>{{ currentNote.head }}</textarea>
       </div>
       <div class="flex grow">
-        <Editor v-if="reveal" class="min-h-full" :initial="currentNote.body" />
+        <Editor
+          v-if="reveal"
+          ref="body-editor"
+          class="min-h-full"
+          :initial="currentNote.body"
+          @toggle-focus-mode="toggleBodyFocus"
+        />
       </div>
     </div>
     <div v-else>No note to show!</div>

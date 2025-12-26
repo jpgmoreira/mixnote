@@ -103,6 +103,7 @@ export const useNotesStore = defineStore('notes', {
       window.api.invoke(InvokeChannels.updateNoteField, noteId, field, content, now);
     },
     updateNote(note: Note) {
+      note.lastModified = Date.now(); // Will reflect in the caller.
       const clone = structuredClone(toRawDeep(note));
       if (note.id in this.notes) this.notes[note.id] = clone;
       window.api.invoke(InvokeChannels.updateNote, clone);

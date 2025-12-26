@@ -59,7 +59,6 @@
     edit.value = false;
     if (bodyRef.value) currentNote.value.body = bodyRef.value.getContent();
     if (headRef.value) currentNote.value.head = headRef.value.value;
-    currentNote.value.lastModified = Date.now();
     notesStore.updateNote(currentNote.value);
     uiStore.showToast('Note saved!', 'success');
   }

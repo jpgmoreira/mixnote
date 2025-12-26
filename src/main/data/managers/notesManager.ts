@@ -9,6 +9,10 @@ import { TabsManager } from './tabsManager';
 import { TreeManager } from './treeManager';
 import { shuffleArray } from '@common/utils/utils';
 
+type ReviewBucketType = {
+  string: boolean;
+};
+
 /**
  * Singleton for managing notes.
  * Access via NotesManager.instance
@@ -16,7 +20,12 @@ import { shuffleArray } from '@common/utils/utils';
 export class NotesManager {
   static #instance: NotesManager;
 
+  private _reviewBucketProxy: FileProxy<ReviewBucketType> | null = null;
   private profileId: string | null = null;
+
+  private get reviewBucket() {
+    return this._reviewBucketProxy?.proxy || null;
+  }
 
   private constructor() {}
 
@@ -49,6 +58,8 @@ export class NotesManager {
 
   public loadProfile(profileId: string) {
     this.profileId = profileId;
+    const bucketPath = path.join(DATA_DIR, 'profileData', profileId, 'reviewBucket.json');
+    this._reviewBucketProxy = new FileProxy(bucketPath, {} as ReviewBucketType);
     this.resetData();
   }
 

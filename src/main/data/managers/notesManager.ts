@@ -74,7 +74,7 @@ export class NotesManager {
     if (!this.profileId) throw new Error('Profile not initialized.');
     const now = Date.now();
     const note = getEmptyNote(title, now);
-    const dirPath = path.join(DATA_DIR, 'profileData', this.profileId, 'notes');
+    const dirPath = path.join(DATA_DIR, 'profileData', this.profileId, 'notes', note.id);
     ensureDirExists(dirPath);
     const fPath = path.join(dirPath, `${note.id}.json`);
     new FileProxy(fPath, note);
@@ -85,7 +85,14 @@ export class NotesManager {
   public async getNote(noteId: string): Promise<Note> {
     if (!this.profileId) throw new Error('Profile not initialized!');
     if (!this.reviewBucket) throw new Error('Review bucket not initialized!');
-    const fPath = path.join(DATA_DIR, 'profileData', this.profileId, 'notes', `${noteId}.json`);
+    const fPath = path.join(
+      DATA_DIR,
+      'profileData',
+      this.profileId,
+      'notes',
+      noteId,
+      `${noteId}.json`
+    );
     if (!fs.existsSync(fPath)) {
       throw new Error(`Note does not exist!: ${noteId}`);
     }
@@ -106,7 +113,14 @@ export class NotesManager {
     timestamp: number
   ) {
     if (!this.profileId) throw new Error('Profile not initialized!');
-    const fPath = path.join(DATA_DIR, 'profileData', this.profileId, 'notes', `${noteId}.json`);
+    const fPath = path.join(
+      DATA_DIR,
+      'profileData',
+      this.profileId,
+      'notes',
+      noteId,
+      `${noteId}.json`
+    );
     const note = await this.getNote(noteId);
     note[field] = content;
     note.lastModified = timestamp;
@@ -116,13 +130,27 @@ export class NotesManager {
   public async updateNote(note: Note) {
     if (!this.profileId) throw new Error('Profile not initialized!');
     sanitizeNote(note);
-    const fPath = path.join(DATA_DIR, 'profileData', this.profileId, 'notes', `${note.id}.json`);
+    const fPath = path.join(
+      DATA_DIR,
+      'profileData',
+      this.profileId,
+      'notes',
+      note.id,
+      `${note.id}.json`
+    );
     await fs.promises.writeFile(fPath, JSON.stringify(note), 'utf-8');
   }
 
   public async renameNote(noteId: string, newName: string) {
     if (!this.profileId) throw new Error('Profile not initialized!');
-    const fPath = path.join(DATA_DIR, 'profileData', this.profileId, 'notes', `${noteId}.json`);
+    const fPath = path.join(
+      DATA_DIR,
+      'profileData',
+      this.profileId,
+      'notes',
+      noteId,
+      `${noteId}.json`
+    );
     const note = await this.getNote(noteId);
     note.title = newName;
     await fs.promises.writeFile(fPath, JSON.stringify(note), 'utf-8');
@@ -130,16 +158,17 @@ export class NotesManager {
 
   public async deleteNote(noteId: string) {
     if (!this.profileId) throw new Error('Profile not initialized!');
-    const fPath = path.join(DATA_DIR, 'profileData', this.profileId, 'notes', `${noteId}.json`);
-    if (!fs.existsSync(fPath)) {
+    const dirPath = path.join(DATA_DIR, 'profileData', this.profileId, 'notes', noteId);
+    if (!fs.existsSync(dirPath)) {
       throw new Error(`Note does not exist!: ${noteId}`);
     }
-    await fs.promises.unlink(fPath);
+    await fs.promises.rm(dirPath, { recursive: true, force: true });
     ProfileManager.instance.addNotes(-1);
     TabsManager.instance.noteDeleted(noteId);
     this.filteredIds = this.filteredIds.filter((id) => id !== noteId);
     this.highIds.delete(noteId);
     this.lowIds.delete(noteId);
+    delete this.reviewBucket![noteId];
   }
 
   private canChooseFrequency(frequency: NoteFrequency): boolean {

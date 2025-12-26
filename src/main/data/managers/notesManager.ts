@@ -205,6 +205,10 @@ export class NotesManager {
     if (frequency === 'low') this.lowIds.add(noteId);
   }
 
+  /**
+   * Refilter = true is used when you change the review bucket status of a note
+   * during the flashcards study.
+   */
   public setNoteInReviewBucket(noteId: string, value: boolean, refilter: boolean) {
     if (!this.reviewBucket) throw new Error('Review bucket not initialized!');
     if (value) this.reviewBucket[noteId] = true;

@@ -286,7 +286,7 @@
           <input
             type="checkbox"
             v-model="currentNote.inReviewBucket"
-            @click="notesStore.toggleReviewBucket(currentNote.id, true)"
+            @click="notesStore.toggleNoteReviewBucket(currentNote.id, true)"
           />
         </div>
       </div>

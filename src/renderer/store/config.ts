@@ -23,7 +23,7 @@ export const useConfigStore = defineStore('config', {
     initData(data: StartupDTO) {
       if (data.config) this.config = data.config;
     },
-    toggleReviewBucket(value: YesNo) {
+    toggleConfigReviewBucket(value: YesNo) {
       let newArray = [...this.config.reviewBucket];
       if (newArray.includes(value)) arrayRemove(newArray, value);
       else newArray.push(value);

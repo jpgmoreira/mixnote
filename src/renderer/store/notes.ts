@@ -107,7 +107,7 @@ export const useNotesStore = defineStore('notes', {
       if (note.id in this.notes) this.notes[note.id] = clone;
       window.api.invoke(InvokeChannels.updateNote, clone);
     },
-    toggleReviewBucket(noteId: string, refilter: boolean) {
+    toggleNoteReviewBucket(noteId: string, refilter: boolean) {
       const note = this.notes[noteId];
       if (note) note.inReviewBucket = !note.inReviewBucket;
       window.api.invoke(

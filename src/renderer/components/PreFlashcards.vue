@@ -39,7 +39,7 @@
         <SelectionList
           :options="reviewBucketOptions"
           :selected="configStore.config.reviewBucket"
-          @toggle="configStore.toggleReviewBucket"
+          @toggle="configStore.toggleConfigReviewBucket"
         />
       </div>
     </div>

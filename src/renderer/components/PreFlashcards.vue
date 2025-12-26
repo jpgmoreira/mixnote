@@ -4,7 +4,7 @@
   import { useConfigStore } from '@renderer/store/config';
   import { YesNo } from '@common/types/yesNo';
   import SelectionList from './UI/SelectionList.vue';
-  import { onMounted, onActivated } from 'vue';
+  import { onMounted } from 'vue';
   const router = useRouter();
   const notesStore = useNotesStore();
   const configStore = useConfigStore();

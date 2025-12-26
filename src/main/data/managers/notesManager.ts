@@ -15,6 +15,7 @@ import { shuffleArray } from '@common/utils/utils';
  */
 export class NotesManager {
   static #instance: NotesManager;
+
   private profileId: string | null = null;
 
   private constructor() {}
@@ -168,8 +169,9 @@ export class NotesManager {
       };
       this.highIds.clear();
       this.lowIds.clear();
+      return this.getNextFlashcard();
     }
-    return this.getNextFlashcard();
+    return null;
   }
 
   public setNoteFrequency(noteId: string, frequency: NoteFrequency) {

@@ -323,7 +323,7 @@
         class="card-counter absolute right-0 bottom-full flex items-center"
       >
         <span class="whitespace-nowrap">
-          Notes seen: {{ seen.size }} of {{ notesStore.nSelectedNotes }}
+          Notes seen: {{ seen.size }} of {{ notesStore.statistics?.filtered }}
         </span>
       </div>
     </footer>

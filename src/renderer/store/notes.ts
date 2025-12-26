@@ -24,8 +24,7 @@ EventEmitter.instance.on(Events.clearProfileData, () => {
 export const useNotesStore = defineStore('notes', {
   state: () => ({
     notes: {} as Record<string, Note>,
-    nSelectedNotes: 0,
-    nFilteredNotes: 0,
+    statistics: null as NoteStatistics | null,
     tabGroups: null as TabGroup[] | null,
     tabGroupsTimer: undefined as ReturnType<typeof setTimeout> | undefined,
   }),
@@ -42,9 +41,8 @@ export const useNotesStore = defineStore('notes', {
     },
     clear() {
       this.tabGroups = null;
+      this.statistics = null;
       this.notes = {};
-      this.nSelectedNotes = 0;
-      this.nFilteredNotes = 0;
     },
     updateTabGroups() {
       clearTimeout(this.tabGroupsTimer);
@@ -115,10 +113,9 @@ export const useNotesStore = defineStore('notes', {
       const route = router.currentRoute.value;
       // There is no point on fetching note statistics if you are not in the pre-flashcards page.
       if (route.path === '/notes/flashcards') {
-        console.log('AAA');
-        const result = await window.api.invoke<NoteStatistics>(InvokeChannels.fetchNoteStatistics);
-        this.nSelectedNotes = result.selected;
-        this.nFilteredNotes = result.filtered;
+        this.statistics = await window.api.invoke<NoteStatistics>(
+          InvokeChannels.fetchNoteStatistics
+        );
       }
     },
     async toggleNoteReviewBucket(noteId: string) {

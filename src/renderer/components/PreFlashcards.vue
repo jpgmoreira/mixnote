@@ -36,15 +36,23 @@
 
     <div class="section">
       <div class="row">
-        <span class="label">Selected notes</span>
-        <span class="value">{{ notesStore.nSelectedNotes }}</span>
+        <span class="label">Total number of notes</span>
+        <span class="value">{{ notesStore.statistics?.total || 0 }}</span>
+      </div>
+      <div class="row">
+        <span class="label">Review bucket size</span>
+        <span class="value">{{ notesStore.statistics?.reviewBucketTotal || 0 }}</span>
       </div>
     </div>
 
     <div class="section">
       <div class="row">
-        <span class="label">Total filtered notes</span>
-        <span class="value">{{ notesStore.nFilteredNotes }}</span>
+        <span class="label">Selected notes</span>
+        <span class="value">{{ notesStore.statistics?.selected || 0 }}</span>
+      </div>
+      <div class="row">
+        <span class="label">Filtered notes (selected + bucket)</span>
+        <span class="value">{{ notesStore.statistics?.filtered || 0 }}</span>
       </div>
     </div>
 

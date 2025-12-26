@@ -3,8 +3,10 @@ import { buildId } from '@common/utils/utils';
 export type NoteFrequency = 'high' | 'normal' | 'low';
 
 export type NoteStatistics = {
-  selected: number;
-  filtered: number;
+  total: number; // Total number of notes.
+  reviewBucketTotal: number; // Total number of notes in the review bucket.
+  selected: number; // Number of nodes selected.
+  filtered: number; // Number of nodes selected & filtered.
 };
 
 export type Note = {

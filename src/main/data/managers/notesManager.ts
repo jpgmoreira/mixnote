@@ -199,17 +199,15 @@ export class NotesManager {
     return null;
   }
 
-  public fetchNoteStatistics(): NoteStatistics {
+  public async fetchNoteStatistics(): Promise<NoteStatistics> {
     const selected = TreeManager.instance.getSelectedNotes();
-    const { reviewBucket } = ConfigManager.instance.getConfig();
-    const filtered = selected.filter((nid) => {
-      if (reviewBucket.includes('yes') && nid in this.reviewBucket!) return true;
-      if (reviewBucket.includes('no') && !(nid in this.reviewBucket!)) return true;
-      return false;
-    });
+    const total = TreeManager.instance.getNFiles();
+    await this.flashcardsFilter(false);
     return {
+      total,
+      reviewBucketTotal: Object.keys(this.reviewBucket!).length,
       selected: selected.length,
-      filtered: filtered.length,
+      filtered: this.filteredIds.length,
     };
   }
 

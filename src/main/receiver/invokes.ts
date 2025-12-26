@@ -139,3 +139,10 @@ ipcMain.handle(
     NotesManager.instance.setNoteFrequency(noteId, frequency);
   }
 );
+
+ipcMain.handle(
+  InvokeChannels.setNoteInReviewBucket,
+  async (_: IpcMainInvokeEvent, noteId: string, value: boolean) => {
+    NotesManager.instance.setNoteInReviewBucket(noteId, value);
+  }
+);

@@ -19,6 +19,7 @@ export const allowedInvokeChannels = Object.freeze([
   InvokeChannels.getNextFlashcard,
   InvokeChannels.setNoteFrequency,
   InvokeChannels.deleteNote,
+  InvokeChannels.setNoteInReviewBucket,
   // Channels for communication for the TreeView component:
   TreeChannels.createNode,
   TreeChannels.createNodeAbove,

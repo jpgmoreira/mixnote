@@ -20,4 +20,5 @@ export enum InvokeChannels {
   getNextFlashcard = 'get-next-flashcard',
   setNoteFrequency = 'set-note-frequency',
   deleteNote = 'delete-note',
+  setNoteInReviewBucket = 'set-note-in-review-bucket',
 }

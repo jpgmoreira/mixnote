@@ -194,6 +194,12 @@ export class NotesManager {
     if (frequency === 'low') this.lowIds.add(noteId);
   }
 
+  public setNoteInReviewBucket(noteId: string, value: boolean) {
+    if (!this.reviewBucket) throw new Error('Review bucket not initialized!');
+    if (value) this.reviewBucket[noteId] = true;
+    else delete this.reviewBucket[noteId];
+  }
+
   public clear() {
     this.profileId = null;
     this.resetData();

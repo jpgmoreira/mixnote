@@ -80,7 +80,7 @@
         class="grow"
         ref="body-ref"
         :initial="props.note.body"
-        @change="noteChange('body')"
+        @input="noteChange('body')"
         @toggle-focus-mode="toggleFocus"
         placeholder="BODY"
       />

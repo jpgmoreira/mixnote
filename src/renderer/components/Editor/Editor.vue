@@ -12,7 +12,7 @@
   });
 
   const emit = defineEmits<{
-    (e: 'change'): void;
+    (e: 'input'): void;
     (e: 'blur'): void;
     (e: 'toggleFocusMode'): void;
   }>();
@@ -109,7 +109,7 @@
     noEcharts
     :autoFoldThreshold="Infinity"
     :placeholder="props.placeholder || ''"
-    @onChange="emit('change')"
+    @onInput="emit('input')"
     @onBlur="emit('blur')"
   >
     <template #defToolbars>

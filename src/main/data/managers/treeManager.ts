@@ -472,6 +472,7 @@ export class TreeManager {
 
   public selectAll() {
     this.nSelectedFiles = 0;
+    this.selectedNotes = [];
     for (const node of this.expandedFlat) {
       node.selected = true;
       if (node.type === 'dir') node.nSelDesc = node.nDesc;

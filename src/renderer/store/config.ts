@@ -23,13 +23,13 @@ export const useConfigStore = defineStore('config', {
     initData(data: StartupDTO) {
       if (data.config) this.config = data.config;
     },
-    toggleConfigReviewBucket(value: YesNo) {
+    async toggleConfigReviewBucket(value: YesNo) {
       let newArray = [...this.config.reviewBucket];
       if (newArray.includes(value)) arrayRemove(newArray, value);
       else newArray.push(value);
       if (!newArray.length) return;
       this.config.reviewBucket = newArray;
-      window.api.invoke(InvokeChannels.setConfigReviewBucket, newArray);
+      await window.api.invoke(InvokeChannels.setConfigReviewBucket, newArray);
     },
     clear() {
       this.config = getEmptyAppConfig();

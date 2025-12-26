@@ -4,6 +4,7 @@
   import { useConfigStore } from '@renderer/store/config';
   import { YesNo } from '@common/types/yesNo';
   import SelectionList from './UI/SelectionList.vue';
+  import { onMounted, onActivated } from 'vue';
   const router = useRouter();
   const notesStore = useNotesStore();
   const configStore = useConfigStore();
@@ -20,6 +21,13 @@
   function goFlashcards() {
     router.replace('/flashcards');
   }
+  async function toggleReviewBucket(value: YesNo) {
+    await configStore.toggleConfigReviewBucket(value);
+    notesStore.fetchNoteStatistics();
+  }
+  onMounted(() => {
+    notesStore.fetchNoteStatistics();
+  });
 </script>
 
 <template>
@@ -35,11 +43,18 @@
 
     <div class="section">
       <div class="row">
+        <span class="label">Total filtered notes</span>
+        <span class="value">{{ notesStore.nFilteredNotes }}</span>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="row">
         <span class="label">Review bucket:</span>
         <SelectionList
           :options="reviewBucketOptions"
           :selected="configStore.config.reviewBucket"
-          @toggle="configStore.toggleConfigReviewBucket"
+          @toggle="toggleReviewBucket"
         />
       </div>
     </div>

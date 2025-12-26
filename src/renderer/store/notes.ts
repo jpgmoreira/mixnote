@@ -4,7 +4,7 @@ import { Events } from '@renderer/events';
 import { StartupDTO } from '@common/dto/startupDTO';
 import { Tab, TabGroup } from '@common/schemas/tabs';
 import { InvokeChannels } from '@preload/channels/invoke';
-import { Note } from '@common/schemas/note';
+import { Note, NoteStatistics } from '@common/schemas/note';
 import { randomId, toRawDeep } from '@common/utils/utils';
 
 EventEmitter.instance.on(Events.loadStartupData, (data: StartupDTO) => {
@@ -24,6 +24,7 @@ export const useNotesStore = defineStore('notes', {
   state: () => ({
     notes: {} as Record<string, Note>,
     nSelectedNotes: 0,
+    nFilteredNotes: 0,
     tabGroups: null as TabGroup[] | null,
     tabGroupsTimer: undefined as ReturnType<typeof setTimeout> | undefined,
   }),
@@ -42,6 +43,7 @@ export const useNotesStore = defineStore('notes', {
       this.tabGroups = null;
       this.notes = {};
       this.nSelectedNotes = 0;
+      this.nFilteredNotes = 0;
     },
     updateTabGroups() {
       clearTimeout(this.tabGroupsTimer);
@@ -107,6 +109,11 @@ export const useNotesStore = defineStore('notes', {
       const clone = structuredClone(toRawDeep(note));
       if (note.id in this.notes) this.notes[note.id] = clone;
       window.api.invoke(InvokeChannels.updateNote, clone);
+    },
+    async fetchNoteStatistics() {
+      const result = await window.api.invoke<NoteStatistics>(InvokeChannels.fetchNoteStatistics);
+      this.nSelectedNotes = result.selected;
+      this.nFilteredNotes = result.filtered;
     },
     async toggleNoteReviewBucket(noteId: string) {
       const note = this.notes[noteId];

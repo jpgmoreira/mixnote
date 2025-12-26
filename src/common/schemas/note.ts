@@ -2,6 +2,11 @@ import { buildId } from '@common/utils/utils';
 
 export type NoteFrequency = 'high' | 'normal' | 'low';
 
+export type NoteStatistics = {
+  selected: number;
+  filtered: number;
+};
+
 export type Note = {
   id: string;
   title: string;

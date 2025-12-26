@@ -8,7 +8,7 @@ import { UISettings } from '@common/schemas/ui';
 import { UIManager } from '@main/data/managers/uiManager';
 import { TabGroup } from '@common/schemas/tabs';
 import { TabsManager } from '@main/data/managers/tabsManager';
-import { Note, NoteFrequency } from '@common/schemas/note';
+import { Note, NoteFrequency, NoteStatistics } from '@common/schemas/note';
 import { NotesManager } from '@main/data/managers/notesManager';
 import { TreeManager } from '@main/data/managers/treeManager';
 import { sleep } from '@common/utils/utils';
@@ -153,5 +153,12 @@ ipcMain.handle(
   InvokeChannels.setConfigReviewBucket,
   async (_: IpcMainInvokeEvent, value: YesNo[]) => {
     ConfigManager.instance.setReviewBucket(value);
+  }
+);
+
+ipcMain.handle(
+  InvokeChannels.fetchNoteStatistics,
+  async (_: IpcMainInvokeEvent): Promise<NoteStatistics> => {
+    return NotesManager.instance.fetchNoteStatistics();
   }
 );

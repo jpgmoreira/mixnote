@@ -142,13 +142,7 @@
 
   // --- Watches: ---
 
-  watch(
-    nSelectedFiles,
-    (newValue) => {
-      notesStore.nSelectedNotes = newValue;
-    },
-    { immediate: true }
-  );
+  watch(nSelectedFiles, notesStore.fetchNoteStatistics);
 
   // --- Context menu: ---
 

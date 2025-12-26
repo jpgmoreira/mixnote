@@ -2,7 +2,13 @@ import { FileProxy } from '../fileProxy';
 import path from 'path';
 import { DATA_DIR } from '@main/constants';
 import { ensureDirExists } from '@main/utils/utils';
-import { getEmptyNote, Note, NoteFrequency, sanitizeNote } from '@common/schemas/note';
+import {
+  getEmptyNote,
+  Note,
+  NoteFrequency,
+  NoteStatistics,
+  sanitizeNote,
+} from '@common/schemas/note';
 import { ProfileManager } from './profileManager';
 import fs from 'fs';
 import { TabsManager } from './tabsManager';
@@ -191,6 +197,20 @@ export class NotesManager {
       return this.getNextFlashcard();
     }
     return null;
+  }
+
+  public fetchNoteStatistics(): NoteStatistics {
+    const selected = TreeManager.instance.getSelectedNotes();
+    const { reviewBucket } = ConfigManager.instance.getConfig();
+    const filtered = selected.filter((nid) => {
+      if (reviewBucket.includes('yes') && nid in this.reviewBucket!) return true;
+      if (reviewBucket.includes('no') && !(nid in this.reviewBucket!)) return true;
+      return false;
+    });
+    return {
+      selected: selected.length,
+      filtered: filtered.length,
+    };
   }
 
   public setNoteFrequency(noteId: string, frequency: NoteFrequency) {

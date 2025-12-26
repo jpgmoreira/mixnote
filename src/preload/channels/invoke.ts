@@ -22,4 +22,5 @@ export enum InvokeChannels {
   deleteNote = 'delete-note',
   toggleNoteReviewBucket = 'toggle-note-review-bucket',
   setConfigReviewBucket = 'set-config-review-bucket',
+  fetchNoteStatistics = 'fetch-note-statistics',
 }

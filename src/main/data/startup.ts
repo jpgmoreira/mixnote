@@ -4,7 +4,7 @@ import { TreeManager } from './managers/treeManager';
 import { UIManager } from './managers/uiManager';
 import { NotesManager } from './managers/notesManager';
 import { TabsManager } from './managers/tabsManager';
-import { SettingsManager } from './managers/settingsManager';
+import { ConfigManager } from './managers/configManager';
 
 export async function loadStartupData() {
   const profile = ProfileManager.instance.getCurrProfile();
@@ -14,17 +14,17 @@ export async function loadStartupData() {
     registry,
     ui: null,
     tabGroups: null,
-    settings: null,
+    config: null,
   };
   if (profile) {
     TreeManager.instance.loadTree(profile.id);
     UIManager.instance.loadProfile(profile.id);
     NotesManager.instance.loadProfile(profile.id);
     TabsManager.instance.loadProfile(profile.id);
-    SettingsManager.instance.loadProfile(profile.id);
+    ConfigManager.instance.loadProfile(profile.id);
     data.ui = UIManager.instance.getUISettings();
     data.tabGroups = TabsManager.instance.getGroups();
-    data.settings = SettingsManager.instance.getSettings();
+    data.config = ConfigManager.instance.getProfileConfig();
   }
   return data;
 }

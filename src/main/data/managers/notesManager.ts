@@ -8,6 +8,7 @@ import fs from 'fs';
 import { TabsManager } from './tabsManager';
 import { TreeManager } from './treeManager';
 import { shuffleArray } from '@common/utils/utils';
+import { ConfigManager } from './configManager';
 
 type ReviewBucketType = {
   string: boolean;
@@ -171,7 +172,12 @@ export class NotesManager {
   }
 
   public async flashcardsFilter(isStart: boolean): Promise<Note | null> {
-    const noteIds = TreeManager.instance.getSelectedNotes();
+    if (!this.reviewBucket) throw new Error('Review bucket not initialized!');
+    let noteIds = TreeManager.instance.getSelectedNotes();
+    const { reviewBucket } = ConfigManager.instance.getProfileConfig();
+    if (reviewBucket) {
+      noteIds = noteIds.filter((nid) => nid in this.reviewBucket!);
+    }
     this.filteredIds = noteIds;
     if (isStart) {
       this.indexes = {

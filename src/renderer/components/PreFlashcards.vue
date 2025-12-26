@@ -1,8 +1,10 @@
 <script lang="ts" setup>
   import { useRouter } from 'vue-router';
   import { useNotesStore } from '@renderer/store/notes';
+  import { useConfigStore } from '@renderer/store/config';
   const router = useRouter();
   const notesStore = useNotesStore();
+  const configStore = useConfigStore();
   function goFlashcards() {
     router.replace('/flashcards');
   }
@@ -16,6 +18,17 @@
       <div class="row">
         <span class="label">Selected notes</span>
         <span class="value">{{ notesStore.nSelectedNotes }}</span>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="row">
+        <span class="label">Review bucket:</span>
+        <input
+          type="checkbox"
+          v-model="configStore.config.reviewBucket"
+          @change="configStore.setReviewBucket"
+        />
       </div>
     </div>
 

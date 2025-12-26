@@ -12,6 +12,7 @@ import { Note, NoteFrequency } from '@common/schemas/note';
 import { NotesManager } from '@main/data/managers/notesManager';
 import { TreeManager } from '@main/data/managers/treeManager';
 import { sleep } from '@common/utils/utils';
+import { ConfigManager } from '@main/data/managers/configManager';
 
 ipcMain.handle(
   InvokeChannels.createProfile,
@@ -144,5 +145,12 @@ ipcMain.handle(
   InvokeChannels.setNoteInReviewBucket,
   async (_: IpcMainInvokeEvent, noteId: string, value: boolean) => {
     NotesManager.instance.setNoteInReviewBucket(noteId, value);
+  }
+);
+
+ipcMain.handle(
+  InvokeChannels.setConfigReviewBucket,
+  async (_: IpcMainInvokeEvent, value: boolean) => {
+    ConfigManager.instance.setReviewBucket(value);
   }
 );

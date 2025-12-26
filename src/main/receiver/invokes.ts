@@ -93,19 +93,6 @@ ipcMain.handle(InvokeChannels.deleteNote, async (_: IpcMainInvokeEvent, noteId: 
   TreeManager.instance.noteWasDeleted(noteId);
 });
 
-ipcMain.handle(
-  InvokeChannels.updateNoteField,
-  async (
-    _: IpcMainInvokeEvent,
-    noteId: string,
-    field: 'head' | 'body',
-    content: string,
-    timestamp: number
-  ) => {
-    NotesManager.instance.updateNoteField(noteId, field, content, timestamp);
-  }
-);
-
 ipcMain.handle(InvokeChannels.updateNote, async (_: IpcMainInvokeEvent, note: Note) => {
   NotesManager.instance.updateNote(note);
 });

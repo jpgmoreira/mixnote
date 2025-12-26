@@ -5,7 +5,7 @@ import { StartupDTO } from '@common/dto/startupDTO';
 import { Tab, TabGroup } from '@common/schemas/tabs';
 import { InvokeChannels } from '@preload/channels/invoke';
 import { Note, NoteStatistics } from '@common/schemas/note';
-import { randomId, toRawDeep } from '@common/utils/utils';
+import { cloneDeep, randomId, toRawDeep } from '@common/utils/utils';
 import { router } from '@renderer/router';
 
 EventEmitter.instance.on(Events.loadStartupData, (data: StartupDTO) => {
@@ -94,18 +94,9 @@ export const useNotesStore = defineStore('notes', {
       }
       delete this.notes[noteId];
     },
-    updateNoteField(noteId: string, field: 'head' | 'body', content: string) {
-      // Should be debounced somewhere else.
-      if (!(noteId in this.notes)) throw new Error('Cannot update non-existing note!');
-      const now = Date.now();
-      const note = this.notes[noteId];
-      note[field] = content;
-      note.lastModified = now;
-      window.api.invoke(InvokeChannels.updateNoteField, noteId, field, content, now);
-    },
     updateNote(note: Note) {
-      note.lastModified = Date.now(); // Will reflect in the caller.
-      const clone = structuredClone(toRawDeep(note));
+      note.lastModified = Date.now();
+      const clone = cloneDeep(note);
       if (note.id in this.notes) this.notes[note.id] = clone;
       window.api.invoke(InvokeChannels.updateNote, clone);
     },

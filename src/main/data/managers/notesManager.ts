@@ -106,27 +106,6 @@ export class NotesManager {
     return note;
   }
 
-  public async updateNoteField(
-    noteId: string,
-    field: 'head' | 'body',
-    content: string,
-    timestamp: number
-  ) {
-    if (!this.profileId) throw new Error('Profile not initialized!');
-    const fPath = path.join(
-      DATA_DIR,
-      'profileData',
-      this.profileId,
-      'notes',
-      noteId,
-      `${noteId}.json`
-    );
-    const note = await this.getNote(noteId);
-    note[field] = content;
-    note.lastModified = timestamp;
-    await fs.promises.writeFile(fPath, JSON.stringify(note), 'utf-8');
-  }
-
   public async updateNote(note: Note) {
     if (!this.profileId) throw new Error('Profile not initialized!');
     sanitizeNote(note);

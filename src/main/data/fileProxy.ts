@@ -3,6 +3,7 @@ import type { JSONValue, JSONObject } from '@common/types/json';
 import fs from 'fs';
 import util from 'util';
 import path from 'path';
+import { cloneDeep } from '@common/utils/utils';
 
 export const INDENT = 2;
 export const DISK_FLUSH_DEBOUNCE = 500; // Debounce in milliseconds to write file to disk.
@@ -34,7 +35,7 @@ export class FileProxy<T extends JSONObject> {
     const dir = path.dirname(filePath);
     ensureDirExists(dir);
     if (!fs.existsSync(filePath)) {
-      this._target = structuredClone(targetObject);
+      this._target = cloneDeep(targetObject);
       fs.writeFileSync(filePath, JSON.stringify(this._target, null, INDENT));
     } else {
       this._target = JSON.parse(fs.readFileSync(filePath, 'utf-8'));

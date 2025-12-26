@@ -141,3 +141,7 @@ export function toRawDeep<T>(obj: T): T {
   }
   return result as T;
 }
+
+export function cloneDeep<T>(obj: T): T {
+  return structuredClone(toRawDeep(obj));
+}

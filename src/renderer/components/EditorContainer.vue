@@ -4,6 +4,7 @@
   import { useNotesStore } from '@renderer/store/notes';
   import { parseTimestamp } from '@common/utils/dateUtils';
   import Editor from './Editor/Editor.vue';
+  import { cloneDeep } from '@common/utils/utils';
   const props = defineProps<{ note: Note }>();
   const notesStore = useNotesStore();
   const bodyRef = useTemplateRef('body-ref');
@@ -13,14 +14,14 @@
   function toggleFocus() {
     focus.value = !focus.value;
   }
-  function noteChange(field: 'head' | 'body') {
+  function noteChange() {
     clearTimeout(noteChangeTimer.value);
     noteChangeTimer.value = setTimeout(() => {
       if (!bodyRef.value) return;
-      let content = '';
-      if (field === 'head') content = headContent.value;
-      else content = bodyRef.value.getContent();
-      notesStore.updateNoteField(props.note.id, field, content);
+      const clone = cloneDeep(props.note); // Cannot mutate a prop.
+      clone.head = headContent.value;
+      clone.body = bodyRef.value.getContent();
+      notesStore.updateNote(clone);
     }, 500);
   }
   watch(
@@ -74,13 +75,13 @@
         placeholder="HEAD"
         spellcheck="false"
         v-model="headContent"
-        @input="noteChange('head')"
+        @input="noteChange"
       ></textarea>
       <Editor
         class="grow"
         ref="body-ref"
         :initial="props.note.body"
-        @input="noteChange('body')"
+        @input="noteChange"
         @toggle-focus-mode="toggleFocus"
         placeholder="BODY"
       />

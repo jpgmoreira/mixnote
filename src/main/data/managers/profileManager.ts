@@ -9,7 +9,7 @@ import path from 'path';
 import { DATA_DIR } from '@main/constants';
 import fs from 'node:fs';
 import { GenericResponseDTO } from '@common/dto/genericResponseDTO';
-import { buildId } from '@common/utils/utils';
+import { buildId, cloneDeep } from '@common/utils/utils';
 
 /**
  * Singleton for managing profiles.
@@ -59,12 +59,12 @@ export class ProfileManager {
   }
 
   public getCurrProfile() {
-    const x = structuredClone(this._currProfileProxy?.target || null);
+    const x = cloneDeep(this._currProfileProxy?.target || null);
     return x;
   }
 
   public getProfileRegistry() {
-    const x = structuredClone(this._registryProxy.target || null);
+    const x = cloneDeep(this._registryProxy.target || null);
     return x;
   }
 

@@ -11,7 +11,6 @@ export const allowedInvokeChannels = Object.freeze([
   InvokeChannels.updateUISettings,
   InvokeChannels.updateTabGroups,
   InvokeChannels.getNote,
-  InvokeChannels.updateNoteField,
   InvokeChannels.updateNote,
   InvokeChannels.renameNote,
   InvokeChannels.getTabGroups,

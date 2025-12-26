@@ -2,6 +2,7 @@ import { FileProxy } from '../fileProxy';
 import path from 'path';
 import { DATA_DIR } from '@main/constants';
 import { getEmptyUISettings, UISettings } from '@common/schemas/ui';
+import { cloneDeep } from '@common/utils/utils';
 
 /**
  * Singleton for managing UI settings.
@@ -35,7 +36,7 @@ export class UIManager {
 
   public getUISettings() {
     if (!this.target) throw new Error('UI settings not initialized!');
-    return structuredClone(this.target);
+    return cloneDeep(this.target);
   }
 
   public setUISettings(settings: UISettings) {

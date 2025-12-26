@@ -3,6 +3,7 @@ import path from 'path';
 import { DATA_DIR } from '@main/constants';
 import { AppConfig, getEmptyAppConfig } from '@common/schemas/config';
 import { YesNo } from '@common/types/yesNo';
+import { cloneDeep } from '@common/utils/utils';
 
 /**
  * Singleton for managing app configuration.
@@ -37,7 +38,7 @@ export class ConfigManager {
 
   public getConfig() {
     if (!this.target) throw new Error('App config not initialized!');
-    return structuredClone(this.target);
+    return cloneDeep(this.target);
   }
 
   public setReviewBucket(value: YesNo[]) {

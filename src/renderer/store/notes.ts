@@ -108,11 +108,8 @@ export const useNotesStore = defineStore('notes', {
       window.api.invoke(InvokeChannels.updateNote, clone);
     },
     toggleReviewBucket(noteId: string) {
-      if (!(noteId in this.notes)) {
-        throw new Error('Cannot toggle review bucket for non-existing note!');
-      }
       const note = this.notes[noteId];
-      note.inReviewBucket = !note.inReviewBucket;
+      if (note) note.inReviewBucket = !note.inReviewBucket;
       window.api.invoke(InvokeChannels.setNoteInReviewBucket, noteId, note.inReviewBucket);
     },
     async refreshTabs() {

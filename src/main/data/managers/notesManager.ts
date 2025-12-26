@@ -78,6 +78,7 @@ export class NotesManager {
 
   public async getNote(noteId: string): Promise<Note> {
     if (!this.profileId) throw new Error('Profile not initialized!');
+    if (!this.reviewBucket) throw new Error('Review bucket not initialized!');
     const fPath = path.join(DATA_DIR, 'profileData', this.profileId, 'notes', `${noteId}.json`);
     if (!fs.existsSync(fPath)) {
       throw new Error(`Note does not exist!: ${noteId}`);
@@ -85,8 +86,10 @@ export class NotesManager {
     const content = await fs.promises.readFile(fPath, 'utf-8');
     const note = JSON.parse(content) as Note;
     note.frequency = 'normal';
+    note.inReviewBucket = false;
     if (this.lowIds.has(noteId)) note.frequency = 'low';
     if (this.highIds.has(noteId)) note.frequency = 'high';
+    if (noteId in this.reviewBucket) note.inReviewBucket = true;
     return note;
   }
 

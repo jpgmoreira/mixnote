@@ -272,13 +272,23 @@
       </div>
 
       <!-- META -->
-      <div v-if="currentNote && reveal && !bodyFocus" class="flex justify-center my-2 gap-2">
-        <span>Frequency:</span>
-        <SelectionList
-          :options="frequencyOptions"
-          :selected="[currentNote.frequency!]"
-          @toggle="toggleFrequency"
-        />
+      <div v-if="currentNote && reveal && !bodyFocus" class="flex justify-center my-2 gap-5">
+        <div class="flex items-center gap-1">
+          <span>Frequency:</span>
+          <SelectionList
+            :options="frequencyOptions"
+            :selected="[currentNote.frequency!]"
+            @toggle="toggleFrequency"
+          />
+        </div>
+        <div class="flex items-center gap-1">
+          <span>Review bucket:</span>
+          <input
+            type="checkbox"
+            v-model="currentNote.inReviewBucket"
+            @change="notesStore.toggleReviewBucket(currentNote.id)"
+          />
+        </div>
       </div>
 
       <div v-else-if="!currentNote" class="absolute-center text-xl opacity-70">

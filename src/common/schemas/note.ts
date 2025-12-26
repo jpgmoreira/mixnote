@@ -23,3 +23,13 @@ export function getEmptyNote(title: string, timestamp: number): Note {
     body: '',
   };
 }
+
+const NOTE_KEYS = ['id', 'title', 'createdAt', 'lastModified', 'head', 'body'];
+
+export function sanitizeNote(note: Note) {
+  for (const key of Object.keys(note)) {
+    if (!NOTE_KEYS.includes(key)) {
+      delete note[key];
+    }
+  }
+}

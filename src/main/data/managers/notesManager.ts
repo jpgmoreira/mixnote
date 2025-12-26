@@ -2,7 +2,7 @@ import { FileProxy } from '../fileProxy';
 import path from 'path';
 import { DATA_DIR } from '@main/constants';
 import { ensureDirExists } from '@main/utils/utils';
-import { getEmptyNote, Note, NoteFrequency } from '@common/schemas/note';
+import { getEmptyNote, Note, NoteFrequency, sanitizeNote } from '@common/schemas/note';
 import { ProfileManager } from './profileManager';
 import fs from 'fs';
 import { TabsManager } from './tabsManager';
@@ -94,6 +94,7 @@ export class NotesManager {
 
   public async updateNote(note: Note) {
     if (!this.profileId) throw new Error('Profile not initialized!');
+    sanitizeNote(note);
     const fPath = path.join(DATA_DIR, 'profileData', this.profileId, 'notes', `${note.id}.json`);
     await fs.promises.writeFile(fPath, JSON.stringify(note), 'utf-8');
   }

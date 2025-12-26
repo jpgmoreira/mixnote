@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+  import { computed, ref } from 'vue';
   import { useRouter } from 'vue-router';
   import { useNotesStore } from '@renderer/store/notes';
   import { useConfigStore } from '@renderer/store/config';
@@ -8,6 +9,8 @@
   const router = useRouter();
   const notesStore = useNotesStore();
   const configStore = useConfigStore();
+  const hfProbability = ref(configStore.config.hfProbability * 100);
+  const lfProbability = ref(configStore.config.lfProbability * 100);
   const reviewBucketOptions: { text: string; value: YesNo }[] = [
     {
       text: 'Yes',
@@ -25,6 +28,13 @@
     await configStore.toggleConfigReviewBucket(value);
     notesStore.fetchNoteStatistics();
   }
+  function updateHfProbability() {
+    configStore.updateHfProbability(hfProbability.value);
+  }
+  function updateLfProbability() {
+    configStore.updateLfProbability(lfProbability.value);
+  }
+  const probabilitySum = computed(() => hfProbability.value + lfProbability.value);
   onMounted(() => {
     notesStore.fetchNoteStatistics();
   });
@@ -64,6 +74,21 @@
           :selected="configStore.config.reviewBucket"
           @toggle="toggleReviewBucket"
         />
+      </div>
+      <div class="row">
+        <span class="label">High frequency probability (%)</span>
+        <input type="number" v-model="hfProbability" @change="updateHfProbability" />
+      </div>
+      <div class="row">
+        <span class="label">Low frequency probability (%)</span>
+        <input type="number" v-model="lfProbability" @change="updateLfProbability" />
+      </div>
+      <div v-if="probabilitySum > 100" class="row">
+        <span class="label">
+          <div class="text-danger">
+            The sum of the probabilities should be less than or equal 100!
+          </div>
+        </span>
       </div>
     </div>
 

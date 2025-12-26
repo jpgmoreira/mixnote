@@ -150,12 +150,12 @@ export class NotesManager {
 
   public async getNextFlashcard(): Promise<Note | null> {
     if (!this.filteredIds.length) return null;
-    // TODO: Update to use probabilities from user settings.
+    const { lfProbability, hfProbability } = ConfigManager.instance.getConfig();
     let frequency: NoteFrequency = 'normal';
     do {
       const prob = Math.random();
-      if (prob < 0.3) frequency = 'high';
-      else if (prob < 0.3 + 0.1) frequency = 'low';
+      if (prob < hfProbability) frequency = 'high';
+      else if (prob < hfProbability + lfProbability) frequency = 'low';
       else frequency = 'normal';
     } while (!this.canChooseFrequency(frequency));
     let verifier = (noteId: string) => !this.lowIds.has(noteId) && !this.highIds.has(noteId);

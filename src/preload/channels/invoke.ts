@@ -23,4 +23,5 @@ export enum InvokeChannels {
   toggleNoteReviewBucket = 'toggle-note-review-bucket',
   setConfigReviewBucket = 'set-config-review-bucket',
   fetchNoteStatistics = 'fetch-note-statistics',
+  updateProbability = 'update-probability',
 }

@@ -31,6 +31,16 @@ export const useConfigStore = defineStore('config', {
       this.config.reviewBucket = newArray;
       await window.api.invoke(InvokeChannels.setConfigReviewBucket, newArray);
     },
+    updateHfProbability(value: number) {
+      const percent = value / 100;
+      this.config.hfProbability = percent;
+      window.api.invoke(InvokeChannels.updateProbability, 'high', percent);
+    },
+    updateLfProbability(value: number) {
+      const percent = value / 100;
+      this.config.lfProbability = percent;
+      window.api.invoke(InvokeChannels.updateProbability, 'low', percent);
+    },
     clear() {
       this.config = getEmptyAppConfig();
     },

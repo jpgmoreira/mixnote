@@ -1,15 +1,15 @@
 import { YesNo } from '@common/types/yesNo';
 
 export type AppConfig = {
-  highFrequencyProbability: number;
-  lowFrequencyProbability: number;
+  hfProbability: number; // High frequency;
+  lfProbability: number; // Low frequency
   reviewBucket: YesNo[];
 };
 
 export function getEmptyAppConfig(): AppConfig {
   return {
-    highFrequencyProbability: 0.3,
-    lowFrequencyProbability: 0.1,
+    hfProbability: 0.3,
+    lfProbability: 0.1,
     reviewBucket: ['no'],
   };
 }

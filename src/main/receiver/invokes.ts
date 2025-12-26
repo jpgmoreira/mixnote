@@ -162,3 +162,10 @@ ipcMain.handle(
     return NotesManager.instance.fetchNoteStatistics();
   }
 );
+
+ipcMain.handle(
+  InvokeChannels.updateProbability,
+  async (_: IpcMainInvokeEvent, which: 'low' | 'high', value: number) => {
+    return ConfigManager.instance.updateProbability(which, value);
+  }
+);

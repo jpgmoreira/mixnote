@@ -18,6 +18,9 @@
   border: 1px solid #2f2f2f;
   border-radius: 6px;
   padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .theme-dark .pre-flashcards .row {
@@ -41,4 +44,9 @@
   margin-top: auto;
   display: flex;
   justify-content: flex-start;
+}
+
+.theme-dark .pre-flashcards input[type='number'] {
+  text-align: center;
+  width: 80px;
 }

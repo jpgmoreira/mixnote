@@ -45,6 +45,12 @@ export class ConfigManager {
     this.proxy.reviewBucket = value;
   }
 
+  public updateProbability(which: 'low' | 'high', value: number) {
+    if (!this.proxy) throw new Error('App config not initialized!');
+    if (which === 'high') this.proxy.hfProbability = value;
+    else this.proxy.lfProbability = value;
+  }
+
   public clear() {
     this._proxy = null;
   }

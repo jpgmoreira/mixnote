@@ -22,6 +22,7 @@ export const allowedInvokeChannels = Object.freeze([
   InvokeChannels.toggleNoteReviewBucket,
   InvokeChannels.setConfigReviewBucket,
   InvokeChannels.fetchNoteStatistics,
+  InvokeChannels.updateProbability,
   // Channels for communication for the TreeView component:
   TreeChannels.createNode,
   TreeChannels.createNodeAbove,

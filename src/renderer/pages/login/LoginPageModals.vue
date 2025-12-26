@@ -31,6 +31,11 @@
       renameInput.value?.select();
     });
   }
+
+  function closeDeleteModal() {
+    if (isDeleting.value) return;
+    modals.delete = false;
+  }
 </script>
 
 <template>
@@ -79,7 +84,7 @@
   </Modal>
 
   <!-- Delete modal: -->
-  <Modal :visible="modals.delete" :frozen="isDeleting" @close="modals.delete = false">
+  <Modal :visible="modals.delete" @close="closeDeleteModal">
     <template #header>Delete</template>
     <template #body>
       <div>

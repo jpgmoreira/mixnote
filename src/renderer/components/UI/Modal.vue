@@ -5,17 +5,11 @@
       type: Boolean,
       required: true,
     },
-    // TODO: This "frozen" parameter makes no sense. You could control it in the parent component only.
-    frozen: {
-      type: Boolean,
-      required: false,
-    },
   });
   const emit = defineEmits<{
     (e: 'close'): void;
   }>();
   function close() {
-    if (props.frozen) return;
     emit('close');
   }
   function onKey(e: KeyboardEvent) {

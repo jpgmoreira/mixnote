@@ -13,7 +13,7 @@
 </script>
 
 <template>
-  <Modal :visible="modalState.visible" :frozen="modalState.isDeleting" @close="closeModal">
+  <Modal :visible="modalState.visible" @close="closeModal">
     <template #header>
       <div v-if="!modalState.multiple && modalState.currentNode?.type === 'dir'">
         Delete folder

@@ -345,6 +345,7 @@
   }
 
   function closeModal() {
+    if (modalState.isDeleting) return;
     modalState.currentNode = null;
     modalState.visible = false;
     modalState.multiple = false;

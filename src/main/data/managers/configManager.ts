@@ -1,17 +1,17 @@
 import { FileProxy } from '../fileProxy';
 import path from 'path';
 import { DATA_DIR } from '@main/constants';
-import { ProfileConfig, getEmptyProfileConfig } from '@common/schemas/config';
+import { AppConfig, getEmptyAppConfig } from '@common/schemas/config';
 import { YesNo } from '@common/types/yesNo';
 
 /**
- * Singleton for managing profile configuration.
+ * Singleton for managing app configuration.
  * Access via ConfigManager.instance
  */
 export class ConfigManager {
   static #instance: ConfigManager;
 
-  private _proxy: FileProxy<ProfileConfig> | null = null;
+  private _proxy: FileProxy<AppConfig> | null = null;
 
   private get proxy() {
     return this._proxy?.proxy || null;
@@ -32,16 +32,16 @@ export class ConfigManager {
 
   public loadProfile(profileId: string) {
     const fPath = path.join(DATA_DIR, 'profileData', profileId, 'config.json');
-    this._proxy = new FileProxy(fPath, getEmptyProfileConfig());
+    this._proxy = new FileProxy(fPath, getEmptyAppConfig());
   }
 
-  public getProfileConfig() {
-    if (!this.target) throw new Error('Profile config not initialized!');
+  public getConfig() {
+    if (!this.target) throw new Error('App config not initialized!');
     return structuredClone(this.target);
   }
 
   public setReviewBucket(value: YesNo[]) {
-    if (!this.proxy) throw new Error('Profile config not initialized!');
+    if (!this.proxy) throw new Error('App config not initialized!');
     this.proxy.reviewBucket = value;
   }
 

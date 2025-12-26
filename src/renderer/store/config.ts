@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import { EventEmitter } from '@common/events/eventEmitter';
 import { Events } from '@renderer/events';
 import { StartupDTO } from '@common/dto/startupDTO';
-import { getEmptyProfileConfig } from '@common/schemas/config';
+import { getEmptyAppConfig } from '@common/schemas/config';
 import { InvokeChannels } from '@preload/channels/invoke';
 import { YesNo } from '@common/types/yesNo';
 import { arrayRemove } from '@common/utils/utils';
@@ -17,7 +17,7 @@ EventEmitter.instance.on(Events.clearProfileData, () => {
 
 export const useConfigStore = defineStore('config', {
   state: () => ({
-    config: getEmptyProfileConfig(),
+    config: getEmptyAppConfig(),
   }),
   actions: {
     initData(data: StartupDTO) {
@@ -32,7 +32,7 @@ export const useConfigStore = defineStore('config', {
       window.api.invoke(InvokeChannels.setConfigReviewBucket, newArray);
     },
     clear() {
-      this.config = getEmptyProfileConfig();
+      this.config = getEmptyAppConfig();
     },
   },
 });

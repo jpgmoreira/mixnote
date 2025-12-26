@@ -47,8 +47,8 @@
               <b>Review bucket:</b>
               <input
                 type="checkbox"
-                :checked="props.note.inReviewBucket"
-                @click="notesStore.toggleNoteReviewBucket(props.note.id, false)"
+                :checked="props.note.reviewBucket"
+                @click="notesStore.toggleNoteReviewBucket(props.note.id)"
               />
             </div>
           </div>

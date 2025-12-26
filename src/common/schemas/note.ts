@@ -10,7 +10,7 @@ export type Note = {
   head: string;
   body: string;
   frequency?: NoteFrequency; // Not persisted. Used only on flashcards.
-  inReviewBucket?: boolean; // Not persisted. Used only on flashcards.
+  reviewBucket?: boolean; // Not persisted. Used only on flashcards.
 };
 
 export function getEmptyNote(title: string, timestamp: number): Note {

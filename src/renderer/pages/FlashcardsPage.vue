@@ -178,6 +178,12 @@
     uiStore.showToast('Note deleted!', 'success');
   }
 
+  async function toggleNoteReviewBucket() {
+    if (!currentNote.value) throw new Error('Cannot toggle review bucket on non-existing note!');
+    await notesStore.toggleNoteReviewBucket(currentNote.value.id);
+    await window.api.invoke(InvokeChannels.flashcardsFilter, false);
+  }
+
   onActivated(async () => {
     clear();
     isLoading.value = true;
@@ -285,8 +291,8 @@
           <span>Review bucket:</span>
           <input
             type="checkbox"
-            v-model="currentNote.inReviewBucket"
-            @click="notesStore.toggleNoteReviewBucket(currentNote.id, true)"
+            v-model="currentNote.reviewBucket"
+            @click="toggleNoteReviewBucket"
           />
         </div>
       </div>

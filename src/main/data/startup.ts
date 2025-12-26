@@ -24,7 +24,7 @@ export async function loadStartupData() {
     ConfigManager.instance.loadProfile(profile.id);
     data.ui = UIManager.instance.getUISettings();
     data.tabGroups = TabsManager.instance.getGroups();
-    data.config = ConfigManager.instance.getProfileConfig();
+    data.config = ConfigManager.instance.getConfig();
   }
   return data;
 }

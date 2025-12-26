@@ -86,10 +86,10 @@ export class NotesManager {
     const content = await fs.promises.readFile(fPath, 'utf-8');
     const note = JSON.parse(content) as Note;
     note.frequency = 'normal';
-    note.inReviewBucket = false;
+    note.reviewBucket = false;
     if (this.lowIds.has(noteId)) note.frequency = 'low';
     if (this.highIds.has(noteId)) note.frequency = 'high';
-    if (noteId in this.reviewBucket) note.inReviewBucket = true;
+    if (noteId in this.reviewBucket) note.reviewBucket = true;
     return note;
   }
 
@@ -122,12 +122,6 @@ export class NotesManager {
     await fs.promises.writeFile(fPath, JSON.stringify(note), 'utf-8');
   }
 
-  private fixFlashcardIdsAfterDeletion(noteId: string) {
-    this.filteredIds = this.filteredIds.filter((id) => id !== noteId);
-    this.highIds.delete(noteId);
-    this.lowIds.delete(noteId);
-  }
-
   public async deleteNote(noteId: string) {
     if (!this.profileId) throw new Error('Profile not initialized!');
     const fPath = path.join(DATA_DIR, 'profileData', this.profileId, 'notes', `${noteId}.json`);
@@ -137,7 +131,9 @@ export class NotesManager {
     await fs.promises.unlink(fPath);
     ProfileManager.instance.addNotes(-1);
     TabsManager.instance.noteDeleted(noteId);
-    this.fixFlashcardIdsAfterDeletion(noteId);
+    this.filteredIds = this.filteredIds.filter((id) => id !== noteId);
+    this.highIds.delete(noteId);
+    this.lowIds.delete(noteId);
   }
 
   private canChooseFrequency(frequency: NoteFrequency): boolean {
@@ -177,7 +173,7 @@ export class NotesManager {
   public async flashcardsFilter(isStart: boolean): Promise<Note | null> {
     if (!this.reviewBucket) throw new Error('Review bucket not initialized!');
     let noteIds = TreeManager.instance.getSelectedNotes();
-    const { reviewBucket } = ConfigManager.instance.getProfileConfig();
+    const { reviewBucket } = ConfigManager.instance.getConfig();
     noteIds = noteIds.filter((nid) => {
       if (reviewBucket.includes('yes') && nid in this.reviewBucket!) return true;
       if (reviewBucket.includes('no') && !(nid in this.reviewBucket!)) return true;
@@ -205,15 +201,10 @@ export class NotesManager {
     if (frequency === 'low') this.lowIds.add(noteId);
   }
 
-  /**
-   * Refilter = true is used when you change the review bucket status of a note
-   * during the flashcards study.
-   */
-  public setNoteInReviewBucket(noteId: string, value: boolean, refilter: boolean) {
+  public toggleNoteReviewBucket(noteId: string) {
     if (!this.reviewBucket) throw new Error('Review bucket not initialized!');
-    if (value) this.reviewBucket[noteId] = true;
-    else delete this.reviewBucket[noteId];
-    if (refilter) this.flashcardsFilter(false);
+    if (noteId in this.reviewBucket) delete this.reviewBucket[noteId];
+    else this.reviewBucket[noteId] = true;
   }
 
   public clear() {

@@ -143,9 +143,9 @@ ipcMain.handle(
 );
 
 ipcMain.handle(
-  InvokeChannels.setNoteInReviewBucket,
-  async (_: IpcMainInvokeEvent, noteId: string, value: boolean, refilter: boolean) => {
-    NotesManager.instance.setNoteInReviewBucket(noteId, value, refilter);
+  InvokeChannels.toggleNoteReviewBucket,
+  async (_: IpcMainInvokeEvent, noteId: string) => {
+    NotesManager.instance.toggleNoteReviewBucket(noteId);
   }
 );
 

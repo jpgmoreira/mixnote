@@ -178,9 +178,11 @@ export class NotesManager {
     if (!this.reviewBucket) throw new Error('Review bucket not initialized!');
     let noteIds = TreeManager.instance.getSelectedNotes();
     const { reviewBucket } = ConfigManager.instance.getProfileConfig();
-    if (reviewBucket) {
-      noteIds = noteIds.filter((nid) => nid in this.reviewBucket!);
-    }
+    noteIds = noteIds.filter((nid) => {
+      if (reviewBucket.includes('yes') && nid in this.reviewBucket!) return true;
+      if (reviewBucket.includes('no') && !(nid in this.reviewBucket!)) return true;
+      return false;
+    });
     this.filteredIds = noteIds;
     if (isStart) {
       this.indexes = {
@@ -203,10 +205,11 @@ export class NotesManager {
     if (frequency === 'low') this.lowIds.add(noteId);
   }
 
-  public setNoteInReviewBucket(noteId: string, value: boolean) {
+  public setNoteInReviewBucket(noteId: string, value: boolean, refilter: boolean) {
     if (!this.reviewBucket) throw new Error('Review bucket not initialized!');
     if (value) this.reviewBucket[noteId] = true;
     else delete this.reviewBucket[noteId];
+    if (refilter) this.flashcardsFilter(false);
   }
 
   public clear() {

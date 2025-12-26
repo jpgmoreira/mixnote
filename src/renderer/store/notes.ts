@@ -107,10 +107,15 @@ export const useNotesStore = defineStore('notes', {
       if (note.id in this.notes) this.notes[note.id] = clone;
       window.api.invoke(InvokeChannels.updateNote, clone);
     },
-    toggleReviewBucket(noteId: string) {
+    toggleReviewBucket(noteId: string, refilter: boolean) {
       const note = this.notes[noteId];
       if (note) note.inReviewBucket = !note.inReviewBucket;
-      window.api.invoke(InvokeChannels.setNoteInReviewBucket, noteId, note.inReviewBucket);
+      window.api.invoke(
+        InvokeChannels.setNoteInReviewBucket,
+        noteId,
+        note.inReviewBucket,
+        refilter
+      );
     },
     async refreshTabs() {
       this.tabGroups = await window.api.invoke<TabGroup[]>(InvokeChannels.getTabGroups);

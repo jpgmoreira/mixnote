@@ -13,6 +13,7 @@ import { NotesManager } from '@main/data/managers/notesManager';
 import { TreeManager } from '@main/data/managers/treeManager';
 import { sleep } from '@common/utils/utils';
 import { ConfigManager } from '@main/data/managers/configManager';
+import { YesNo } from '@common/types/yesNo';
 
 ipcMain.handle(
   InvokeChannels.createProfile,
@@ -143,14 +144,14 @@ ipcMain.handle(
 
 ipcMain.handle(
   InvokeChannels.setNoteInReviewBucket,
-  async (_: IpcMainInvokeEvent, noteId: string, value: boolean) => {
-    NotesManager.instance.setNoteInReviewBucket(noteId, value);
+  async (_: IpcMainInvokeEvent, noteId: string, value: boolean, refilter: boolean) => {
+    NotesManager.instance.setNoteInReviewBucket(noteId, value, refilter);
   }
 );
 
 ipcMain.handle(
   InvokeChannels.setConfigReviewBucket,
-  async (_: IpcMainInvokeEvent, value: boolean) => {
+  async (_: IpcMainInvokeEvent, value: YesNo[]) => {
     ConfigManager.instance.setReviewBucket(value);
   }
 );

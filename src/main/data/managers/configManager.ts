@@ -2,6 +2,7 @@ import { FileProxy } from '../fileProxy';
 import path from 'path';
 import { DATA_DIR } from '@main/constants';
 import { ProfileConfig, getEmptyProfileConfig } from '@common/schemas/config';
+import { YesNo } from '@common/types/yesNo';
 
 /**
  * Singleton for managing profile configuration.
@@ -39,7 +40,7 @@ export class ConfigManager {
     return structuredClone(this.target);
   }
 
-  public setReviewBucket(value: boolean) {
+  public setReviewBucket(value: YesNo[]) {
     if (!this.proxy) throw new Error('Profile config not initialized!');
     this.proxy.reviewBucket = value;
   }

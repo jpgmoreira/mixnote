@@ -2,9 +2,21 @@
   import { useRouter } from 'vue-router';
   import { useNotesStore } from '@renderer/store/notes';
   import { useConfigStore } from '@renderer/store/config';
+  import { YesNo } from '@common/types/yesNo';
+  import SelectionList from './UI/SelectionList.vue';
   const router = useRouter();
   const notesStore = useNotesStore();
   const configStore = useConfigStore();
+  const reviewBucketOptions: { text: string; value: YesNo }[] = [
+    {
+      text: 'Yes',
+      value: 'yes',
+    },
+    {
+      text: 'No',
+      value: 'no',
+    },
+  ];
   function goFlashcards() {
     router.replace('/flashcards');
   }
@@ -24,10 +36,10 @@
     <div class="section">
       <div class="row">
         <span class="label">Review bucket:</span>
-        <input
-          type="checkbox"
-          v-model="configStore.config.reviewBucket"
-          @change="configStore.setReviewBucket"
+        <SelectionList
+          :options="reviewBucketOptions"
+          :selected="configStore.config.reviewBucket"
+          @toggle="configStore.toggleReviewBucket"
         />
       </div>
     </div>

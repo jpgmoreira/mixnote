@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-  import Modal from '../Modal.vue';
   import ContextMenu from './ContextMenu.vue';
   import { TreeOperationResponseDTO } from '@common/dto/treeOperationResponseDTO';
   import { NodeType, Node, DirNode } from '@common/types/tree';

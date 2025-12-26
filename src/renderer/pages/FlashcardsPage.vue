@@ -286,7 +286,7 @@
           <input
             type="checkbox"
             v-model="currentNote.inReviewBucket"
-            @change="notesStore.toggleReviewBucket(currentNote.id, true)"
+            @click="notesStore.toggleReviewBucket(currentNote.id, true)"
           />
         </div>
       </div>
@@ -302,13 +302,7 @@
         <button class="btn-primary" @click="startEditing" :disabled="!currentNote || !reveal">
           Edit
         </button>
-        <button
-          class="btn-primary"
-          @click="goPrev"
-          :disabled="(idx <= 0 && !reveal) || !currentNote"
-        >
-          Prev
-        </button>
+        <button class="btn-primary" @click="goPrev" :disabled="idx <= 0 && !reveal">Prev</button>
         <button class="btn-primary" @click="goNext" :disabled="!currentNote">Next</button>
         <button class="btn-primary" @click="exit">Exit</button>
       </template>

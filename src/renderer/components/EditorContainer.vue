@@ -14,9 +14,6 @@
     focus.value = !focus.value;
   }
   function noteChange() {
-    // console.clear();
-    // console.log('-- head:', headContent.value);
-    // console.log('-- body:', bodyRef.value!.getContent());
     const clone = cloneDeep(props.note); // Do not mutate props.
     clone.head = headContent.value;
     clone.body = bodyRef.value!.getContent();

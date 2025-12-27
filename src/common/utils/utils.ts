@@ -4,15 +4,15 @@ import slugify from 'slugify';
 
 const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
-export function toBase62(num: number): string {
-  if (num === 0) return ALPHABET[0];
-  const base = ALPHABET.length;
-  let result = '',
-    n = num;
-  while (n > 0) {
+export function toBase62(num: bigint): string {
+  if (num === 0n) return ALPHABET[0];
+  const base = BigInt(ALPHABET.length);
+  let result = '';
+  let n = num;
+  while (n > 0n) {
     const remainder = n % base;
-    result = ALPHABET[remainder] + result;
-    n = Math.floor(n / base);
+    result = ALPHABET[Number(remainder)] + result;
+    n = n / base;
   }
   return result;
 }
@@ -53,16 +53,20 @@ export function arrayRemove<T>(array: T[], element: T) {
  * Returns a random alphanumeric ID with ~17 characters.
  */
 export function randomId() {
-  const timePart = toBase62(Date.now());
-  const randomPart = toBase62(Math.floor(Math.random() * 1e15));
+  const timePart = toBase62(BigInt(Date.now()));
+  const randomPart = toBase62(BigInt(Math.floor(Math.random() * 1e15)));
   return `${timePart}_${randomPart}`;
 }
 
 /**
- * Generates a deterministic hexadecimal hash for a string and returns the first "len" characters.
+ * Generates a deterministic hexadecimal hash for a string.
+ * The result contains only alphanumeric characters in base 62.
  */
-export function genHash(str: string, len: number) {
-  return crypto.createHash('sha256').update(str, 'binary').digest('hex').substring(0, len);
+export function genHash(str: string) {
+  const hexHash = crypto.createHash('sha256').update(str, 'utf8').digest('hex');
+  const hashNumber = BigInt('0x' + hexHash);
+  const base62 = toBase62(hashNumber);
+  return base62;
 }
 
 /**
@@ -73,7 +77,7 @@ export function buildId(name: string, timestamp: number) {
     strict: true,
     lower: true,
   });
-  const code = toBase62(timestamp);
+  const code = toBase62(BigInt(timestamp));
   const id = `${slug}_${code}`;
   return id;
 }

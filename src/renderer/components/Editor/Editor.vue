@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import { ref, useTemplateRef, watch } from 'vue';
+  import { nextTick, ref, useTemplateRef, watch } from 'vue';
   import { MdEditor, ToolbarNames, type ExposeParam } from 'md-editor-v3';
   import CustomPreview from './CustomPreview.vue';
   import ColorPicker from './ColorPicker.vue';
@@ -12,8 +12,8 @@
   });
 
   const emit = defineEmits<{
-    (e: 'input'): void;
     (e: 'keydown'): void;
+    (e: 'input'): void;
     (e: 'blur'): void;
     (e: 'toggleFocusMode'): void;
   }>();
@@ -72,10 +72,11 @@
   //  --- ---
 
   function insertColor(color: string) {
-    editorRef.value?.insert(() => ({ targetValue: color }));
+    editorRef.value?.insert(() => ({ targetValue: color, select: false }));
   }
 
   function getContent() {
+    // May not be the most recent after @input.
     return content.value;
   }
 
@@ -87,8 +88,12 @@
     editorRef.value?.togglePreviewOnly(value);
   }
 
-  // Beware: can cause unexpected behavior if updating the content on every change.
-  // You should update it just on blur, or use a debounce on change.
+  async function onChange() {
+    await nextTick();
+    emit('input');
+  }
+
+  // May cause issues if changed too frequently.
   watch(
     () => props.initial,
     (newValue) => (content.value = newValue)
@@ -110,7 +115,7 @@
     noEcharts
     :autoFoldThreshold="Infinity"
     :placeholder="props.placeholder || ''"
-    @onInput="emit('input')"
+    @onChange="onChange"
     @onBlur="emit('blur')"
     @keydown="emit('keydown')"
   >

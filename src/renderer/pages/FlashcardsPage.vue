@@ -59,7 +59,7 @@
     edit.value = false;
     if (bodyRef.value) currentNote.value.body = bodyRef.value.getContent();
     if (headRef.value) currentNote.value.head = headRef.value.value;
-    notesStore.updateNoteWithoutDebounce(currentNote.value);
+    // notesStore.updateNoteWithoutDebounce(currentNote.value);
     uiStore.showToast('Note saved!', 'success');
   }
 

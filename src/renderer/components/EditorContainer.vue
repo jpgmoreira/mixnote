@@ -4,7 +4,6 @@
   import { useNotesStore } from '@renderer/store/notes';
   import { parseTimestamp } from '@common/utils/dateUtils';
   import Editor from './Editor/Editor.vue';
-  import { cloneDeep } from '@common/utils/utils';
   const props = defineProps<{ note: Note }>();
   const notesStore = useNotesStore();
   const bodyRef = useTemplateRef('body-ref');
@@ -14,11 +13,9 @@
     focus.value = !focus.value;
   }
   function noteChange() {
-    if (!bodyRef.value) return;
-    const clone = cloneDeep(props.note); // Because we must not mutate props.
-    clone.head = headContent.value;
-    clone.body = bodyRef.value.getContent();
-    notesStore.updateNoteWithDebounce(clone);
+    console.clear();
+    console.log('-- head:', headContent.value);
+    console.log('-- body:', bodyRef.value!.getContent());
   }
   watch(
     () => props.note.id,
@@ -78,7 +75,7 @@
         class="grow"
         ref="body-ref"
         :initial="props.note.body"
-        @keydown="noteChange"
+        @input="noteChange"
         @toggle-focus-mode="toggleFocus"
         placeholder="BODY"
       />

@@ -95,17 +95,22 @@ export const useNotesStore = defineStore('notes', {
       }
       delete this.notes[noteId];
     },
-    updateNoteWithoutDebounce(note: Note) {
+    // updateNoteWithoutDebounce(note: Note) {
+    //   note.lastModified = Date.now();
+    //   const clone = cloneDeep(note);
+    //   if (note.id in this.notes) this.notes[note.id] = clone;
+    //   window.api.invoke(InvokeChannels.updateNote, clone);
+    // },
+    // updateNoteWithDebounce(note: Note) {
+    //   clearTimeout(this.updateTimer);
+    //   this.updateTimer = setTimeout(() => {
+    //     this.updateNoteWithoutDebounce(note);
+    //   }, 1000);
+    // },
+    updateNote(note: Note) {
       note.lastModified = Date.now();
       const clone = cloneDeep(note);
       if (note.id in this.notes) this.notes[note.id] = clone;
-      window.api.invoke(InvokeChannels.updateNote, clone);
-    },
-    updateNoteWithDebounce(note: Note) {
-      clearTimeout(this.updateTimer);
-      this.updateTimer = setTimeout(() => {
-        this.updateNoteWithoutDebounce(note);
-      }, 1000);
     },
     async fetchNoteStatistics() {
       const route = router.currentRoute.value;

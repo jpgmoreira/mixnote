@@ -9,7 +9,7 @@ import { UIManager } from '@main/data/managers/uiManager';
 import { TabGroup } from '@common/schemas/tabs';
 import { TabsManager } from '@main/data/managers/tabsManager';
 import { Note, NoteFrequency, NoteStatistics } from '@common/schemas/note';
-import { NotesManager } from '@main/data/managers/notesManager';
+import { NotesManager } from '@main/data/managers/notes/notesManager';
 import { TreeManager } from '@main/data/managers/treeManager';
 import { sleep } from '@common/utils/utils';
 import { ConfigManager } from '@main/data/managers/configManager';

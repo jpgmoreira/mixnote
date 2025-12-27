@@ -7,7 +7,7 @@ import { TreeOperationResponseDTO } from '@common/dto/treeOperationResponseDTO';
 import { GenericResponseDTO } from '@common/dto/genericResponseDTO';
 import path from 'path';
 import { setBit, clearBit } from '@common/utils/bitMask';
-import { NotesManager } from './notesManager';
+import { NotesManager } from './notes/notesManager';
 
 // Contains a linked list of the root nodes.
 type Root = Links & {

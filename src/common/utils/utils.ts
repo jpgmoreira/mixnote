@@ -50,12 +50,12 @@ export function arrayRemove<T>(array: T[], element: T) {
 }
 
 /**
- * Returns a random alphanumeric ID with ~17 characters.
+ * Returns a random alphanumeric with dashes ID with ~17 characters.
  */
 export function randomId() {
   const timePart = toBase62(BigInt(Date.now()));
   const randomPart = toBase62(BigInt(Math.floor(Math.random() * 1e15)));
-  return `${timePart}_${randomPart}`;
+  return `${timePart}-${randomPart}`;
 }
 
 /**
@@ -78,7 +78,7 @@ export function buildId(name: string, timestamp: number) {
     lower: true,
   });
   const code = toBase62(BigInt(timestamp));
-  const id = `${slug}_${code}`;
+  const id = `${slug}-${code}`;
   return id;
 }
 

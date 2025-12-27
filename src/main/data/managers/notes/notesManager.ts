@@ -1,4 +1,4 @@
-import { FileProxy } from '../fileProxy';
+import { FileProxy } from '../../fileProxy';
 import path from 'path';
 import { DATA_DIR } from '@main/constants';
 import { ensureDirExists } from '@main/utils/utils';
@@ -9,12 +9,13 @@ import {
   NoteStatistics,
   sanitizeNote,
 } from '@common/schemas/note';
-import { ProfileManager } from './profileManager';
+import { ProfileManager } from '../profileManager';
 import fs from 'fs';
-import { TabsManager } from './tabsManager';
-import { TreeManager } from './treeManager';
-import { genHash, shuffleArray } from '@common/utils/utils';
-import { ConfigManager } from './configManager';
+import { TabsManager } from '../tabsManager';
+import { TreeManager } from '../treeManager';
+import { shuffleArray } from '@common/utils/utils';
+import { ConfigManager } from '../configManager';
+import { NotesImgManager } from './notesImgManager';
 
 type ReviewBucketType = {
   string: boolean;
@@ -67,6 +68,7 @@ export class NotesManager {
     this.profileId = profileId;
     const bucketPath = path.join(DATA_DIR, 'profileData', profileId, 'reviewBucket.json');
     this._reviewBucketProxy = new FileProxy(bucketPath, {} as ReviewBucketType);
+    NotesImgManager.instance.loadProfile(profileId);
     this.resetData();
   }
 
@@ -103,93 +105,14 @@ export class NotesManager {
     if (this.lowIds.has(noteId)) note.frequency = 'low';
     if (this.highIds.has(noteId)) note.frequency = 'high';
     if (noteId in this.reviewBucket) note.reviewBucket = true;
+    NotesImgManager.instance.setNoteImagesAsSafeFile(note);
     return note;
-  }
-
-  private saveBuffer(buffer: Buffer, hash: string, noteId: string) {
-    const dirPath = path.join(DATA_DIR, 'profileData', this.profileId!, 'notes', noteId, 'media');
-    ensureDirExists(dirPath);
-    const fPath = path.join(dirPath, `${noteId}_${hash}.png`);
-    fs.writeFileSync(fPath, buffer);
-  }
-
-  private saveBase64src(src: string, hash: string, noteId: string) {
-    const base64 = src.slice(src.indexOf(';base64,') + ';base64,'.length);
-    const buffer = Buffer.from(base64, 'base64');
-    this.saveBuffer(buffer, hash, noteId);
-  }
-
-  private async saveHttpSrc(src: string, hash: string, noteId: string) {
-    const response = await fetch(src);
-    const arrayBuffer = await response.arrayBuffer();
-    const buffer = Buffer.from(arrayBuffer);
-    this.saveBuffer(buffer, hash, noteId);
-  }
-
-  private processImageSrc(src: string, hash: string, noteId: string) {
-    if (src.startsWith('safe-file')) {
-      // Do nothing, image already saved.
-    } else if (src.startsWith('data:image')) {
-      this.saveBase64src(src, hash, noteId);
-    } else if (src.startsWith('http')) {
-      this.saveHttpSrc(src, hash, noteId);
-    }
-  }
-
-  private imageAlreadySaved(src: string, hash: string, noteId: string) {
-    if (src.startsWith('safe-file')) {
-      return true;
-    }
-    const dirPath = path.join(DATA_DIR, 'profileData', this.profileId!, 'notes', noteId, 'media');
-    const fPath = path.join(dirPath, `${noteId}_${hash}.png`);
-    if (fs.existsSync(fPath)) {
-      return true;
-    }
-    return false;
-  }
-
-  private normalizeSrc(src: string) {
-    if (src.startsWith('data:image')) {
-      return src.replace(/^data:image\/[a-zA-Z+]+;base64,/, '');
-    }
-    return src;
-  }
-
-  private replaceImageSrcs(note: Note) {
-    let result = note.body;
-    const hashes = new Set<string>();
-    // 1. <img src="..."> or <img src='...'>
-    result = result.replace(
-      /<img\b[^>]*?\bsrc\s*=\s*(['"])(.*?)\1[^>]*?>/gi,
-      (fullMatch, _, src) => {
-        const normalized = this.normalizeSrc(src);
-        const hash = genHash(normalized);
-        const newSrc = `hash://${hash}`;
-        if (!hashes.has(hash) && !this.imageAlreadySaved(src, hash, note.id)) {
-          this.processImageSrc(src, hash, note.id);
-        }
-        hashes.add(hash);
-        return fullMatch.replace(src, newSrc);
-      }
-    );
-    // 2. Markdown image: ![alt](src)
-    result = result.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (_, alt, src) => {
-      const normalized = this.normalizeSrc(src);
-      const hash = genHash(normalized);
-      const newSrc = `hash://${hash}`;
-      if (!hashes.has(hash) && !this.imageAlreadySaved(src, hash, note.id)) {
-        this.processImageSrc(src, hash, note.id);
-      }
-      hashes.add(hash);
-      return `![${alt}](${newSrc})`;
-    });
-    note.body = result;
   }
 
   public async updateNote(note: Note) {
     if (!this.profileId) throw new Error('Profile not initialized!');
     sanitizeNote(note);
-    this.replaceImageSrcs(note);
+    NotesImgManager.instance.setNoteImagesAsHash(note);
     const fPath = path.join(
       DATA_DIR,
       'profileData',
@@ -316,6 +239,7 @@ export class NotesManager {
 
   public clear() {
     this.profileId = null;
+    NotesImgManager.instance.clear();
     this.resetData();
   }
 }

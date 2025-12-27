@@ -2,7 +2,7 @@ import { StartupDTO } from '@common/dto/startupDTO';
 import { ProfileManager } from './managers/profileManager';
 import { TreeManager } from './managers/treeManager';
 import { UIManager } from './managers/uiManager';
-import { NotesManager } from './managers/notesManager';
+import { NotesManager } from './managers/notes/notesManager';
 import { TabsManager } from './managers/tabsManager';
 import { ConfigManager } from './managers/configManager';
 

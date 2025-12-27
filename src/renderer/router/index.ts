@@ -3,6 +3,7 @@ import NotesPage from '@renderer/pages/NotesPage.vue';
 import SettingsPage from '@renderer/pages/SettingsPage.vue';
 import LoginPage from '@renderer/pages/login/LoginPage.vue';
 import FlashcardsPage from '@renderer/pages/FlashcardsPage.vue';
+import GraphPage from '@renderer/pages/GraphPage.vue';
 
 const routes = [
   {
@@ -21,6 +22,10 @@ const routes = [
   {
     path: '/flashcards',
     component: FlashcardsPage,
+  },
+  {
+    path: '/graph',
+    component: GraphPage,
   },
 ];
 

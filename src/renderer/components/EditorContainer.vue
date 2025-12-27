@@ -14,18 +14,17 @@
     focus.value = !focus.value;
   }
   function noteChange() {
-    setTimeout(() => {
-      if (!bodyRef.value) return;
-      const clone = cloneDeep(props.note); // Because we must not mutate props.
-      clone.head = headContent.value;
-      clone.body = bodyRef.value.getContent();
-      notesStore.updateNoteWithDebounce(clone);
-    }, 50);
+    if (!bodyRef.value) return;
+    const clone = cloneDeep(props.note); // Because we must not mutate props.
+    clone.head = headContent.value;
+    clone.body = bodyRef.value.getContent();
+    notesStore.updateNoteWithDebounce(clone);
   }
   watch(
-    () => props.note.head,
-    (newVal) => {
-      headContent.value = newVal;
+    () => props.note.id,
+    () => {
+      headContent.value = props.note.head;
+      bodyRef.value?.resetContent();
     }
   );
 </script>
@@ -73,7 +72,7 @@
         placeholder="HEAD"
         spellcheck="false"
         v-model="headContent"
-        @keydown="noteChange"
+        @input="noteChange"
       ></textarea>
       <Editor
         class="grow"

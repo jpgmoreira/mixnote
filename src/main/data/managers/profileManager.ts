@@ -10,6 +10,12 @@ import { DATA_DIR } from '@main/constants';
 import fs from 'node:fs';
 import { GenericResponseDTO } from '@common/dto/genericResponseDTO';
 import { buildId, cloneDeep } from '@common/utils/utils';
+import { EventEmitter } from '@common/events/eventEmitter';
+import { Events } from '@main/events/events';
+
+EventEmitter.instance.on(Events.clearProfileData, () => {
+  ProfileManager.instance.clear();
+});
 
 /**
  * Singleton for managing profiles.
@@ -138,7 +144,7 @@ export class ProfileManager {
   }
 
   public logout() {
-    this.clear();
+    EventEmitter.instance.emit(Events.clearProfileData);
   }
 
   public clear() {

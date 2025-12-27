@@ -42,7 +42,10 @@ export const allowedInvokeChannels = Object.freeze([
   TreeChannels.moveSelectedFoldersBelow,
   TreeChannels.moveSelectedNodesInto,
 ] as const);
-export const allowedOnChannels = Object.freeze([OnChannels.startup] as const);
+export const allowedOnChannels = Object.freeze([
+  OnChannels.startup,
+  OnChannels.updateGraphRecord,
+] as const);
 
 export interface ElectronAPI {
   invoke: <T = void>(channel: (typeof allowedInvokeChannels)[number], ...data: any[]) => Promise<T>;

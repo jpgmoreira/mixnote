@@ -4,6 +4,7 @@ import { installExtension, VUEJS_DEVTOOLS } from 'electron-devtools-installer';
 import { is } from '@electron-toolkit/utils';
 import { loadStartupData } from '../startup';
 import { OnChannels } from '@preload/channels/on';
+import { GraphRecord } from '@common/schemas/graph';
 
 /**
  * Singleton for managing application windows.
@@ -67,5 +68,9 @@ export class WindowManager {
       this.mainWindow.show();
     });
     this.initWindow(this.mainWindow);
+  }
+
+  public graphRecordUpdated(record: GraphRecord) {
+    this.mainWindow.webContents.send(OnChannels.updateGraphRecord, record);
   }
 }

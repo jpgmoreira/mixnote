@@ -5,6 +5,8 @@ import { router } from '@renderer/router';
 import { EventEmitter } from '@common/events/eventEmitter';
 import { Events } from '@renderer/events';
 import { initStores } from '@renderer/store/initStores';
+import { GraphRecord } from '@common/schemas/graph';
+import { useGraphStore } from '@renderer/store/graph';
 
 window.api.on(OnChannels.startup, (data: StartupDTO) => {
   initStores();
@@ -20,4 +22,8 @@ window.api.on(OnChannels.startup, (data: StartupDTO) => {
   } else {
     router.replace('/login');
   }
+});
+
+window.api.on(OnChannels.updateGraphRecord, (record: GraphRecord) => {
+  useGraphStore().updateRecord(record);
 });

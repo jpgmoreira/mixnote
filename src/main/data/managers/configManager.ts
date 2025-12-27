@@ -4,6 +4,12 @@ import { DATA_DIR } from '@main/constants';
 import { AppConfig, getEmptyAppConfig } from '@common/schemas/config';
 import { YesNo } from '@common/types/yesNo';
 import { cloneDeep } from '@common/utils/utils';
+import { EventEmitter } from '@common/events/eventEmitter';
+import { Events } from '@main/events/events';
+
+EventEmitter.instance.on(Events.clearProfileData, () => {
+  ConfigManager.instance.clear();
+});
 
 /**
  * Singleton for managing app configuration.

@@ -5,6 +5,7 @@ import { UIManager } from './managers/uiManager';
 import { NotesManager } from './managers/notes/notesManager';
 import { TabsManager } from './managers/tabsManager';
 import { ConfigManager } from './managers/configManager';
+import { GraphManager } from './managers/graph/graphManager';
 
 export async function loadStartupData() {
   const profile = ProfileManager.instance.getCurrProfile();
@@ -15,6 +16,7 @@ export async function loadStartupData() {
     ui: null,
     tabGroups: null,
     config: null,
+    graphData: [],
   };
   if (profile) {
     TreeManager.instance.loadTree(profile.id);
@@ -22,9 +24,11 @@ export async function loadStartupData() {
     NotesManager.instance.loadProfile(profile.id);
     TabsManager.instance.loadProfile(profile.id);
     ConfigManager.instance.loadProfile(profile.id);
+    const graphData = await GraphManager.instance.loadProfile(profile.id);
     data.ui = UIManager.instance.getUISettings();
     data.tabGroups = TabsManager.instance.getGroups();
     data.config = ConfigManager.instance.getConfig();
+    data.graphData = graphData;
   }
   return data;
 }

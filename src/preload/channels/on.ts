@@ -5,4 +5,5 @@
 
 export enum OnChannels {
   startup = 'startup',
+  updateGraphRecord = 'update-graph-record',
 }

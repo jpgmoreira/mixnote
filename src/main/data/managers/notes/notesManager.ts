@@ -2,6 +2,8 @@ import { FileProxy } from '../../fileProxy';
 import path from 'path';
 import { DATA_DIR } from '@main/constants';
 import { ensureDirExists } from '@main/utils/utils';
+import { EventEmitter } from '@common/events/eventEmitter';
+import { Events } from '@main/events/events';
 import {
   getEmptyNote,
   Note,
@@ -16,6 +18,10 @@ import { TreeManager } from '../treeManager';
 import { shuffleArray } from '@common/utils/utils';
 import { ConfigManager } from '../configManager';
 import { NotesImgManager } from './notesImgManager';
+
+EventEmitter.instance.on(Events.clearProfileData, () => {
+  NotesManager.instance.clear();
+});
 
 type ReviewBucketType = {
   string: boolean;

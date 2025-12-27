@@ -3,6 +3,12 @@ import path from 'path';
 import { DATA_DIR } from '@main/constants';
 import { getEmptyTabGroup, TabGroup } from '@common/schemas/tabs';
 import { cloneDeep, randomId } from '@common/utils/utils';
+import { EventEmitter } from '@common/events/eventEmitter';
+import { Events } from '@main/events/events';
+
+EventEmitter.instance.on(Events.clearProfileData, () => {
+  TabsManager.instance.clear();
+});
 
 type TabsManagerProxy = {
   groups: TabGroup[];

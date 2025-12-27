@@ -3,6 +3,12 @@ import path from 'path';
 import { DATA_DIR } from '@main/constants';
 import { getEmptyUISettings, UISettings } from '@common/schemas/ui';
 import { cloneDeep } from '@common/utils/utils';
+import { EventEmitter } from '@common/events/eventEmitter';
+import { Events } from '@main/events/events';
+
+EventEmitter.instance.on(Events.clearProfileData, () => {
+  UIManager.instance.clear();
+});
 
 /**
  * Singleton for managing UI settings.

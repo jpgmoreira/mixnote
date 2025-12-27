@@ -14,11 +14,13 @@
     focus.value = !focus.value;
   }
   function noteChange() {
-    if (!bodyRef.value) return;
-    const clone = cloneDeep(props.note); // Because we must not mutate props.
-    clone.head = headContent.value;
-    clone.body = bodyRef.value.getContent();
-    notesStore.updateNoteWithDebounce(clone);
+    setTimeout(() => {
+      if (!bodyRef.value) return;
+      const clone = cloneDeep(props.note); // Because we must not mutate props.
+      clone.head = headContent.value;
+      clone.body = bodyRef.value.getContent();
+      notesStore.updateNoteWithDebounce(clone);
+    }, 0);
   }
   watch(
     () => props.note.head,
@@ -71,13 +73,13 @@
         placeholder="HEAD"
         spellcheck="false"
         v-model="headContent"
-        @input="noteChange"
+        @keydown="noteChange"
       ></textarea>
       <Editor
         class="grow"
         ref="body-ref"
         :initial="props.note.body"
-        @input="noteChange"
+        @keydown="noteChange"
         @toggle-focus-mode="toggleFocus"
         placeholder="BODY"
       />

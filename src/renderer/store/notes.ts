@@ -102,7 +102,6 @@ export const useNotesStore = defineStore('notes', {
       window.api.invoke(InvokeChannels.updateNote, clone);
     },
     updateNoteWithDebounce(note: Note) {
-      console.log('uu');
       clearTimeout(this.updateTimer);
       this.updateTimer = setTimeout(() => {
         this.updateNoteWithoutDebounce(note);

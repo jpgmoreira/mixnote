@@ -20,7 +20,7 @@
       clone.head = headContent.value;
       clone.body = bodyRef.value.getContent();
       notesStore.updateNoteWithDebounce(clone);
-    }, 0);
+    }, 50);
   }
   watch(
     () => props.note.head,

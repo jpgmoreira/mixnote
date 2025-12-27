@@ -65,7 +65,7 @@
     files.forEach(async (file) => {
       const dataUrl = await fileToDataUrl(file);
       const md = `<img src="${dataUrl}" />`;
-      editorRef.value?.insert(() => ({ targetValue: md }));
+      editorRef.value?.insert(() => ({ targetValue: md, select: false }));
     });
   }
 

@@ -26,6 +26,7 @@ export const useNotesStore = defineStore('notes', {
     notes: {} as Record<string, Note>,
     statistics: null as NoteStatistics | null,
     tabGroups: null as TabGroup[] | null,
+    updateTimer: undefined as ReturnType<typeof setTimeout> | undefined,
     tabGroupsTimer: undefined as ReturnType<typeof setTimeout> | undefined,
   }),
   actions: {
@@ -94,11 +95,18 @@ export const useNotesStore = defineStore('notes', {
       }
       delete this.notes[noteId];
     },
-    updateNote(note: Note) {
+    updateNoteWithoutDebounce(note: Note) {
       note.lastModified = Date.now();
       const clone = cloneDeep(note);
       if (note.id in this.notes) this.notes[note.id] = clone;
       window.api.invoke(InvokeChannels.updateNote, clone);
+    },
+    updateNoteWithDebounce(note: Note) {
+      console.log('uu');
+      clearTimeout(this.updateTimer);
+      this.updateTimer = setTimeout(() => {
+        this.updateNoteWithoutDebounce(note);
+      }, 1000);
     },
     async fetchNoteStatistics() {
       const route = router.currentRoute.value;

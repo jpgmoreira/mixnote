@@ -9,20 +9,16 @@
   const notesStore = useNotesStore();
   const bodyRef = useTemplateRef('body-ref');
   const headContent = ref(props.note.head);
-  const noteChangeTimer = ref<ReturnType<typeof setTimeout> | undefined>(undefined);
   const focus = ref(false);
   function toggleFocus() {
     focus.value = !focus.value;
   }
   function noteChange() {
-    clearTimeout(noteChangeTimer.value);
-    noteChangeTimer.value = setTimeout(() => {
-      if (!bodyRef.value) return;
-      const clone = cloneDeep(props.note); // Cannot mutate a prop.
-      clone.head = headContent.value;
-      clone.body = bodyRef.value.getContent();
-      notesStore.updateNote(clone);
-    }, 500);
+    if (!bodyRef.value) return;
+    const clone = cloneDeep(props.note); // Because we must not mutate props.
+    clone.head = headContent.value;
+    clone.body = bodyRef.value.getContent();
+    notesStore.updateNoteWithDebounce(clone);
   }
   watch(
     () => props.note.head,

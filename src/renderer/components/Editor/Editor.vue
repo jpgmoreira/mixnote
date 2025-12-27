@@ -13,6 +13,7 @@
 
   const emit = defineEmits<{
     (e: 'input'): void;
+    (e: 'keydown'): void;
     (e: 'blur'): void;
     (e: 'toggleFocusMode'): void;
   }>();
@@ -111,6 +112,7 @@
     :placeholder="props.placeholder || ''"
     @onInput="emit('input')"
     @onBlur="emit('blur')"
+    @keydown="emit('keydown')"
   >
     <template #defToolbars>
       <ColorPicker @select="insertColor" />

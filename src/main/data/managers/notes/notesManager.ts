@@ -15,7 +15,7 @@ import { ProfileManager } from '../profileManager';
 import fs from 'fs';
 import { TabsManager } from '../tabsManager';
 import { TreeManager } from '../treeManager';
-import { shuffleArray } from '@common/utils/utils';
+import { shuffleArray, sleep } from '@common/utils/utils';
 import { ConfigManager } from '../configManager';
 import { NotesImgManager } from './notesImgManager';
 
@@ -51,6 +51,9 @@ export class NotesManager {
   };
   private highIds: Set<string> = new Set();
   private lowIds: Set<string> = new Set();
+
+  private updateTimers: Record<string, ReturnType<typeof setTimeout> | undefined> = {};
+  private updatePromises: Record<string, { promise: Promise<void>; resolve: () => void }> = {};
 
   public static get instance(): NotesManager {
     if (!this.#instance) {
@@ -115,34 +118,45 @@ export class NotesManager {
     return note;
   }
 
-  public async updateNote(note: Note) {
+  private async atomicallySaveNote(note: Note) {
     if (!this.profileId) throw new Error('Profile not initialized!');
-    sanitizeNote(note);
-    NotesImgManager.instance.setNoteImagesAsHash(note);
-    const fPath = path.join(
-      DATA_DIR,
-      'profileData',
-      this.profileId,
-      'notes',
-      note.id,
-      `${note.id}.json`
-    );
-    await fs.promises.writeFile(fPath, JSON.stringify(note), 'utf-8');
+    const dirPath = path.join('profileData', this.profileId, 'notes', note.id);
+    const fPath = path.join(dirPath, `${note.id}.json`);
+    const tmpPath = path.join(dirPath, `${note.id}.json.tmp`);
+    await fs.promises.writeFile(tmpPath, JSON.stringify(note), 'utf-8');
+    await fs.promises.rename(tmpPath, fPath);
+  }
+
+  public updateNote(note: Note) {
+    clearTimeout(this.updateTimers[note.id]);
+    if (!this.updatePromises[note.id]) {
+      let resolveFn!: () => void;
+      const promise = new Promise<void>((resolve) => {
+        resolveFn = resolve;
+      });
+      this.updatePromises[note.id] = { promise, resolve: resolveFn };
+    }
+    this.updateTimers[note.id] = setTimeout(async () => {
+      try {
+        sanitizeNote(note);
+        NotesImgManager.instance.setNoteImagesAsHash(note);
+        await this.atomicallySaveNote(note);
+      } finally {
+        this.updatePromises[note.id]?.resolve();
+        delete this.updatePromises[note.id];
+        delete this.updateTimers[note.id];
+      }
+    }, 500);
   }
 
   public async renameNote(noteId: string, newName: string) {
+    if (this.updatePromises[noteId]) {
+      await this.updatePromises[noteId].promise;
+    }
     if (!this.profileId) throw new Error('Profile not initialized!');
-    const fPath = path.join(
-      DATA_DIR,
-      'profileData',
-      this.profileId,
-      'notes',
-      noteId,
-      `${noteId}.json`
-    );
     const note = await this.getNote(noteId);
     note.title = newName;
-    await fs.promises.writeFile(fPath, JSON.stringify(note), 'utf-8');
+    await this.atomicallySaveNote(note);
   }
 
   public async deleteNote(noteId: string) {

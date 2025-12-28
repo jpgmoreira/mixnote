@@ -1,4 +1,9 @@
 <script lang="ts" setup>
+  /**
+   * Note updates that must be reflected in the notesStore cache: perform via notesStore.
+   * Other note updates: call main process directly.
+   */
+
   import { ref, reactive, onActivated, useTemplateRef, watch, nextTick } from 'vue';
   import { Note, NoteFrequency } from '@common/schemas/note';
   import { useRouter } from 'vue-router';
@@ -42,6 +47,13 @@
       value: 'high',
     },
   ];
+
+  async function fetchCurrentNoteFromIndex() {
+    currentNote.value = await window.api.invoke<Note | null>(
+      InvokeChannels.getNote,
+      noteIds.value[idx.value]
+    );
+  }
 
   function startEditing() {
     if (!currentNote.value) throw new Error('Cannot edit without a note!');
@@ -93,7 +105,7 @@
         }
       } else {
         idx.value++;
-        currentNote.value = await notesStore.getNote(noteIds.value[idx.value], false);
+        await fetchCurrentNoteFromIndex();
       }
     } finally {
       isFetching.value = false;
@@ -111,7 +123,7 @@
     isFetching.value = true;
     try {
       idx.value--;
-      currentNote.value = await notesStore.getNote(noteIds.value[idx.value], false);
+      await fetchCurrentNoteFromIndex();
     } finally {
       isFetching.value = false;
       reveal.value = true;
@@ -169,7 +181,7 @@
     // If deleted some note in the middle:
     else {
       reveal.value = false;
-      currentNote.value = await notesStore.getNote(noteIds.value[idx.value], false);
+      await fetchCurrentNoteFromIndex();
     }
     edit.value = false;
     modalState.isDeleting = false;

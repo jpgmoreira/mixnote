@@ -120,7 +120,7 @@ export class NotesManager {
 
   private async atomicallySaveNote(note: Note) {
     if (!this.profileId) throw new Error('Profile not initialized!');
-    const dirPath = path.join('profileData', this.profileId, 'notes', note.id);
+    const dirPath = path.join(DATA_DIR, 'profileData', this.profileId, 'notes', note.id);
     const fPath = path.join(dirPath, `${note.id}.json`);
     const tmpPath = path.join(dirPath, `${note.id}.json.tmp`);
     await fs.promises.writeFile(tmpPath, JSON.stringify(note), 'utf-8');

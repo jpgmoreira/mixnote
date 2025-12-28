@@ -23,6 +23,7 @@ EventEmitter.instance.on(Events.clearProfileData, () => {
  */
 export const useNotesStore = defineStore('notes', {
   state: () => ({
+    // Notes cache is used only for the editor, not for flashcards.
     notes: {} as Record<string, Note>,
     statistics: null as NoteStatistics | null,
     tabGroups: null as TabGroup[] | null,
@@ -35,7 +36,7 @@ export const useNotesStore = defineStore('notes', {
       if (this.tabGroups) {
         for (const group of this.tabGroups) {
           for (const tab of group.tabs) {
-            this.getNote(tab.noteId, true);
+            this.getNote(tab.noteId);
           }
         }
       }
@@ -51,10 +52,10 @@ export const useNotesStore = defineStore('notes', {
         window.api.invoke(InvokeChannels.updateTabGroups, toRawDeep(this.tabGroups));
       }, 500);
     },
-    async getNote(noteId: string, saveToCache: boolean) {
+    async getNote(noteId: string) {
       if (noteId in this.notes) return this.notes[noteId];
       const note = await window.api.invoke<Note>(InvokeChannels.getNote, noteId);
-      if (saveToCache) this.notes[noteId] = note;
+      this.notes[noteId] = note;
       return note;
     },
     setActiveTab(group: TabGroup, tabId: string) {
@@ -143,7 +144,7 @@ export const useNotesStore = defineStore('notes', {
         throw new Error('No tab groups!');
       }
       // 1. If the note is not in the front, request it from the back:
-      await this.getNote(noteId, true);
+      await this.getNote(noteId);
       // 2. Verify if the note is already open in the current tab group:
       let activeGroup = this.tabGroups.find((g) => g.active);
       if (!activeGroup) {

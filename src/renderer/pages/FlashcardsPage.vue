@@ -264,6 +264,8 @@
 
     <FocusIcon v-if="reveal" class="focus-icon" @click="toggleBodyFocus" />
 
+    <div class="note-title" v-if="currentNote && !bodyFocus">{{ currentNote.title }}</div>
+
     <main class="flashcards-main grow overflow-y-auto">
       <!-- HEAD -->
       <div
@@ -271,14 +273,16 @@
         class="flashcard-head-wrapper"
         :class="currentNote.frequency"
       >
-        <div class="flashcard-head">
+        <div class="flashcard-head" v-if="currentNote.head || edit">
           <textarea
             ref="head-textarea"
             :readonly="!edit"
             spellcheck="false"
             :value="currentNote.head"
+            placeholder="HEAD"
           ></textarea>
         </div>
+        <div class="no-head" v-else>No head</div>
       </div>
 
       <!-- BODY -->
@@ -307,8 +311,10 @@
           />
         </div>
         <div class="flex items-center gap-1">
-          <span>Review bucket:</span>
+          <label for="review-bucket-input">Review bucxket:</label>
           <input
+            id="review-bucket-input"
+            name="review-bucket-input"
             type="checkbox"
             v-model="currentNote.reviewBucket"
             @click="toggleNoteReviewBucket"
@@ -324,18 +330,16 @@
     <!-- FOOTER -->
     <footer v-if="!bodyFocus" class="flashcards-footer select-none relative">
       <template v-if="!edit">
-        <button class="btn-primary" @click="startEditing" :disabled="!currentNote || !reveal">
-          Edit
-        </button>
+        <button class="btn-primary" @click="startEditing" :disabled="!currentNote">Edit</button>
         <button class="btn-primary" @click="goPrev" :disabled="idx <= 0 && !reveal">Prev</button>
         <button class="btn-primary" @click="goNext" :disabled="!currentNote">Next</button>
         <button class="btn-primary" @click="exit">Exit</button>
       </template>
 
       <template v-else>
-        <button class="btn-primary" @click="undoEditing">Cancel</button>
-        <button class="btn-primary" @click="saveEditing">Save</button>
         <button class="btn-danger" @click="modalState.visible = true">Delete</button>
+        <button class="btn-primary" @click="saveEditing">Save</button>
+        <button class="btn-primary" @click="undoEditing">Cancel</button>
       </template>
 
       <div

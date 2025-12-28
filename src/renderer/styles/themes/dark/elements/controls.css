@@ -11,11 +11,6 @@
   border-radius: 5px;
 }
 
-.theme-dark input[type='checkbox'] {
-  width: 16px;
-  height: 16px;
-}
-
 .theme-dark input[type='number']::-webkit-inner-spin-button,
 .theme-dark input[type='number']::-webkit-outer-spin-button {
   -webkit-appearance: none;

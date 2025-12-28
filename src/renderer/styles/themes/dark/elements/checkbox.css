@@ -1,0 +1,36 @@
+.theme-dark input[type='checkbox'] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border: 1px solid #555;
+  border-radius: 3px;
+  background-color: #1e1e1e;
+  cursor: pointer;
+  position: relative;
+}
+
+.theme-dark input[type='checkbox']:hover {
+  border-color: #777;
+}
+
+.theme-dark input[type='checkbox']:checked {
+  background-color: #3a3a3a;
+  border-color: #777;
+}
+
+.theme-dark input[type='checkbox']:checked::after {
+  content: '✓';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 15px;
+  font-weight: bold;
+  color: #d0d0d0;
+}
+
+.theme-dark input[type='checkbox']:focus-visible {
+  outline: 2px solid #555;
+  outline-offset: 2px;
+}

@@ -6,7 +6,6 @@ import { Tab, TabGroup } from '@common/schemas/tabs';
 import { InvokeChannels } from '@preload/channels/invoke';
 import { Note, NoteStatistics } from '@common/schemas/note';
 import { cloneDeep, randomId, toRawDeep } from '@common/utils/utils';
-import { router } from '@renderer/router';
 
 EventEmitter.instance.on(Events.loadStartupData, (data: StartupDTO) => {
   useNotesStore().initData(data);
@@ -105,13 +104,7 @@ export const useNotesStore = defineStore('notes', {
       window.api.invoke(InvokeChannels.updateNote, clone);
     },
     async fetchNoteStatistics() {
-      const route = router.currentRoute.value;
-      // There is no point on fetching note statistics if you are not in the pre-flashcards page.
-      if (route.path === '/notes/flashcards') {
-        this.statistics = await window.api.invoke<NoteStatistics>(
-          InvokeChannels.fetchNoteStatistics
-        );
-      }
+      this.statistics = await window.api.invoke<NoteStatistics>(InvokeChannels.fetchNoteStatistics);
     },
     async toggleNoteReviewBucket(noteId: string) {
       const note = this.notes[noteId];

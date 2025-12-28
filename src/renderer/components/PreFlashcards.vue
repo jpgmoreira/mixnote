@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import { computed, ref } from 'vue';
+  import { computed, onActivated, ref } from 'vue';
   import { useRouter } from 'vue-router';
   import { useNotesStore } from '@renderer/store/notes';
   import { useConfigStore } from '@renderer/store/config';
@@ -42,7 +42,11 @@
     updateLfProbability();
   }
   const probabilitySum = computed(() => hfProbability.value + lfProbability.value);
+  // Here we need to fetch statistics whenever this component is either mounted or activated.
   onMounted(() => {
+    notesStore.fetchNoteStatistics();
+  });
+  onActivated(() => {
     notesStore.fetchNoteStatistics();
   });
 </script>

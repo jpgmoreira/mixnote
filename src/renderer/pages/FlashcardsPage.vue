@@ -254,7 +254,11 @@
 
     <main class="flashcards-main grow overflow-y-auto">
       <!-- HEAD -->
-      <div v-if="currentNote && !bodyFocus" class="flashcard-head-wrapper">
+      <div
+        v-if="currentNote && !bodyFocus"
+        class="flashcard-head-wrapper"
+        :class="currentNote.frequency"
+      >
         <div class="flashcard-head">
           <textarea
             ref="head-textarea"
@@ -266,7 +270,11 @@
       </div>
 
       <!-- BODY -->
-      <div v-if="currentNote && reveal" class="flashcard-body-wrapper">
+      <div
+        v-if="currentNote && reveal"
+        class="flashcard-body-wrapper"
+        :class="currentNote.frequency"
+      >
         <div class="flashcard-body-card">
           <Editor
             ref="body-editor"

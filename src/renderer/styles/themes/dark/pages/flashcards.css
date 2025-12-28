@@ -159,6 +159,26 @@
 }
 
 /* ===============================
+   LOW FREQUENCY (RED)
+================================ */
+.theme-dark .flashcard-head-wrapper.low .flashcard-head,
+.theme-dark .flashcard-body-wrapper.low .flashcard-body-card {
+  background: rgba(160, 60, 60, 0.18);
+  outline: 1px solid rgba(200, 80, 80, 0.55);
+  outline-offset: -1px;
+}
+
+/* ===============================
+   HIGH FREQUENCY (GREEN)
+================================ */
+.theme-dark .flashcard-head-wrapper.high .flashcard-head,
+.theme-dark .flashcard-body-wrapper.high .flashcard-body-card {
+  background: rgba(60, 140, 90, 0.18);
+  outline: 1px solid rgba(90, 200, 140, 0.55);
+  outline-offset: -1px;
+}
+
+/* ===============================
    ANIMATION
 ================================ */
 /* @keyframes flashcardFadeIn {

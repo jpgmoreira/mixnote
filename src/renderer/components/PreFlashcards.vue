@@ -6,6 +6,7 @@
   import { YesNo } from '@common/types/yesNo';
   import SelectionList from './UI/SelectionList.vue';
   import { onMounted } from 'vue';
+  import { DEFAULT_HF_PROBABILITY, DEFAULT_LF_PROBABILITY } from '@common/schemas/config';
   const router = useRouter();
   const notesStore = useNotesStore();
   const configStore = useConfigStore();
@@ -33,6 +34,12 @@
   }
   function updateLfProbability() {
     configStore.updateLfProbability(lfProbability.value);
+  }
+  function resetProbabilities() {
+    hfProbability.value = DEFAULT_HF_PROBABILITY * 100;
+    lfProbability.value = DEFAULT_LF_PROBABILITY * 100;
+    updateHfProbability();
+    updateLfProbability();
   }
   const probabilitySum = computed(() => hfProbability.value + lfProbability.value);
   onMounted(() => {
@@ -82,6 +89,9 @@
       <div class="row">
         <span class="label">Low frequency probability (%)</span>
         <input type="number" v-model="lfProbability" @change="updateLfProbability" />
+      </div>
+      <div class="row">
+        <button type="button" class="btn-primary ml-auto" @click="resetProbabilities">Reset</button>
       </div>
       <div v-if="probabilitySum > 100" class="row">
         <span class="label">

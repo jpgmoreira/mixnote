@@ -15,7 +15,7 @@ import { ProfileManager } from '../profileManager';
 import fs from 'fs';
 import { TabsManager } from '../tabsManager';
 import { TreeManager } from '../treeManager';
-import { shuffleArray, sleep } from '@common/utils/utils';
+import { shuffleArray } from '@common/utils/utils';
 import { ConfigManager } from '../configManager';
 import { NotesImgManager } from './notesImgManager';
 
